@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
+
+import org.Reply.ReplyMsg;
 import org.apache.commons.lang.StringUtils;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
@@ -564,34 +566,20 @@ public class QQService {
             qqMsg = "<p>" + qqMsg + "</p>";
             sendToForum(qqMsg, userName);
         }
-
-        String msg = "";
-        if (StringUtils.contains(content, XiaoVs.QQ_BOT_NAME)
-                || (StringUtils.length(content) > 6
-                && (StringUtils.contains(content, "?") || StringUtils.contains(content, "？") || StringUtils.contains(content, "问")))) {
-            msg = answer(content, userName);
+        if(!userName.equals("37087917")){
+        	String msg = ReplyMsg.reply(content, userName);
+	        if(msg.length()<2){
+	                if (content.contains("baka机器人")) {
+	                	String chat = content.replaceAll("baka机器人", "");
+	                	msg = answer(chat, userName);
+	                	sendMessageToGroup(groupId, msg);
+	                }
+	        }else{
+	        	sendMessageToGroup(groupId, msg);
+	        }
         }
 
-        if (StringUtils.isBlank(msg)) {
-            return;
-        }
 
-        if (RandomUtils.nextFloat() >= 0.9) {
-            Long latestAdTime = GROUP_AD_TIME.get(groupId);
-            if (null == latestAdTime) {
-                latestAdTime = 0L;
-            }
-
-            final long now = System.currentTimeMillis();
-
-            if (now - latestAdTime > 1000 * 60 * 30) {
-                msg = msg + "\n\n（" + ADS.get(RandomUtils.nextInt(ADS.size())) + "）";
-
-                GROUP_AD_TIME.put(groupId, now);
-            }
-        }
-
-        sendMessageToGroup(groupId, msg);
     }
 
     public void onQQDiscussMessage(final DiscussMessage message) {
@@ -634,8 +622,34 @@ public class QQService {
 
         sendMessageToDiscuss(discussId, msg);
     }
-
+    
     private String answer(final String content, final String userName) {
+	    double d = Math.random();
+	    String ret = "";
+	    if(d<0.8){
+	                ret = turingQueryService.chat(userName, content);
+	                ret = StringUtils.replace(ret, "图灵机器人", "baka机器人");
+	                ret = StringUtils.replace(ret, "默认机器人", "baka机器人");
+	    }else if(d<0.9){
+		    ret = baiduQueryService.chat(content);
+	    }else{
+		    ret = itpkQueryService.chat(content);
+	    }
+            if (StringUtils.isBlank(ret)) {
+                ret = "嗯~";
+            }
+            return ret;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+
+    private String answer2(final String content, final String userName) {
         String keyword = "";
         String[] keywords = StringUtils.split(XiaoVs.getString("bot.follow.keywords"), ",");
         keywords = Strings.trimAll(keywords);
