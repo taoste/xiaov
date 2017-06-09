@@ -568,10 +568,22 @@ public class QQService {
         }
         if(!userName.equals("37087917")){
         	String msg = ReplyMsg.reply(content, userName);
+        	//TODO
+//        	System.out.println("------------------------");
+//        	System.out.println(userName);
+//        	System.out.println(content);
+//        	System.out.println(msg);
+//        	System.out.println("------------------------\n");
+
 	        if(msg.length()<2){
+	                if (content.contains("百百")) {
+	                	String chat = content.replaceAll("百百", "");
+	                	msg = answer(chat, userName,"百百");
+	                	sendMessageToGroup(groupId, msg);
+	                }
 	                if (content.contains("baka机器人")) {
 	                	String chat = content.replaceAll("baka机器人", "");
-	                	msg = answer(chat, userName);
+	                	msg = answer(chat, userName,"baka机器人");
 	                	sendMessageToGroup(groupId, msg);
 	                }
 	        }else{
@@ -598,7 +610,7 @@ public class QQService {
         if (StringUtils.contains(content, XiaoVs.QQ_BOT_NAME)
                 || (StringUtils.length(content) > 6
                 && (StringUtils.contains(content, "?") || StringUtils.contains(content, "？") || StringUtils.contains(content, "问")))) {
-            msg = answer(content, userName);
+            msg = answer(content, userName,"百百");
         }
 
         if (StringUtils.isBlank(msg)) {
@@ -623,13 +635,13 @@ public class QQService {
         sendMessageToDiscuss(discussId, msg);
     }
     
-    private String answer(final String content, final String userName) {
+    private String answer(final String content, final String userName,final String botname) {
 	    double d = Math.random();
 	    String ret = "";
 	    if(d<0.8){
 	                ret = turingQueryService.chat(userName, content);
-	                ret = StringUtils.replace(ret, "图灵机器人", "baka机器人");
-	                ret = StringUtils.replace(ret, "默认机器人", "baka机器人");
+	                ret = StringUtils.replace(ret, "图灵机器人",botname);
+	                ret = StringUtils.replace(ret, "默认机器人", botname);
 	    }else if(d<0.9){
 		    ret = baiduQueryService.chat(content);
 	    }else{
