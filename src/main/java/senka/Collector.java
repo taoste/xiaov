@@ -39,7 +39,7 @@ public class Collector {
 			}else{
 				for(int i=0;i<thread;i++){
 					final int begin = from+i*(to-from)/thread;
-					final int end = from+(i+1)*(to-from)/thread-1;
+					final int end = from+(i+1)*(to-from)/thread;
 					new Thread(new Runnable() {
 						public void run() {
 							int f = 0;
