@@ -47,6 +47,10 @@ public class ApiHandler {
 		if(path.equals("test")){
 			ret = "{\"r\":110}";
 		}
+		if(path.equals("collect")){
+			senka.Collector.runCollector(data);
+			ret = "will run collector";
+		}
 		return ret;
 	}
 }
