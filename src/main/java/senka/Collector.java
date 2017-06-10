@@ -27,13 +27,13 @@ public class Collector {
 	}
 	
 	public static void runCollector(Map<String, String[]> data)throws Exception{
-		String type = data.get("type")[0];
-		String token = data.get("token")[0];
-		String server = data.get("server")[0];
+		final String type = data.get("type")[0];
+		final String token = data.get("token")[0];
+		final String server = data.get("server")[0];
 		if(type.equals("init")){
-			int from = Integer.valueOf(data.get("from")[0]); 
-			int to = Integer.valueOf(data.get("to")[0]); 
-			int thread = Integer.valueOf(data.get("thread")[0]); 
+			final int from = Integer.valueOf(data.get("from")[0]); 
+			final int to = Integer.valueOf(data.get("to")[0]); 
+			final int thread = Integer.valueOf(data.get("thread")[0]); 
 			if(from<700000||to-from>500000||thread>8){
 				return;
 			}else{
