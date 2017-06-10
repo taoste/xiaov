@@ -38,8 +38,8 @@ public class Collector {
 				return;
 			}else{
 				for(int i=0;i<thread;i++){
-					final int begin = i*(to-from)/thread;
-					final int end = (i+1)*(to-from)/thread-1;
+					final int begin = from+i*(to-from)/thread;
+					final int end = from+(i+1)*(to-from)/thread-1;
 					new Thread(new Runnable() {
 						public void run() {
 							int f = 0;
@@ -48,7 +48,7 @@ public class Collector {
 								int id=j;
 								String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
 								try {
-									String r = Post(url, param);
+									String r = Post(url, param,token);
 									if(r.startsWith("svdata="));
 									JSONObject jd = new JSONObject(r.substring(7));
 									Thread.sleep(100);
@@ -58,12 +58,14 @@ public class Collector {
 									int ret = save(jd,server);
 									if(ret == 1){
 										f++;
-										System.out.print("failed get info:"+j);
+										System.out.println(param);
+										System.out.print("\nfailed get info:"+j+"\n");
 										System.out.print(jd);
 									}else{
 										f=0;
 									}
 									if(f>5){
+										
 										break;
 									}
 									Thread.sleep(100);
@@ -109,7 +111,7 @@ public class Collector {
 	
 	
 	
-	 public static String  Post(String urlStr,String param) throws Exception{
+	 public static String  Post(String urlStr,String param,String token) throws Exception{
 	         URL url = new URL(urlStr);
 	         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 	         conn.setRequestMethod("POST");
@@ -120,7 +122,7 @@ public class Collector {
 	         conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
 	         conn.setRequestProperty("X-Powered-By","PHP/5.3.3");
 	         conn.setRequestProperty("Accept-Language","zh-CN,zh;q=0.8");
-	         conn.setRequestProperty("Referer","http://203.104.248.135/kcs/mainD2.swf?api_token=35c234835c146e3c8aa30700d10ee732b6051117&api_starttime=1497062500846/[[DYNAMIC]]/1");
+	         conn.setRequestProperty("Referer","http://203.104.248.135/kcs/mainD2.swf?api_token="+token+"&api_starttime="+new Date().getTime()+"/[[DYNAMIC]]/1");
 	         conn.setRequestProperty("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36");
 	         conn.setRequestProperty("X-Requested-With","ShockwaveFlash/25.0.0.171");
 	         OutputStream os = conn.getOutputStream();     
