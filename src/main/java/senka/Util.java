@@ -11,7 +11,7 @@ public class Util {
 	}
 	public static void init(){
 		String mongouri = new String();
-			mongouri="mongodb://192.168.17.100:27050/?replicaSet=rs0";
+			mongouri="mongodb://127.0.0.1:27050/?replicaSet=rs0";
 		try {
 			MongoClient mongoClient = new MongoClient(new MongoClientURI(mongouri));
 			db = mongoClient.getDB("db_senka");
