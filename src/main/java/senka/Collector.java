@@ -51,11 +51,11 @@ public class Collector {
 						public void run() {
 							int f = 0;
 							for(int j=begin;j<end;j++){
-								String url = "http://203.104.248.135/kcsapi/api_req_member/get_practice_enemyinfo";
+								String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
 								int id=j;
 								String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
 								try {
-									String r = Post(url, param,token);
+									String r = Lib.ApiPost(path, param, token, Integer.valueOf(server));
 									if(r.startsWith("svdata="));
 									JSONObject jd = new JSONObject(r.substring(7));
 									Thread.sleep(100);
