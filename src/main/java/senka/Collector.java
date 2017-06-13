@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -20,6 +21,12 @@ public class Collector {
 		// TODO Auto-generated method stub
 		System.out.println(123123);
 		try {
+			String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
+			String id = "8013954";
+			String token = "175944122e83efbc5fc24edd2c9a228756723e96";
+			String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
+			String s = Lib.ApiPost(path, param, token,8);
+			System.out.println(s);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -65,7 +72,6 @@ public class Collector {
 										f=0;
 									}
 									if(f>5){
-										
 										break;
 									}
 									Thread.sleep(100);
@@ -79,8 +85,31 @@ public class Collector {
 				}
 			}
 		}
-
 	}
+	
+	public static void collectById(ArrayList<Integer> idlist,String token,int server)throws Exception{
+		for(int i=0;i<idlist.size();i++){
+			String url = "http://203.104.248.135/kcsapi/api_req_member/get_practice_enemyinfo";
+			int id=idlist.get(i);
+			String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
+			try {
+				String r = Post(url, param,token);
+				if(r.startsWith("svdata="));
+				JSONObject jd = new JSONObject(r.substring(7));
+				Thread.sleep(100);
+				int ret = save(jd,server+"");
+				if(ret == 1){
+					System.out.println(param);
+					System.out.print("\nfailed get info:"+id+"\n");
+					System.out.print(jd);
+				}
+				Thread.sleep(100);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	public static int save(JSONObject j,String server)throws Exception{
 		String result = j.getString("api_result_msg");

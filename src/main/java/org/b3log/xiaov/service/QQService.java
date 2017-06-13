@@ -636,19 +636,12 @@ public class QQService {
     }
     
     private String answer(final String content, final String userName,final String botname) {
-	    double d = Math.random();
 	    String ret = "";
-	    if(d<0.8){
-	                ret = turingQueryService.chat(userName, content);
-	                ret = StringUtils.replace(ret, "图灵机器人",botname);
-	                ret = StringUtils.replace(ret, "默认机器人", botname);
-	    }else if(d<0.9){
-		    ret = baiduQueryService.chat(content);
-	    }else{
-		    ret = itpkQueryService.chat(content);
-	    }
+        ret = turingQueryService.chat(userName, content);
+        ret = StringUtils.replace(ret, "图灵机器人",botname);
+        ret = StringUtils.replace(ret, "默认机器人", botname);
             if (StringUtils.isBlank(ret)) {
-                ret = "嗯~";
+                ret = "喵~";
             }
             return ret;
     }
