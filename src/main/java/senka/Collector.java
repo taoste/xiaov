@@ -58,7 +58,6 @@ public class Collector {
 									String r = Lib.ApiPost(path, param, token, Integer.valueOf(server));
 									if(r.startsWith("svdata="));
 									JSONObject jd = new JSONObject(r.substring(7));
-									Thread.sleep(100);
 									if(j%100==0){
 										System.out.println(j);
 									}
@@ -74,7 +73,6 @@ public class Collector {
 									if(f>5){
 										break;
 									}
-									Thread.sleep(100);
 								} catch (Exception e) {
 									e.printStackTrace();
 								}

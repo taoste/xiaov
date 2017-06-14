@@ -9,7 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
+import lib.TimerTask;
+
 public class ApiHandler {
+	static{
+		TimerTask.init();
+	}
+	
 	public static void handleReq(final HttpServletRequest req, final HttpServletResponse resp){
 		String pathinfo = req.getPathInfo();
 		String path = pathinfo.substring(1);
@@ -51,6 +57,11 @@ public class ApiHandler {
 			senka.Collector.runCollector(data);
 			ret = "will run collector";
 		}
+		if(path.equals("rank")){
+			senka.Rank.runRank(data);
+			ret = "will run rank";
+		}
+		
 		return ret;
 	}
 }
