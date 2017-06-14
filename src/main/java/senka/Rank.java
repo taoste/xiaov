@@ -191,7 +191,7 @@ public class Rank {
 						JSONObject infoj = new JSONObject(info);
 						int rank = infoj.getInt("api_rank");
 						String tcmt = infoj.getString("api_cmt");
-						if((cmt.equals(tcmt)||(cmt.trim().length()>1&&tcmt.trim().length()>1))&&rank>=2){
+						if((cmt.equals(tcmt)||(cmt.trim().length()>1&&tcmt.trim().length()>1))&&rank<=2){
 							JSONObject jd = new JSONObject();
 							jd.put("id", ud.get("_id"));
 							jd.put("senka", senka);
