@@ -57,7 +57,7 @@ public class Rank {
 		}
 		calMagic();
 		parseData();
-		calsenka(server);
+		calsenka(server,token);
 	}
 	
 	
