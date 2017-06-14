@@ -95,7 +95,7 @@ public class Rank {
 					}
 					calMagic();
 					parseData();
-					calsenka(server);
+					calsenka(server,token);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -157,7 +157,7 @@ public class Rank {
 		}
 	}
 	
-	public static void calsenka(int server)throws Exception{
+	public static void calsenka(int server,String token)throws Exception{
 		ArrayList<JSONObject> idlist = new ArrayList<>();
 		DBCollection cl_senka = Util.db.getCollection("cl_senka_"+server);
 		DBCollection cl_tmp_senka = Util.db.getCollection("cl_tmp_senka_"+server);
@@ -189,14 +189,51 @@ public class Rank {
 						String info = ud.get("info").toString();
 						JSONObject infoj = new JSONObject(info);
 						String cmti = infoj.getString("api_cmt");
-						int lv = Integer.valueOf(ud.get("lv").toString());
 						int rank = infoj.getInt("api_rank");
-						if(cmti.equals(cmt)&&lv>100-i/5&&rank<=2){
+						ArrayList<JSONObject> mayids = new ArrayList<>();
+						if(cmti.equals(cmt)&&rank>=2){
 							JSONObject jd = new JSONObject();
 							jd.put("id", ud.get("_id"));
 							jd.put("senka", senka);
 							jd.put("name",name);
-							idlist.add(jd);
+							jd.put("n", i);
+							mayids.add(jd);
+						}
+						if(mayids.size()==1){
+							idlist.add(mayids.get(0));
+						}else if(mayids.size()==0){
+							System.out.println("++++++++++++++++++++++++++++");
+							System.out.println("can't find id:"+name+","+senka);
+						}else if(mayids.size()<5){
+							ArrayList<JSONObject> mayids2 = new ArrayList<>();
+							for(int x=0;x<mayids.size();x++){
+								JSONObject jm = mayids.get(x);
+								int id = jm.getInt("id");
+								String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
+								String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
+								String r = Lib.ApiPost(path, param, token, Integer.valueOf(server));
+								if(r.startsWith("svdata="));
+								JSONObject jddd = new JSONObject(r.substring(7));
+								int trank = jddd.getInt("api_rank");
+								String tcmt = jddd.getString("api_cmt");
+								if(trank==1){
+									mayids2.add(jm);
+								}
+							}
+							if(mayids2.size()==1){
+								idlist.add(mayids2.get(0));
+							}else if(mayids2.size()==0){
+								System.out.println("************************");
+								System.out.println("can't find id:"+name+","+senka);
+							}else{
+								for(int y=0;y<mayids2.size();y++){
+									idlist.add(mayids2.get(y));
+								}
+							}
+						}else{
+							System.out.println("+++++++++++++++++++++++++");
+							System.out.println("too many ids find:"+name+","+senka);
+							System.out.println(mayids);
 						}
 					}
 				}else if(userlist.size()==1){
@@ -204,6 +241,7 @@ public class Rank {
 					jd.put("id", userlist.get(0).get("_id"));
 					jd.put("senka", senka);
 					jd.put("name",name);
+					jd.put("n", i);
 					idlist.add(jd);
 				}else{
 					System.out.println("NO USER FOUND!"+name);
@@ -226,7 +264,7 @@ public class Rank {
 			BasicDBObject update = new BasicDBObject();
 			update.append("$push", new BasicDBObject("senka",new BasicDBObject("senka",senka).append("ts", now)));
 			cl_senka.update(new BasicDBObject("_id", id),update,true,false);
-			dbl.add(new BasicDBObject("id",id).append("senka", senka).append("name", jrd.get("name")));
+			dbl.add(new BasicDBObject("id",id).append("senka", senka).append("name", jrd.get("name")).append("n", jrd.get("n")));
 		}
 		cl_tmp_senka.save(new BasicDBObject("_id",now).append("d", dbl));
 	}
