@@ -84,7 +84,7 @@ public class Rank {
 				try {
 					String path = "/kcsapi/api_req_ranking/mxltvkpyuklh";
 					String ranking = generateRankKey(userid);
-					for(int i=1;i<10;i++){
+					for(int i=1;i<100;i++){
 						String param = "api%5Fpageno="+i+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
 						System.out.println(param);
 						String ret = Lib.ApiPost(path, param, token, server);
@@ -174,8 +174,6 @@ public class Rank {
 			}
 			String name = jdd.getString("api_mtjmdcwtvhdr");
 			String cmt = jdd.getString("api_itbrdpdbkynm");
-			System.out.println(name);
-			System.out.println(senka);
 			DBCursor dbc = null;
 			try {
 				dbc = cl_senka.find(new BasicDBObject("name",name));
@@ -191,7 +189,9 @@ public class Rank {
 						String info = ud.get("info").toString();
 						JSONObject infoj = new JSONObject(info);
 						String cmti = infoj.getString("api_cmt");
-						if(cmti.equals(cmt)){
+						int lv = Integer.valueOf(ud.get("lv").toString());
+						int rank = infoj.getInt("api_rank");
+						if(cmti.equals(cmt)&&lv>100-i/5&&rank<=2){
 							JSONObject jd = new JSONObject();
 							jd.put("id", ud.get("_id"));
 							jd.put("senka", senka);
