@@ -205,7 +205,8 @@ public class Rank {
 					}else if(mayids.size()==0){
 						System.out.println("++++++++++++++++++++++++++++");
 						System.out.println("can't find id:"+name+","+senka);
-					}else if(mayids.size()<5){
+						System.out.println(userlist);
+					}else if(mayids.size()<9){
 						ArrayList<JSONObject> mayids2 = new ArrayList<>();
 						for(int x=0;x<mayids.size();x++){
 							JSONObject jm = mayids.get(x);
@@ -227,6 +228,7 @@ public class Rank {
 						}else if(mayids2.size()==0){
 							System.out.println("************************");
 							System.out.println("can't find id:"+name+","+senka);
+							System.out.println(mayids);
 						}else{
 							ArrayList<JSONObject> mayids3= new ArrayList<>();
 							for(int y=0;y<mayids2.size();y++){
