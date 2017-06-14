@@ -184,14 +184,13 @@ public class Rank {
 					userlist.add(userdata);
 				}
 				if(userlist.size()>1){
+					ArrayList<JSONObject> mayids = new ArrayList<>();
 					for(int k=0;k<userlist.size();k++){
 						DBObject ud = userlist.get(k);
 						String info = ud.get("info").toString();
 						JSONObject infoj = new JSONObject(info);
-						String cmti = infoj.getString("api_cmt");
 						int rank = infoj.getInt("api_rank");
-						ArrayList<JSONObject> mayids = new ArrayList<>();
-						if(cmti.equals(cmt)&&rank>=2){
+						if(rank>=2){
 							JSONObject jd = new JSONObject();
 							jd.put("id", ud.get("_id"));
 							jd.put("senka", senka);
@@ -199,43 +198,46 @@ public class Rank {
 							jd.put("n", i);
 							mayids.add(jd);
 						}
-						if(mayids.size()==1){
-							idlist.add(mayids.get(0));
-						}else if(mayids.size()==0){
-							System.out.println("++++++++++++++++++++++++++++");
-							System.out.println("can't find id:"+name+","+senka);
-						}else if(mayids.size()<5){
-							ArrayList<JSONObject> mayids2 = new ArrayList<>();
-							for(int x=0;x<mayids.size();x++){
-								JSONObject jm = mayids.get(x);
-								int id = jm.getInt("id");
-								String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
-								String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
-								String r = Lib.ApiPost(path, param, token, Integer.valueOf(server));
-								if(r.startsWith("svdata="));
-								JSONObject jddd = new JSONObject(r.substring(7));
-								int trank = jddd.getInt("api_rank");
-								String tcmt = jddd.getString("api_cmt");
-								if(trank==1){
-									mayids2.add(jm);
-								}
-							}
-							if(mayids2.size()==1){
-								idlist.add(mayids2.get(0));
-							}else if(mayids2.size()==0){
-								System.out.println("************************");
-								System.out.println("can't find id:"+name+","+senka);
-							}else{
-								for(int y=0;y<mayids2.size();y++){
-									idlist.add(mayids2.get(y));
-								}
-							}
-						}else{
-							System.out.println("+++++++++++++++++++++++++");
-							System.out.println("too many ids find:"+name+","+senka);
-							System.out.println(mayids);
-						}
 					}
+					if(mayids.size()==1){
+						idlist.add(mayids.get(0));
+					}else if(mayids.size()==0){
+						System.out.println("++++++++++++++++++++++++++++");
+						System.out.println("can't find id:"+name+","+senka);
+					}else if(mayids.size()<5){
+						ArrayList<JSONObject> mayids2 = new ArrayList<>();
+						for(int x=0;x<mayids.size();x++){
+							JSONObject jm = mayids.get(x);
+							int id = jm.getInt("id");
+							String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
+							String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
+							String r = Lib.ApiPost(path, param, token, Integer.valueOf(server));
+							if(r.startsWith("svdata="));
+							JSONObject jddd = new JSONObject(r.substring(7));
+							int trank = jddd.getInt("api_rank");
+							String tcmt = jddd.getString("api_cmt");
+							if(trank==1){
+								mayids2.add(jm);
+							}
+						}
+						if(mayids2.size()==1){
+							idlist.add(mayids2.get(0));
+						}else if(mayids2.size()==0){
+							System.out.println("************************");
+							System.out.println("can't find id:"+name+","+senka);
+						}else{
+							for(int y=0;y<mayids2.size();y++){
+								idlist.add(mayids2.get(y));
+							}
+						}
+					}else{
+						System.out.println("+++++++++++++++++++++++++");
+						System.out.println("too many ids find:"+name+","+senka);
+						System.out.println(mayids);
+					}
+					
+					
+					
 				}else if(userlist.size()==1){
 					JSONObject jd = new JSONObject();
 					jd.put("id", userlist.get(0).get("_id"));
