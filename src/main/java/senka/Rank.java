@@ -94,10 +94,10 @@ public class Rank {
 							JSONObject j = new JSONObject(ret.substring(7));
 							addData(j);
 						}
-						calMagic();
-						parseData();
-						calsenka(server);
 					}
+					calMagic();
+					parseData();
+					calsenka(server);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
