@@ -83,10 +83,9 @@ public class Rank {
 			public void run() {
 				try {
 					String path = "/kcsapi/api_req_ranking/mxltvkpyuklh";
-					int page=1;
 					String ranking = generateRankKey(userid);
 					for(int i=1;i<100;i++){
-						String param = "api%5Fpageno="+page+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
+						String param = "api%5Fpageno="+i+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
 						System.out.println(param);
 						String ret = Lib.ApiPost(path, param, token, server);
 						if(ret.startsWith("svdata=")){
