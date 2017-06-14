@@ -84,7 +84,7 @@ public class Rank {
 				try {
 					String path = "/kcsapi/api_req_ranking/mxltvkpyuklh";
 					String ranking = generateRankKey(userid);
-					for(int i=1;i<100;i++){
+					for(int i=1;i<10;i++){
 						String param = "api%5Fpageno="+i+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
 						System.out.println(param);
 						String ret = Lib.ApiPost(path, param, token, server);
@@ -168,11 +168,14 @@ public class Rank {
 			long key=jdd.getLong("api_wuhnhojjxmke");
 			int lrate = (int)(key / MAGIC_R_NUMS[no%13]);
 			int senka = lrate/magic - 91;
+			
 			if(no==senkaRank.size()+1){
 				senkaRank.add(senka);
 			}
 			String name = jdd.getString("api_mtjmdcwtvhdr");
 			String cmt = jdd.getString("api_itbrdpdbkynm");
+			System.out.println(name);
+			System.out.println(senka);
 			DBCursor dbc = null;
 			try {
 				dbc = cl_senka.find(new BasicDBObject("name",name));
@@ -203,7 +206,7 @@ public class Rank {
 					jd.put("name",name);
 					idlist.add(jd);
 				}else{
-					//TODO need fetch user data
+					System.out.println("NO USER FOUND!"+name);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
