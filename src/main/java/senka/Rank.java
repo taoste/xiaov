@@ -74,7 +74,7 @@ public class Rank {
 		runRankTask(token, server, userid);
 	}
 	
-	public static void runRankTask(String token,final int server,final int userid)throws Exception{
+	public static void runRankTask(final String token,final int server,final int userid)throws Exception{
 		magic=0;
 		tmpdata=new ArrayList<>();
 		larray = new ArrayList<>();
