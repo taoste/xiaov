@@ -190,7 +190,8 @@ public class Rank {
 						String info = ud.get("info").toString();
 						JSONObject infoj = new JSONObject(info);
 						int rank = infoj.getInt("api_rank");
-						if(rank>=2){
+						String tcmt = infoj.getString("api_cmt");
+						if((cmt.equals(tcmt)||(cmt.trim().length()>1&&tcmt.trim().length()>1))&&rank>=2){
 							JSONObject jd = new JSONObject();
 							jd.put("id", ud.get("_id"));
 							jd.put("senka", senka);
@@ -214,9 +215,10 @@ public class Rank {
 							String r = Lib.ApiPost(path, param, token, Integer.valueOf(server));
 							if(r.startsWith("svdata="));
 							JSONObject jddd = new JSONObject(r.substring(7));
-							int trank = jddd.getInt("api_rank");
-							String tcmt = jddd.getString("api_cmt");
+							JSONObject userdata = jddd.getJSONObject("api_data");
+							int trank = userdata.getInt("api_rank");
 							if(trank==1){
+								jm.put("data", userdata);
 								mayids2.add(jm);
 							}
 						}
@@ -226,8 +228,26 @@ public class Rank {
 							System.out.println("************************");
 							System.out.println("can't find id:"+name+","+senka);
 						}else{
+							ArrayList<JSONObject> mayids3= new ArrayList<>();
 							for(int y=0;y<mayids2.size();y++){
-								idlist.add(mayids2.get(y));
+								JSONObject userdata = mayids2.get(y).getJSONObject("data");
+								String ncmt = userdata.getString("api_cmt");
+								if(ncmt.equals(cmt)){
+									mayids3.add(mayids2.get(y));
+								}
+							}
+							if(mayids3.size()==1){
+								idlist.add(mayids3.get(0));
+							}else if(mayids3.size()==0){
+								System.out.println("=========================");
+								System.out.println("can't find id:"+name+","+senka);
+								for(int z=0;z>mayids2.size();z++){
+									idlist.add(mayids2.get(z));
+								}
+							}else{
+								for(int z=0;z>mayids3.size();z++){
+									idlist.add(mayids3.get(z));
+								}
 							}
 						}
 					}else{
