@@ -74,24 +74,35 @@ public class Rank {
 		runRankTask(token, server, userid);
 	}
 	
-	public static void runRankTask(String token,int server,int userid)throws Exception{
-		String path = "/kcsapi/api_req_ranking/mxltvkpyuklh";
-		int page=1;
+	public static void runRankTask(String token,final int server,final int userid)throws Exception{
 		magic=0;
 		tmpdata=new ArrayList<>();
 		larray = new ArrayList<>();
-		String ranking = generateRankKey(userid);
-		for(int i=1;i<100;i++){
-			String param = "api%5Fpageno="+page+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
-			String ret = Lib.ApiPost(path, param, token, server);
-			if(ret.startsWith("svdata=")){
-				JSONObject j = new JSONObject(ret.substring(7));
-				addData(j);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					String path = "/kcsapi/api_req_ranking/mxltvkpyuklh";
+					int page=1;
+					String ranking = generateRankKey(userid);
+					for(int i=1;i<100;i++){
+						String param = "api%5Fpageno="+page+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
+						String ret = Lib.ApiPost(path, param, token, server);
+						if(ret.startsWith("svdata=")){
+							JSONObject j = new JSONObject(ret.substring(7));
+							addData(j);
+						}
+						calMagic();
+						parseData();
+						calsenka(server);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
 			}
-			calMagic();
-			parseData();
-			calsenka(server);
-		}
+		});
+
 	}
 	
 
