@@ -89,7 +89,6 @@ public class Rank {
 						String param = "api%5Fpageno="+page+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
 						System.out.println(param);
 						String ret = Lib.ApiPost(path, param, token, server);
-						System.out.println(ret);
 						if(ret.startsWith("svdata=")){
 							JSONObject j = new JSONObject(ret.substring(7));
 							addData(j);
@@ -110,20 +109,25 @@ public class Rank {
 
 
 	public static void addData(JSONObject j)throws Exception{
-		JSONArray list = j.getJSONObject("api_data").getJSONArray("api_list");
-		for(int i=0;i<list.length();i++){
-			JSONObject jd = list.getJSONObject(i);
-			int no=jd.getInt("api_mxltvkpyuklh");
-			long key=jd.getLong("api_wuhnhojjxmke");
-			if(key%MAGIC_R_NUMS[no%13]==0){
-				int lrate = (int)(key / MAGIC_R_NUMS[no%13]);
-				if(magic==0&&larray.size()<calMagicNum){
-					larray.add(lrate);
-					tmpdata.add(jd);
-				}else{
-					tmpdata.add(jd);
+		if(j.getInt("api_result")==1){
+			JSONArray list = j.getJSONObject("api_data").getJSONArray("api_list");
+			for(int i=0;i<list.length();i++){
+				JSONObject jd = list.getJSONObject(i);
+				int no=jd.getInt("api_mxltvkpyuklh");
+				long key=jd.getLong("api_wuhnhojjxmke");
+				if(key%MAGIC_R_NUMS[no%13]==0){
+					int lrate = (int)(key / MAGIC_R_NUMS[no%13]);
+					if(magic==0&&larray.size()<calMagicNum){
+						larray.add(lrate);
+						tmpdata.add(jd);
+					}else{
+						tmpdata.add(jd);
+					}
 				}
 			}
+		}else{
+			System.out.println("---------------error get senka----------------");
+			System.out.println(j);
 		}
 	}
 	
@@ -181,7 +185,7 @@ public class Rank {
 				}
 				if(userlist.size()>1){
 					for(int k=0;k<userlist.size();k++){
-						DBObject ud = userlist.get(i);
+						DBObject ud = userlist.get(k);
 						String info = ud.get("info").toString();
 						JSONObject infoj = new JSONObject(info);
 						String cmti = infoj.getString("api_cmt");
