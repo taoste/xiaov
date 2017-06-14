@@ -87,7 +87,9 @@ public class Rank {
 					String ranking = generateRankKey(userid);
 					for(int i=1;i<100;i++){
 						String param = "api%5Fpageno="+page+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
+						System.out.println(param);
 						String ret = Lib.ApiPost(path, param, token, server);
+						System.out.println(ret);
 						if(ret.startsWith("svdata=")){
 							JSONObject j = new JSONObject(ret.substring(7));
 							addData(j);
