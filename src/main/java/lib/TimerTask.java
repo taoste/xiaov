@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import senka.Collector;
+import senka.Rank;
 
 public class TimerTask {
 	static{
@@ -28,6 +29,12 @@ public class TimerTask {
 		stpe2.scheduleAtFixedRate(new Runnable() {
 			public void run() {
 				System.out.println(new Date());
+				System.out.println("-----------------will get senka now------------");
+				try {
+					Rank.runRankTask("8c3f8fa5533a18f92ac54c65022491eb2900125e", 8, 8156938);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}, left2, 43200, TimeUnit.SECONDS);
 		System.out.println("--------------------------------");
