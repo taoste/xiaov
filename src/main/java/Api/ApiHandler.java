@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 
 import lib.TimerTask;
+import senka.Search;
 
 public class ApiHandler {
 	static{
@@ -61,7 +62,9 @@ public class ApiHandler {
 			senka.Rank.runRank(data);
 			ret = "will run rank";
 		}
-		
+		if(path.equals("seek")){
+			ret = Search.seekByName(data);
+		}
 		return ret;
 	}
 }
