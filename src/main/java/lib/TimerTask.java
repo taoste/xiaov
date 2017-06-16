@@ -18,7 +18,7 @@ public class TimerTask {
 			public void run() {
 				System.out.println(new Date());
 				System.out.println("-----------------will get exp now------------");
-				Collector.collectByLastSenka("8c3f8fa5533a18f92ac54c65022491eb2900125e", 8);
+				Collector.collectByLastSenka("97bdb209855ebda602ee4ecb03fb595a4a950679", 8);
 
 			}
 		}, left1, 43200, TimeUnit.SECONDS);
@@ -31,7 +31,7 @@ public class TimerTask {
 				System.out.println(new Date());
 				System.out.println("-----------------will get senka now------------");
 				try {
-					Rank.runRankTask("8c3f8fa5533a18f92ac54c65022491eb2900125e", 8, 8156938);
+					Rank.runRankTask("97bdb209855ebda602ee4ecb03fb595a4a950679", 8, 8156938);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
