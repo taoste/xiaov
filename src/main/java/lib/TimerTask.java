@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import senka.Collector;
+
 public class TimerTask {
 	static{
 		Date  now = new Date(new Date().getTime()+(new Date().getTimezoneOffset()+480)*60000);
@@ -14,6 +16,9 @@ public class TimerTask {
 		stpe1.scheduleAtFixedRate(new Runnable() {
 			public void run() {
 				System.out.println(new Date());
+				System.out.println("-----------------will get exp now------------");
+				Collector.collectByLastSenka("8c3f8fa5533a18f92ac54c65022491eb2900125e", 8);
+
 			}
 		}, left1, 43200, TimeUnit.SECONDS);
 		

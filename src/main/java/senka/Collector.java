@@ -7,30 +7,40 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 
 public class Collector {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		System.out.println(123123);
+		long t1 = new Date().getTime();
 		try {
-			String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
-			String id = "8013954";
-			String token = "175944122e83efbc5fc24edd2c9a228756723e96";
-			String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
-			String s = Lib.ApiPost(path, param, token,8);
-			System.out.println(s);
+			collectByLastSenka("8c3f8fa5533a18f92ac54c65022491eb2900125e", 8);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("finish");
+		long t2 = new Date().getTime();
+		System.out.println("finish:"+(t2-t1));
+	}
+	
+	public static void test()throws Exception{
+		String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
+		String id = "8156938";
+		String token = "8c3f8fa5533a18f92ac54c65022491eb2900125e";
+		String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
+		String s = Lib.ApiPost(path, param, token,8);
+		System.out.println(s);
 	}
 	
 	public static void runCollector(Map<String, String[]> data)throws Exception{
@@ -85,28 +95,78 @@ public class Collector {
 		}
 	}
 	
-	public static void collectById(ArrayList<Integer> idlist,String token,int server)throws Exception{
-		for(int i=0;i<idlist.size();i++){
-			String url = "http://203.104.248.135/kcsapi/api_req_member/get_practice_enemyinfo";
-			int id=idlist.get(i);
-			String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
-			try {
-				String r = Post(url, param,token);
-				if(r.startsWith("svdata="));
-				JSONObject jd = new JSONObject(r.substring(7));
-				Thread.sleep(100);
-				int ret = save(jd,server+"");
-				if(ret == 1){
-					System.out.println(param);
-					System.out.print("\nfailed get info:"+id+"\n");
-					System.out.print(jd);
+	public static JSONObject collectById(int id,String token,int server)throws Exception{
+		String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
+		String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
+		try {
+			String r = Lib.ApiPost(path, param, token, server);
+			if(r.startsWith("svdata="));
+			JSONObject jd = new JSONObject(r.substring(7));
+			int ret = save(jd,server+"");
+			if(ret == 1){
+				System.out.println(param);
+				System.out.print("\nfailed get info:"+id+"\n");
+				System.out.print(jd);
+				return null;
+			}else{
+				return jd.getJSONObject("api_data");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static void collectByLastSenka(String token,int server){
+		DBCollection cl_n_senka = Util.db.getCollection("cl_n_senka_"+server);
+		DBCursor dbc = null;
+		Date now = new Date();
+		int rankNo = Util.getRankDateNo(now);
+		try {
+			dbc = cl_n_senka.find(new BasicDBObject("ts",new BasicDBObject("$gt",new Date(now.getTime()-60000000L)))); //1000 min
+			int all=0;
+			while (dbc.hasNext()) {
+				all++;
+				DBObject dbObject = (DBObject) dbc.next();
+				String name = dbObject.get("_id").toString();
+				String key = "d"+now.getMonth();
+				BasicDBList dbl = (BasicDBList)dbObject.get(key);
+				ArrayList<DBObject> matched = new ArrayList<>();
+				for(int i=dbl.size();i>0;i--){
+					DBObject senkainfo = (DBObject)dbl.get(i-1);
+					int thenDateNo = Integer.valueOf(senkainfo.get("ts").toString());
+					if(thenDateNo==rankNo){
+						matched.add(senkainfo);
+					}else{
+						break;
+					}
 				}
-				Thread.sleep(100);
-			} catch (Exception e) {
-				e.printStackTrace();
+				if(matched.size()==0){
+					
+				}else if(matched.size()==1){
+					DBObject nameData = matched.get(0);
+					Object tido = nameData.get("id");
+					int tid=0;
+					if(tido!=null){
+						tid = Integer.valueOf(tido.toString());
+					}
+					NameHandler.handleName(name,matched.get(0),tid,1,server,token);
+				}else if(matched.size()>1){
+					System.out.println(matched);
+					System.out.println(name);
+
+				}
+			}
+			System.out.println("all:"+all);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			if(dbc!=null){
+				dbc.close();
 			}
 		}
 	}
+	
 	
 	
 	public static int save(JSONObject j,String server)throws Exception{
@@ -123,7 +183,7 @@ public class Collector {
 			expdata.append("d", exp);
 			expdata.append("ts",now);
 			int lv = data.getInt("api_level");
-			update.append("$set", new BasicDBObject("name", name).append("e", exp).append("lv", lv).append("info",data.toString()));
+			update.append("$set", new BasicDBObject("name", name).append("e", exp).append("lv", lv).append("info",data.toString()).append("ts", now));
 			update.append("$push", new BasicDBObject("exp",expdata));
 			BasicDBObject query = new BasicDBObject();
 			query.append("_id", id);
