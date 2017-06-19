@@ -33,7 +33,7 @@ public class ReplyMsg {
 			if(content.startsWith("`")){
 				String str = content.substring(1);
 				if(str.equals("")){
-					ret = "翻译成中文：`1+要翻译的内容\n翻译成日文：`2+要翻译的内容\n翻译成英文：`3+要翻译的内容\n";
+					ret = "翻译成中文：`1+要翻译的内容\n翻译成日文：`2+要翻译的内容\n翻译成英文：`3+要翻译的内容\n翻译成中文：`+要翻译的内容\n";
 				}else if(str.startsWith("1")){
 					ret = Translate.translate(str.substring(1), "zh");
 				}else if(str.startsWith("2")){
