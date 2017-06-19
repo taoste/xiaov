@@ -41,9 +41,9 @@ public class Translate {
 						"&appKey="+appKey+
 						"&salt="+ran+
 						"&sign="+calSign(text,ran);
-		String s = HttpGet(url, param);
-		System.out.println(param);
-
+		String urlStr = url+"?"+param;
+		System.out.println(urlStr);
+		String s = HttpGet(urlStr, "");
 		System.out.println(s);
 		JSONObject j = new JSONObject(s);
 		JSONArray translation = j.getJSONArray("translation");
