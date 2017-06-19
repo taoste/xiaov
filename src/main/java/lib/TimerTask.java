@@ -32,7 +32,7 @@ public class TimerTask {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						Collector.collectByLastSenka(token19, 8);
+						Collector.collectByLastSenka(token19, 19);
 					}
 				}).start();
 				
