@@ -29,7 +29,7 @@ public class ApiHandler {
 		
 		try {
 			//resp.addHeader("Cache-Control", "no-store");
-			String ret = handleData(path,data);
+			String ret = handleData(path,data,req,resp);
 			OutputStream output = null;
 			output = resp.getOutputStream();
 			IOUtils.write(ret.getBytes("utf-8"), output);
@@ -47,7 +47,7 @@ public class ApiHandler {
 		}
 	}
 	
-	public static String handleData(String path,Map<String, String[]> data)throws Exception{
+	public static String handleData(String path,Map<String, String[]> data,final HttpServletRequest req, final HttpServletResponse resp)throws Exception{
 		String ret = "{\"r\":100}";
 		System.out.println(path);
 		System.out.println(data);
@@ -63,6 +63,8 @@ public class ApiHandler {
 			ret = "will run rank";
 		}
 		if(path.equals("seek")){
+			resp.setCharacterEncoding("utf-8");
+			resp.setContentType("text/plain");
 			ret = Search.seekByName(data);
 		}
 		return ret;
