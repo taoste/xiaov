@@ -62,7 +62,7 @@ public class TimerTask {
 					@Override
 					public void run() {
 						try {
-							Rank.runRankTask(token19, 19, 8156938);
+							Rank.runRankTask(token19, 19, id19);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}

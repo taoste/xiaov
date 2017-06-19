@@ -22,9 +22,9 @@ import com.mongodb.DBObject;
 public class Rank {
 
 	public static void main(String[] args) {
-		System.out.println("start");
+		System.out.println("start1");
 		try {
-			runRankTask("76c73d1d3b775575e1ffc3116aec113835e8cd37", 8, 8156938);
+			runRankTask("70d709bb2a3cfa7027939452aae19d084509c846", 19, 19154349);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -15,7 +15,7 @@ public class Search {
 
 	public static void main(String[] args) {
 		try {
-			searchByName("アレヴィ", "97bdb209855ebda602ee4ecb03fb595a4a950679", 8);
+			searchByName("アレヴィ", "82686f39ebbfd68bc8ee6d3fc29b0c28a952aa59", 8);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -26,7 +26,7 @@ public class Search {
 		String name = data.get("name")[0];
 		int server = Integer.valueOf(data.get("server")[0]);
 		String ret = searchByName(name, token, server);
-		return name+":"+ret;
+		return name+"\n当前战果值："+ret+"\n"+"";
 	}
 	
 	public static String searchByName(String name,String token,int server)throws Exception{
@@ -90,16 +90,24 @@ public class Search {
 								tail.put("exp", exp);
 								break;
 							}else if(expno>senkano){
-								pointer2++;
-							}else{
 								pointer1++;
+							}else{
+								pointer2++;
 							}
 						}else{
 							pointer1++;
 						}
 					}
 					int nowexp = getNowExp(Integer.valueOf(id), token, server);
-					String addsenka = tail.getString("senka")+"+"+(nowexp-tail.getInt("exp"))/10000.0*7.0+"";
+					String addsenka = tail.getString("senka")+"+"+(nowexp-tail.getInt("exp"))/10000.0*7.0+"\n";
+					Date frontts = (Date)front.get("ts");
+					Date tailts = (Date)tail.get("ts");
+					if(tailts.getTime()-frontts.getTime()>40000000){
+						int senkasub = tail.getInt("senka")-front.getInt("senka");
+						int expsub = tail.getInt("exp")-front.getInt("exp");
+						addsenka = addsenka + "EX:"+(int)(expsub/10000.0*7.0-senkasub)+"("+frontts.toLocaleString()+"-----"+tailts.toLocaleString()+")";
+					}
+					System.out.println(addsenka);
 					return addsenka;
 				}
 			}
@@ -130,7 +138,7 @@ public class Search {
 	private static boolean isExpKeyTs(Date dat){
 		Date  n1 = new Date(dat.getTime()+(dat.getTimezoneOffset()+480)*60000);
 		int left = (int)(43200000-(n1.getTime()-18000000)%43200000)/1000;
-		if(left<600||left>43200-600){
+		if(left<1200||left>43200-600){
 			return true;
 		}else{
 			return false;

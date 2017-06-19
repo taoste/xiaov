@@ -32,7 +32,7 @@ public class ApiHandler {
 			String ret = handleData(path,data);
 			OutputStream output = null;
 			output = resp.getOutputStream();
-			IOUtils.write(ret, output);
+			IOUtils.write(ret.getBytes("utf-8"), output);
 			output.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
