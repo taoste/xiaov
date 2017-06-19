@@ -1,5 +1,6 @@
 package org.Reply;
 
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -70,7 +71,7 @@ public class Translate {
 	private static String calSign(String text,int ran)throws Exception{
 		String strToSign = appKey+text+ran+appSecret;
 		MessageDigest mdInst = MessageDigest.getInstance("MD5");
-		mdInst.update(strToSign.getBytes());
+		mdInst.update(strToSign.getBytes("utf-8"));
 		String sign = DatatypeConverter.printHexBinary(mdInst.digest()).toLowerCase();
 		return sign;
 	}
@@ -85,28 +86,27 @@ public class Translate {
 		try {
 			URL url = new URL(urlStr);
 	        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-	        conn.setConnectTimeout(2000);
-	        conn.setReadTimeout(3000);
+	        conn.setConnectTimeout(10000);
+	        conn.setReadTimeout(12000);
 	        conn.setDoOutput(true);
 	        conn.setRequestMethod("GET");
 	        if(conn.getResponseCode() ==200){
-	                InputStreamReader reader = new InputStreamReader((conn.getInputStream()), "utf-8");  
-	                char[] data = new char[100];  
-	                int readSize;  
-	                StringBuffer sb = new StringBuffer();  
-	                while ((readSize = reader.read(data)) > 0) {  
-	                    sb.append(data, 0, readSize);  
-	                }  
-	                return sb.toString();  
-
+	        	BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	            String line ;
+	            String result ="";
+	            while( (line =br.readLine()) != null ){
+	                result += line + "\n";
+	            }
+	            return result;
 	        }else{
 	            System.out.println("failed"+conn.getResponseCode()+conn.getResponseMessage());
 	        }
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 		return "";
 	}
+	 
 	
 	
 	
