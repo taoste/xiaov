@@ -21,7 +21,8 @@ public class Translate {
 		// TODO Auto-generated method stub
 		System.out.println("start");
 		try {
-			translate("芙兰是", "ja");
+			String r = translate("evitable", "zh-CHS");
+			System.out.println(r);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -32,7 +33,29 @@ public class Translate {
  	
 	private static Random rd = new Random();
 	
+	public static String translateWord(String text){
+		try {
+			String url = "https://api.shanbay.com/bdc/search/?word="+text;
+			String s = HttpGet(url, "");
+			JSONObject j = new JSONObject(s);
+			String transed = "\n"+text+"\n";
+			return transed+j.getJSONObject("data").getString("definition")+"\n";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+
+	}
+	
+	
+	
 	public static String translate(String text,String tolan)throws Exception{
+		if(tolan.equals("zh-CHS")&&text.indexOf(" ")<0){
+			String wordTrans = translateWord(text);
+			if(!wordTrans.equals("")){
+				return wordTrans;
+			}
+		}
 		String url = "https://openapi.youdao.com/api";
 		int ran = 10000+rd.nextInt(88888);
 		String param = 	""+
