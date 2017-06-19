@@ -20,7 +20,7 @@ public class Translate {
 		// TODO Auto-generated method stub
 		System.out.println("start");
 		try {
-			translate("芙兰是baka", "zh-CHS");
+			translate("芙兰是", "ja");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -32,7 +32,7 @@ public class Translate {
 	private static Random rd = new Random();
 	
 	public static String translate(String text,String tolan)throws Exception{
-		String url = "http://openapi.youdao.com/api";
+		String url = "https://openapi.youdao.com/api";
 		int ran = 10000+rd.nextInt(88888);
 		String param = 	""+
 						"q="+URLEncoder.encode(text, "utf-8") +
