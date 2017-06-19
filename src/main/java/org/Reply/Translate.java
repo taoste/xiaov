@@ -48,7 +48,7 @@ public class Translate {
 		System.out.println(s);
 		JSONObject j = new JSONObject(s);
 		JSONArray translation = j.getJSONArray("translation");
-		String transed = text+"\n";
+		String transed = "\n"+text+"\n";
 
 		if(j.has("basic")){
 			JSONObject basic = j.getJSONObject("basic");
