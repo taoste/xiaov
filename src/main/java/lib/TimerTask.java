@@ -8,6 +8,10 @@ import senka.Collector;
 import senka.Rank;
 
 public class TimerTask {
+	private static String token8="82686f39ebbfd68bc8ee6d3fc29b0c28a952aa59";
+	private static int id8 = 8156938;
+	private static String token19="70d709bb2a3cfa7027939452aae19d084509c846";
+	private static int id19 = 19154349;
 	static{
 		Date  now = new Date(new Date().getTime()+(new Date().getTimezoneOffset()+480)*60000);
 		int left1 = (int)(43200000-(now.getTime()-18002000)%43200000)/1000;
@@ -18,8 +22,20 @@ public class TimerTask {
 			public void run() {
 				System.out.println(new Date());
 				System.out.println("-----------------will get exp now------------");
-				Collector.collectByLastSenka("97bdb209855ebda602ee4ecb03fb595a4a950679", 8);
-
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						Collector.collectByLastSenka(token8, 8);
+					}
+				}).start();
+				
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						Collector.collectByLastSenka(token19, 8);
+					}
+				}).start();
+				
 			}
 		}, left1, 43200, TimeUnit.SECONDS);
 		
@@ -30,11 +46,30 @@ public class TimerTask {
 			public void run() {
 				System.out.println(new Date());
 				System.out.println("-----------------will get senka now------------");
-				try {
-					Rank.runRankTask("97bdb209855ebda602ee4ecb03fb595a4a950679", 8, 8156938);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Rank.runRankTask(token8, 8, id8);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}).start();
+				
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Rank.runRankTask(token19, 19, 8156938);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}).start();
+				
+
 			}
 		}, left2, 43200, TimeUnit.SECONDS);
 		System.out.println("--------------------------------");
