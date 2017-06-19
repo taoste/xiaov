@@ -20,7 +20,7 @@ public class Translate {
 		// TODO Auto-generated method stub
 		System.out.println("start");
 		try {
-			translate("芙兰是笨蛋", "ja");
+			translate("芙兰是baka", "zh-CHS");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -89,11 +89,8 @@ public class Translate {
 	        conn.setReadTimeout(3000);
 	        conn.setDoOutput(true);
 	        conn.setRequestMethod("GET");
-	        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36");
-	        conn.setRequestProperty("Accept-Encoding", "gzip, deflate, sdch");
-	        conn.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.8");
 	        if(conn.getResponseCode() ==200){
-	                InputStreamReader reader = new InputStreamReader(new GZIPInputStream(conn.getInputStream()), "utf-8");  
+	                InputStreamReader reader = new InputStreamReader((conn.getInputStream()), "utf-8");  
 	                char[] data = new char[100];  
 	                int readSize;  
 	                StringBuffer sb = new StringBuffer();  

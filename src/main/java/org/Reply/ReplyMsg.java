@@ -35,13 +35,13 @@ public class ReplyMsg {
 				if(str.equals("")){
 					ret = "翻译成中文：`1+要翻译的内容\n翻译成日文：`2+要翻译的内容\n翻译成英文：`3+要翻译的内容\n翻译成中文：`+要翻译的内容\n";
 				}else if(str.startsWith("1")){
-					ret = Translate.translate(str.substring(1), "zh");
+					ret = Translate.translate(str.substring(1), "zh-CHS");
 				}else if(str.startsWith("2")){
 					ret = Translate.translate(str.substring(1), "ja");
 				}else if(str.startsWith("3")){
-					ret = Translate.translate(str.substring(1), "en");
+					ret = Translate.translate(str.substring(1), "EN");
 				}else{
-					ret = Translate.translate(str, "zh");
+					ret = Translate.translate(str, "zh-CHS");
 				}
 			}
 			
