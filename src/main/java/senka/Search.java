@@ -1,5 +1,6 @@
 package senka;
 
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class Search {
 
 	public static void main(String[] args) {
 		try {
-			searchByName("アレヴィ", "82686f39ebbfd68bc8ee6d3fc29b0c28a952aa59", 8);
+			searchByName("クロサワ　ソウイチ", "82686f39ebbfd68bc8ee6d3fc29b0c28a952aa59", 8);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -23,7 +24,7 @@ public class Search {
 	
 	public static String seekByName(Map<String, String[]> data)throws Exception{
 		String token = data.get("token")[0];
-		String name = data.get("name")[0];
+		String name = URLDecoder.decode(data.get("name")[0],"utf-8");
 		int server = Integer.valueOf(data.get("server")[0]);
 		String ret = searchByName(name, token, server);
 		return name+"\n当前战果值："+ret+"\n"+"";
@@ -105,7 +106,7 @@ public class Search {
 					if(tailts.getTime()-frontts.getTime()>40000000){
 						int senkasub = tail.getInt("senka")-front.getInt("senka");
 						int expsub = tail.getInt("exp")-front.getInt("exp");
-						addsenka = addsenka + "EX:"+(int)(expsub/10000.0*7.0-senkasub)+"("+frontts.toLocaleString()+"-----"+tailts.toLocaleString()+")";
+						addsenka = addsenka + "EX:"+(int)(senkasub-expsub/10000.0*7.0)+"    ("+frontts.toLocaleString()+"-----"+tailts.toLocaleString()+")";
 					}
 					System.out.println(addsenka);
 					return addsenka;
