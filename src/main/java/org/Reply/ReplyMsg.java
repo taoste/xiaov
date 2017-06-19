@@ -30,6 +30,21 @@ public class ReplyMsg {
 				}
 				ret = Weather.handlerWeatherReply(city);
 			}
+			if(content.startsWith("`")){
+				String str = content.substring(1);
+				if(str.equals("")){
+					ret = "翻译成中文：`1+要翻译的内容\n翻译成日文：`2+要翻译的内容\n翻译成英文：`3+要翻译的内容\n";
+				}else if(str.startsWith("1")){
+					ret = Translate.translate(str.substring(1), "zh");
+				}else if(str.startsWith("2")){
+					ret = Translate.translate(str.substring(1), "ja");
+				}else if(str.startsWith("3")){
+					ret = Translate.translate(str.substring(1), "en");
+				}else{
+					ret = Translate.translate(str, "zh");
+				}
+			}
+			
 		} catch (Exception e) {
 			ret = "出错了喵";
 			e.printStackTrace();
