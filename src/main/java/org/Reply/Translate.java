@@ -21,7 +21,7 @@ public class Translate {
 		// TODO Auto-generated method stub
 		System.out.println("start");
 		try {
-			String r = translate("evitable", "zh-CHS");
+			String r = translate("tropo", "zh-CHS");
 			System.out.println(r);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -38,8 +38,9 @@ public class Translate {
 			String url = "https://api.shanbay.com/bdc/search/?word="+text;
 			String s = HttpGet(url, "");
 			JSONObject j = new JSONObject(s);
-			String transed = "\n"+text+"\n";
-			return transed+j.getJSONObject("data").getString("definition")+"\n";
+			System.out.println(j);
+			String transed = " "+text+"\n";
+			return transed+j.getJSONObject("data").getString("definition")+"";
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "";
@@ -66,12 +67,10 @@ public class Translate {
 						"&salt="+ran+
 						"&sign="+calSign(text,ran);
 		String urlStr = url+"?"+param;
-		System.out.println(urlStr);
 		String s = HttpGet(urlStr, "");
-		System.out.println(s);
 		JSONObject j = new JSONObject(s);
 		JSONArray translation = j.getJSONArray("translation");
-		String transed = "\n"+text+"\n";
+		String transed = " "+text+"";
 
 		if(j.has("basic")){
 			JSONObject basic = j.getJSONObject("basic");
@@ -83,7 +82,7 @@ public class Translate {
 			}
 			transed=transed+"\n";
 		}
-		transed = transed+"翻译：\n";
+		transed = transed+"↓\n";
 		for(int i=0;i<translation.length();i++){
 			transed = transed + translation.getString(i)+"\n";
 		}

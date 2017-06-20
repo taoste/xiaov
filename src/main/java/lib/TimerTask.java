@@ -5,13 +5,21 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import senka.Collector;
+import senka.Login;
 import senka.Rank;
 
 public class TimerTask {
-	private static String token8="82686f39ebbfd68bc8ee6d3fc29b0c28a952aa59";
 	private static int id8 = 8156938;
-	private static String token19="70d709bb2a3cfa7027939452aae19d084509c846";
 	private static int id19 = 19154349;
+	private static String user8 = "1127805853@qq.com";
+	private static String user19 = "bot1@rewards.msharebox.com";
+	private static String user20 = "bot2@rewards.msharebox.com";
+	private static String user18 = "bot3@rewards.msharebox.com";
+	private static String pass8 = "9876543210";
+	private static String pass19 = "9876543210";
+	private static String pass20 = "9876543210";
+	private static String pass18 = "9876543210";
+
 	static{
 		Date  now = new Date(new Date().getTime()+(new Date().getTimezoneOffset()+480)*60000);
 		int left1 = (int)(43200000-(now.getTime()-18002000)%43200000)/1000;
@@ -25,14 +33,20 @@ public class TimerTask {
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						Collector.collectByLastSenka(token8, 8);
+						String token8 = Login.login(user8, pass8);
+						if(token8.length()>2){
+							Collector.collectByLastSenka(token8, 8);
+						}
 					}
 				}).start();
 				
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
-						Collector.collectByLastSenka(token19, 19);
+						String token19 = Login.login(user19, pass19);
+						if(token19.length()>2){
+							Collector.collectByLastSenka(token19, 19);
+						}
 					}
 				}).start();
 				
@@ -51,7 +65,11 @@ public class TimerTask {
 					@Override
 					public void run() {
 						try {
-							Rank.runRankTask(token8, 8, id8);
+							String token8 = Login.login(user8, pass8);
+							if(token8.length()>2){
+								Rank.runRankTask(token8, 8, id8);
+							}
+							
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -62,7 +80,10 @@ public class TimerTask {
 					@Override
 					public void run() {
 						try {
-							Rank.runRankTask(token19, 19, id19);
+							String token19 = Login.login(user19, pass19);
+							if(token19.length()>2){
+								Rank.runRankTask(token19, 19, id19);
+							}
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
