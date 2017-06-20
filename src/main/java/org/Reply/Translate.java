@@ -81,9 +81,8 @@ public class Translate {
 			for(int i=0;i<explain.length();i++){
 				transed=transed+explain.getString(i)+"\n";
 			}
-			transed=transed+"\n";
 		}
-		transed = transed+"↓\n";
+		transed = transed+"          ↓\n";
 		for(int i=0;i<translation.length();i++){
 			transed = transed + translation.getString(i)+"\n";
 		}
