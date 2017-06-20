@@ -109,7 +109,7 @@ public class Search {
 						int expsub = tail.getInt("exp")-front.getInt("exp");
 						addsenka = addsenka + "EX:"+(int)(senkasub-expsub/10000.0*7.0)+"    ("+frontts.toLocaleString()+"-----"+tailts.toLocaleString()+")";
 					}
-					System.out.println(addsenka);
+					System.out.println(tail);
 					return addsenka;
 				}
 			}
