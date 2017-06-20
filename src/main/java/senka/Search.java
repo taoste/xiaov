@@ -88,6 +88,7 @@ public class Search {
 								tail = new JSONObject();
 								tail.put("ts", expts);
 								tail.put("senka", senka);
+								tail.put("no", senkaData.get("no"));
 								tail.put("exp", exp);
 								break;
 							}else if(expno>senkano){
