@@ -21,7 +21,7 @@ public class Translate {
 		// TODO Auto-generated method stub
 		System.out.println("start");
 		try {
-			String r = translate("tropo", "zh-CHS");
+			String r = translate("发车", "zh-CHS");
 			System.out.println(r);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,6 +68,7 @@ public class Translate {
 						"&sign="+calSign(text,ran);
 		String urlStr = url+"?"+param;
 		String s = HttpGet(urlStr, "");
+		System.out.println(s);
 		JSONObject j = new JSONObject(s);
 		JSONArray translation = j.getJSONArray("translation");
 		String transed = " "+text+"\n";

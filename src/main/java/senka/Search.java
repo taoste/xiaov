@@ -100,7 +100,7 @@ public class Search {
 						}
 					}
 					int nowexp = getNowExp(Integer.valueOf(id), token, server);
-					String addsenka = tail.getString("senka")+"+"+Math.round((nowexp-tail.getInt("exp"))/1000.0*7.0)/10.0+"   ("+now.toLocaleString()+")\n";
+					String addsenka = "("+tail.getInt("no")+")   "+tail.getString("senka")+"+"+Math.round((nowexp-tail.getInt("exp"))/1000.0*7.0)/10.0+"   ("+now.toLocaleString()+")\n";
 					Date frontts = (Date)front.get("ts");
 					Date tailts = (Date)tail.get("ts");
 					if(tailts.getTime()-frontts.getTime()>40000000){

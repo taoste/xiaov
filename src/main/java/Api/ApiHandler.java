@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 
 import lib.TimerTask;
+import senka.Login;
 import senka.Search;
 
 public class ApiHandler {
@@ -66,6 +67,13 @@ public class ApiHandler {
 			resp.setCharacterEncoding("utf-8");
 			resp.setContentType("text/plain");
 			ret = Search.seekByName(data);
+		}
+		if(path.equals("login")){
+			resp.setCharacterEncoding("utf-8");
+			resp.setContentType("text/plain");
+			String userid = data.get("userid")[0];
+			String pwd = data.get("pwd")[0];
+			ret = Login.login(userid, pwd);
 		}
 		return ret;
 	}
