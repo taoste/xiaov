@@ -70,7 +70,7 @@ public class Translate {
 		String s = HttpGet(urlStr, "");
 		JSONObject j = new JSONObject(s);
 		JSONArray translation = j.getJSONArray("translation");
-		String transed = " "+text+"";
+		String transed = " "+text+"\n";
 
 		if(j.has("basic")){
 			JSONObject basic = j.getJSONObject("basic");
