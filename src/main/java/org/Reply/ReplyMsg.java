@@ -69,7 +69,7 @@ public class ReplyMsg {
 			ret = defaultErrorReply[rd.nextInt(defaultErrorReply.length)];
 			e.printStackTrace();
 		}
-		return ret;
+		return " "+ret;
 	}
 	
 	public static void main(String[] args){
