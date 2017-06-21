@@ -150,7 +150,7 @@ public class TuringBot {
 	         OutputStream os = conn.getOutputStream();     
 	         os.write(param.toString().getBytes("utf-8"));     
 	         os.close();         
-	         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(),"utf-8"));
 	         String line ;
 	         String result ="";
 	         while( (line =br.readLine()) != null ){

@@ -73,6 +73,6 @@ public class ReplyMsg {
 	}
 	
 	public static void main(String[] args){
-		System.out.println(reply("``运势","1"));
+		System.out.println(reply("``你是谁","1"));
 	}
 }
