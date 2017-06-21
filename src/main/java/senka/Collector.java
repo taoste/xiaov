@@ -155,6 +155,7 @@ public class Collector {
 				}else if(matched.size()>1){
 					System.out.println(matched);
 					System.out.println(name);
+					NameHandler.handleName(name,matched.get(0),-1,matched.size(),server,token);
 
 				}
 			}
