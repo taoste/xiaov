@@ -208,11 +208,21 @@ public class QQService {
                     public void run() {
                         try {
                             Thread.sleep(500 + RandomUtils.nextInt(1000));
-
+                            
+                            
                             final String content = message.getContent();
                             System.out.println(message.getUserId());
-                            xiaoV.sendMessageToFriend(message.getUserId(), content+"咻～");
-
+                            
+                            if(content.equals("重新登录9")){
+                        	    xiaoV.close();
+                        	    xiaoV.login();
+                            }
+                            if(content.equals("失败次数")){
+                        	    xiaoV.sendMessageToFriend(message.getUserId(), "发送失败了"+xiaoV.failedcount+"次咻～");
+                            }else{
+                        	    xiaoV.sendMessageToFriend(message.getUserId(), content+"咻～");
+                            }
+                           
                         } catch (final Exception e) {
                             LOGGER.log(Level.ERROR, "XiaoV on group message error", e);
                         }
@@ -226,8 +236,6 @@ public class QQService {
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(500 + RandomUtils.nextInt(1000));
-
                             onQQGroupMessage(message);
                         } catch (final Exception e) {
                             LOGGER.log(Level.ERROR, "XiaoV on group message error", e);

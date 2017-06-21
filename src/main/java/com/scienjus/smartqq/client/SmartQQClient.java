@@ -80,10 +80,16 @@ public class SmartQQClient implements Closeable {
                             return;
                         }
                         try {
+	                        try {
+	                       	 	Thread.sleep(1000);
+				} catch (Exception e2) {
+					// TODO: handle exception
+				}
                             pollMessage(callback);
                         } catch (RequestException e) {
                             // Ignore SocketTimeoutException
                             if (!(e.getCause() instanceof SocketTimeoutException)) {
+
                                 LOGGER.error(e.getMessage());
                             }
                         } catch (Exception e) {
@@ -98,7 +104,7 @@ public class SmartQQClient implements Closeable {
     /**
      * 登录
      */
-    private void login() {
+    public void login() {
         getQRCode();
         String url = verifyQRCode();
         getPtwebqq(url);
@@ -654,6 +660,8 @@ public class SmartQQClient implements Closeable {
     }
 
     //检查消息是否发送成功
+    public static int failedcount = 0;
+    
     private static void checkSendMsgResult(Response<String> response) {
         if (response.getStatusCode() != 200) {
             LOGGER.error(String.format("发送失败，Http返回码[%d]", response.getStatusCode()));
@@ -661,9 +669,11 @@ public class SmartQQClient implements Closeable {
         JSONObject json = JSON.parseObject(response.getBody());
         Integer errCode = json.getInteger("errCode");
         if (errCode != null && errCode == 0) {
-            LOGGER.debug("发送成功!");
+	            LOGGER.debug("发送成功!");
+	            failedcount=0;
         } else {
-            LOGGER.error(String.format("发送失败，Api返回码[%d]", json.getInteger("retcode")));
+        	failedcount++;
+        	LOGGER.error(String.format("发送失败，Api返回码[%d]", json.getInteger("retcode")));
         }
     }
 

@@ -1,6 +1,7 @@
 package senka;
 
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ public class Search {
 
 	public static void main(String[] args) {
 		try {
-			searchByName("クロサワ　ソウイチ", "82686f39ebbfd68bc8ee6d3fc29b0c28a952aa59", 8);
+			searchByName("羽瀬川桂", "67e0481b49675f7587818c98bf58dd4e4acade8e", 8);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,7 +91,7 @@ public class Search {
 								tail = new JSONObject();
 								tail.put("ts", expts);
 								tail.put("senka", senka);
-								tail.put("no", senkaData.get("no"));
+								tail.put("no", senkadata.get("no"));
 								tail.put("exp", exp);
 								break;
 							}else if(expno>senkano){
@@ -103,15 +104,18 @@ public class Search {
 						}
 					}
 					int nowexp = getNowExp(Integer.valueOf(id), token, server);
-					String addsenka = "("+""+")   "+tail.getString("senka")+"+"+Math.round((nowexp-tail.getInt("exp"))/1000.0*7.0)/10.0+"   ("+now.toLocaleString()+")\n";
-					Date frontts = (Date)front.get("ts");
 					Date tailts = (Date)tail.get("ts");
+					SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+					String addsenka = "("+tail.getInt("no")+"位)   "+tail.getString("senka")+"+"+Math.round((nowexp-tail.getInt("exp"))/1000.0*7.0)/10.0
+							+"   ("+sdf.format(tailts)+"----"+sdf.format(now)+")\n";
+					Date frontts = (Date)front.get("ts");
+					
 					if(tailts.getTime()-frontts.getTime()>40000000){
 						int senkasub = tail.getInt("senka")-front.getInt("senka");
 						int expsub = tail.getInt("exp")-front.getInt("exp");
-						addsenka = addsenka + "EX:"+(int)(senkasub-expsub/10000.0*7.0)+"    ("+frontts.toLocaleString()+"-----"+tailts.toLocaleString()+")";
+						addsenka = addsenka + "EX:"+(int)(senkasub-expsub/10000.0*7.0)+"    ("+sdf.format(frontts)+"-----"+sdf.format(tailts)+")";
 					}
-					System.out.println(tail);
+					System.out.println(addsenka);
 					return addsenka;
 				}
 			}
