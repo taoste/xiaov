@@ -215,7 +215,7 @@ public class QQService {
                             
                             if(content.equals("重新登录9")){
                         	    xiaoV.close();
-                        	    xiaoV.login();
+                        	    initQQClient();
                             }
                             if(content.equals("失败次数")){
                         	    xiaoV.sendMessageToFriend(message.getUserId(), "发送失败了"+xiaoV.failedcount+"次咻～");
