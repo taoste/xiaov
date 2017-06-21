@@ -210,6 +210,7 @@ public class QQService {
                             Thread.sleep(500 + RandomUtils.nextInt(1000));
 
                             final String content = message.getContent();
+                            System.out.println(message.getUserId());
                             xiaoV.sendMessageToFriend(message.getUserId(), content+"咻～");
 
                         } catch (final Exception e) {
@@ -557,29 +558,20 @@ public class QQService {
             qqMsg = "<p>" + qqMsg + "</p>";
             sendToForum(qqMsg, userName);
         }
-        if(!userName.equals("37087917")){
-        	String msg = ReplyMsg.reply(content, userName);
-        	//TODO
-//        	System.out.println("------------------------");
-//        	System.out.println(userName);
-//        	System.out.println(content);
-//        	System.out.println(msg);
-//        	System.out.println("------------------------\n");
-
-	        if(msg.length()<2){
-	                if (content.contains("百百")) {
-	                	String chat = content.replaceAll("百百", "");
-	                	msg = answer(chat, userName,"百百");
-	                	sendMessageToGroup(groupId, msg);
-	                }
-	                if (content.contains("baka机器人")) {
-	                	String chat = content.replaceAll("baka机器人", "");
-	                	msg = answer(chat, userName,"baka机器人");
-	                	sendMessageToGroup(groupId, msg);
-	                }
-	        }else{
-	        	sendMessageToGroup(groupId, msg);
-	        }
+	String msg = ReplyMsg.reply(content, userName);
+        if(msg.length()<2){
+                if (content.contains("百百")) {
+                	String chat = content.replaceAll("百百", "");
+                	msg = answer(chat, userName,"百百");
+                	sendMessageToGroup(groupId, msg);
+                }
+                if (content.contains("baka机器人")) {
+                	String chat = content.replaceAll("baka机器人", "");
+                	msg = answer(chat, userName,"baka机器人");
+                	sendMessageToGroup(groupId, msg);
+                }
+        }else{
+        	sendMessageToGroup(groupId, msg);
         }
 
 
@@ -636,13 +628,6 @@ public class QQService {
             }
             return ret;
     }
-    
-    
-    
-    
-    
-    
-    
     
 
     private String answer2(final String content, final String userName) {

@@ -38,8 +38,7 @@ public class Translate {
 			String url = "https://api.shanbay.com/bdc/search/?word="+text;
 			String s = HttpGet(url, "");
 			JSONObject j = new JSONObject(s);
-			System.out.println(j);
-			String transed = " "+text+"\n";
+			String transed = text+"\n";
 			return transed+j.getJSONObject("data").getString("definition")+"";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,7 +86,7 @@ public class Translate {
 			transed = transed + translation.getString(i)+"\n";
 		}
 		System.out.println(transed);
-		return " "+transed.trim();
+		return transed.trim();
 	}
 	
 	private static String calSign(String text,int ran)throws Exception{
