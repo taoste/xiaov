@@ -19,29 +19,25 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
-public class Rank {
+import lib.TimerTask;
 
+public class Rank {
+	
 	public static void main(String[] args) {
 		System.out.println("start1");
 		try {
-			runRankTask("70d709bb2a3cfa7027939452aae19d084509c846", 19, 19154349);
+			runRankTask(TimerTask.getToken(19), 19, TimerTask.id19);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println("finish");
 	}
 	private static int[] MAGIC_R_NUMS = new int[]{ 8931, 1201, 1156, 5061, 4569, 4732, 3779, 4568, 5695, 4619, 4912, 5669, 6586 };
-	private static int magic=0;
 	private static Random rd = new Random();
-	private static ArrayList<Integer> larray = new ArrayList<>();
-	private static ArrayList<JSONObject> tmpdata = new ArrayList<>();
 	public static void getRank()throws Exception{
 		String path = "/kcsapi/api_req_ranking/mxltvkpyuklh";
 		int page=1;
 		String token = "76c73d1d3b775575e1ffc3116aec113835e8cd37";
-		magic=0;
-		tmpdata=new ArrayList<>();
-		larray = new ArrayList<>();
 		int server = 8;
 		int userid = 8156938;
 		String ranking = generateRankKey(userid);
@@ -54,9 +50,6 @@ public class Rank {
 			JSONObject j = new JSONObject(ret.substring(7));
 			addData(j);
 		}
-		calMagic();
-		parseData();
-		calsenka(server,token);
 	}
 	
 	
@@ -74,9 +67,6 @@ public class Rank {
 	}
 	
 	public static void runRankTask(final String token,final int server,final int userid)throws Exception{
-		magic=0;
-		tmpdata=new ArrayList<>();
-		larray = new ArrayList<>();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -91,27 +81,29 @@ public class Rank {
 					String key = year + "_" + month + "_" + rankNo + "_" + server;
 					BasicDBObject query = new BasicDBObject("_id",key);
 					DBObject uData = cl_u_senka.findOne(query);
+					ArrayList<JSONObject> tdata = new ArrayList<>();
+					int ma;
 					if(uData==null){
 						for(int i=1;i<100;i++){
 							String param = "api%5Fpageno="+i+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
 							String ret = Lib.ApiPost(path, param, token, server);
 							if(ret.startsWith("svdata=")){
 								JSONObject j = new JSONObject(ret.substring(7));
-								addData(j);
+								tdata.addAll(addData(j));
 							}
 						}
-						calMagic();
-						parseData();
-						cl_u_senka.save(new BasicDBObject("_id",key).append("d", tmpdata.toString()).append("magic", magic));
+						ma = calMagic(tdata);
+						System.out.println("magic:"+ma);
+						cl_u_senka.save(new BasicDBObject("_id",key).append("d", tdata.toString()).append("magic", ma));
 					}else{
 						String t1 = uData.get("d").toString();
 						JSONArray j2 = new JSONArray(t1);
 						for(int i=0;i<j2.length();i++){
-							tmpdata.add(j2.getJSONObject(i));
+							tdata.add(j2.getJSONObject(i));
 						}
-						magic = Integer.valueOf(uData.get("magic").toString());
+						ma = Integer.valueOf(uData.get("magic").toString());
 					}
-					handleSenkaList(server);
+					handleSenkaList(server,ma,tdata);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -122,7 +114,8 @@ public class Rank {
 	
 
 
-	public static void addData(JSONObject j)throws Exception{
+	public static ArrayList<JSONObject> addData(JSONObject j)throws Exception{
+		ArrayList<JSONObject> ta = new ArrayList<>();
 		if(j.getInt("api_result")==1){
 			JSONArray list = j.getJSONObject("api_data").getJSONArray("api_list");
 			for(int i=0;i<list.length();i++){
@@ -130,58 +123,48 @@ public class Rank {
 				int no=jd.getInt("api_mxltvkpyuklh");
 				long key=jd.getLong("api_wuhnhojjxmke");
 				if(key%MAGIC_R_NUMS[no%13]==0){
-					int lrate = (int)(key / MAGIC_R_NUMS[no%13]);
-					if(magic==0&&larray.size()<calMagicNum){
-						larray.add(lrate);
-						tmpdata.add(jd);
-					}else{
-						tmpdata.add(jd);
-					}
+					ta.add(jd);
 				}
 			}
+			return ta;
 		}else{
 			System.out.println("---------------error get senka----------------");
 			System.out.println(j);
+			return new ArrayList<>();
 		}
 	}
 	
-	public static void parseData()throws Exception{
-		for(int k=0;k<tmpdata.size();k++){
-			JSONObject jd = tmpdata.get(k);
+
+	
+	public static int calMagic(ArrayList<JSONObject> tdata)throws Exception{
+		ArrayList<Integer> la = new ArrayList<>();
+		while(la.size()<calMagicNum){
+			JSONObject jd = tdata.get(la.size());
 			int no=jd.getInt("api_mxltvkpyuklh");
 			long key=jd.getLong("api_wuhnhojjxmke");
-
 			if(key%MAGIC_R_NUMS[no%13]==0){
-				int lrate = (int)(key / MAGIC_R_NUMS[no%13]);
-				int senka = lrate/magic - 91;
-				String name = jd.getString("api_mtjmdcwtvhdr");
-				String cmt = jd.getString("api_itbrdpdbkynm");
-//				System.out.println(name);
-//				System.out.println(cmt);
-//				System.out.println(senka);
+				System.out.println(key);
+				System.out.println(key/MAGIC_R_NUMS[no%13]);
+				la.add((int)(key/MAGIC_R_NUMS[no%13]));
+			}else{
+				System.out.println(jd);
+				la.add(0);
 			}
 		}
+		System.out.println(la);
+		return EA(la);
 	}
 	
-	public static void calMagic(){
-		if(larray.size()==calMagicNum){
-			magic = EA(larray);
-		}else{
-			System.out.println(larray);
-			System.out.println("error");
-		}
-	}
-	
-	public static void handleSenkaList(int server)throws Exception{
+	public static void handleSenkaList(int server,int ma,ArrayList<JSONObject> tdata)throws Exception{
 		DBCollection cl_n_senka = Util.db.getCollection("cl_n_senka_"+server);
 		Date now = new Date();
 		int dateNo = Util.getRankDateNo(now);
-		for(int i=0;i<tmpdata.size();i++){
-			JSONObject jdd = tmpdata.get(i);
+		for(int i=0;i<tdata.size();i++){
+			JSONObject jdd = tdata.get(i);
 			int no=jdd.getInt("api_mxltvkpyuklh");
 			long key=jdd.getLong("api_wuhnhojjxmke");
 			int lrate = (int)(key / MAGIC_R_NUMS[no%13]);
-			int senka = lrate/magic - 91;
+			int senka = lrate/ma - 91;
 			String name = jdd.getString("api_mtjmdcwtvhdr");
 			String cmt = jdd.getString("api_itbrdpdbkynm");
 			BasicDBObject insert = new BasicDBObject();
@@ -198,144 +181,8 @@ public class Rank {
 
 	
 	
-	public static void calsenka(int server,String token)throws Exception{
-		ArrayList<JSONObject> idlist = new ArrayList<>();
-		DBCollection cl_senka = Util.db.getCollection("cl_senka_"+server);
-		DBCollection cl_tmp_senka = Util.db.getCollection("cl_tmp_senka_"+server);
-		ArrayList<Integer> senkaRank = new ArrayList<>();
-		for(int i=0;i<tmpdata.size();i++){
-			JSONObject jdd = tmpdata.get(i);
-			int no=jdd.getInt("api_mxltvkpyuklh");
-			long key=jdd.getLong("api_wuhnhojjxmke");
-			int lrate = (int)(key / MAGIC_R_NUMS[no%13]);
-			int senka = lrate/magic - 91;
-			
-			if(no==senkaRank.size()+1){
-				senkaRank.add(senka);
-			}
-			String name = jdd.getString("api_mtjmdcwtvhdr");
-			String cmt = jdd.getString("api_itbrdpdbkynm");
-			DBCursor dbc = null;
-			NameHandler.getIdByName(name, server);
-//			try {
-//				dbc = cl_senka.find(new BasicDBObject("name",name));
-//				ArrayList<DBObject> userlist = new ArrayList<>();
-//				while (dbc.hasNext()) {
-//					DBObject userdata = dbc.next();
-//					needUpdateUserDate(userdata,cl_senka);
-//					userlist.add(userdata);
-//				}
-//				if(userlist.size()>1){
-//					ArrayList<JSONObject> mayids = new ArrayList<>();
-//					for(int k=0;k<userlist.size();k++){
-//						DBObject ud = userlist.get(k);
-//						String info = ud.get("info").toString();
-//						JSONObject infoj = new JSONObject(info);
-//						int rank = infoj.getInt("api_rank");
-//						String tcmt = infoj.getString("api_cmt");
-//						if((cmt.equals(tcmt)||(cmt.trim().length()>1&&tcmt.trim().length()>1))&&rank<=2){
-//							JSONObject jd = new JSONObject();
-//							jd.put("id", ud.get("_id"));
-//							jd.put("senka", senka);
-//							jd.put("name",name);
-//							jd.put("n", i);
-//							mayids.add(jd);
-//						}
-//					}
-//					if(mayids.size()==1){
-//						idlist.add(mayids.get(0));
-//					}else if(mayids.size()==0){
-//						System.out.println("++++++++++++++++++++++++++++");
-//						System.out.println("can't find id:"+name+","+senka);
-//						System.out.println(userlist);
-//					}else if(mayids.size()<9){
-//						ArrayList<JSONObject> mayids2 = new ArrayList<>();
-//						for(int x=0;x<mayids.size();x++){
-//							JSONObject jm = mayids.get(x);
-//							int id = jm.getInt("id");
-//							String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
-//							String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
-//							String r = Lib.ApiPost(path, param, token, Integer.valueOf(server));
-//							if(r.startsWith("svdata="));
-//							JSONObject jddd = new JSONObject(r.substring(7));
-//							JSONObject userdata = jddd.getJSONObject("api_data");
-//							int trank = userdata.getInt("api_rank");
-//							if(trank==1){
-//								jm.put("data", userdata);
-//								mayids2.add(jm);
-//							}
-//						}
-//						if(mayids2.size()==1){
-//							idlist.add(mayids2.get(0));
-//						}else if(mayids2.size()==0){
-//							System.out.println("************************");
-//							System.out.println("can't find id:"+name+","+senka);
-//							System.out.println(mayids);
-//						}else{
-//							ArrayList<JSONObject> mayids3= new ArrayList<>();
-//							for(int y=0;y<mayids2.size();y++){
-//								JSONObject userdata = mayids2.get(y).getJSONObject("data");
-//								String ncmt = userdata.getString("api_cmt");
-//								if(ncmt.equals(cmt)){
-//									mayids3.add(mayids2.get(y));
-//								}
-//							}
-//							if(mayids3.size()==1){
-//								idlist.add(mayids3.get(0));
-//							}else if(mayids3.size()==0){
-//								System.out.println("=========================");
-//								System.out.println("can't find id:"+name+","+senka);
-//								for(int z=0;z>mayids2.size();z++){
-//									idlist.add(mayids2.get(z));
-//								}
-//							}else{
-//								for(int z=0;z>mayids3.size();z++){
-//									idlist.add(mayids3.get(z));
-//								}
-//							}
-//						}
-//					}else{
-//						System.out.println("+++++++++++++++++++++++++");
-//						System.out.println("too many ids find:"+name+","+senka);
-//						System.out.println(mayids);
-//					}
-//					
-//					
-//					
-//				}else if(userlist.size()==1){
-//					JSONObject jd = new JSONObject();
-//					jd.put("id", userlist.get(0).get("_id"));
-//					jd.put("senka", senka);
-//					jd.put("name",name);
-//					jd.put("n", i);
-//					idlist.add(jd);
-//				}else{
-//					System.out.println("NO USER FOUND!"+name);
-//				}
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			} finally {
-//				if(dbc!=null){
-//					dbc.close();
-//				}
-//			}
-		}
-		System.out.println(idlist);
-		BasicDBList dbl = new BasicDBList();
-		Date now = new Date();
-		for(int i=0;i<idlist.size();i++){
-			JSONObject jrd = idlist.get(i);
-			int id = jrd.getInt("id");
-			int senka = jrd.getInt("senka");
-			BasicDBObject update = new BasicDBObject();
-			update.append("$push", new BasicDBObject("senka",new BasicDBObject("senka",senka).append("ts", now)));
-			//cl_senka.update(new BasicDBObject("_id", id),update,true,false);
-			dbl.add(new BasicDBObject("id",id).append("senka", senka).append("name", jrd.get("name")).append("n", jrd.get("n")));
-		}
-		//cl_tmp_senka.save(new BasicDBObject("_id",now).append("d", dbl));
-	}
 	
-	public static void needUpdateUserDate(DBObject user,DBCollection cl_senka){
+	private static void needUpdateUserDate(DBObject user,DBCollection cl_senka){
 		Object us = user.get("senka");
 		Object ud = user.get("exp");
 		boolean needupdate = false;

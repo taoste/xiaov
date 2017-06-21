@@ -210,17 +210,8 @@ public class QQService {
                             Thread.sleep(500 + RandomUtils.nextInt(1000));
 
                             final String content = message.getContent();
-                            final String key = XiaoVs.getString("qq.bot.key");
-                            if (!StringUtils.startsWith(content, key)) { // 不是管理命令，只是普通的私聊
-                                // 让小薇进行自我介绍
-                                xiaoV.sendMessageToFriend(message.getUserId(), XIAO_V_INTRO);
+                            xiaoV.sendMessageToFriend(message.getUserId(), content+"咻～");
 
-                                return;
-                            }
-
-                            final String msg = StringUtils.substringAfter(content, key);
-                            LOGGER.info("Received admin message: " + msg);
-                            sendToPushQQGroups(msg);
                         } catch (final Exception e) {
                             LOGGER.log(Level.ERROR, "XiaoV on group message error", e);
                         }

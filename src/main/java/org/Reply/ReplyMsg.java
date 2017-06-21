@@ -1,9 +1,12 @@
 package org.Reply;
 
 import java.util.Date;
+import java.util.Random;
 
 
 public class ReplyMsg {
+	private static String[] defaultErrorReply = new String[]{"出错了喵～","爆炸了咻！","艾-啦-哎-辣-E-R-R-O-R","警告！生命值不足！生命值不足！"};
+	private static Random rd = new Random();
 	@SuppressWarnings("deprecation")
 	public static String reply(String content,String username){
 		String ret="";
@@ -46,12 +49,9 @@ public class ReplyMsg {
 			}
 			
 		} catch (Exception e) {
-			ret = "出错了喵";
+			ret = defaultErrorReply[rd.nextInt(defaultErrorReply.length)];
 			e.printStackTrace();
 		}
-
-		
-		
 		return ret;
 	}
 	

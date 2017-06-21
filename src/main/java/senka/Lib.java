@@ -40,6 +40,7 @@ public class Lib {
 	 public static String  ApiPost(String path,String param,String token,int server) throws Exception{
 		 String urlStr ="http://"+ips.get(server)+path;
 		 System.out.println(urlStr);
+		 System.out.println(param);
 	         URL url = new URL(urlStr);
 	         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 	         conn.setRequestMethod("POST");
