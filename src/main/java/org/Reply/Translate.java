@@ -71,7 +71,7 @@ public class Translate {
 		System.out.println(s);
 		JSONObject j = new JSONObject(s);
 		JSONArray translation = j.getJSONArray("translation");
-		String transed = " "+text+"\n";
+		String transed = text+"\n";
 
 		if(j.has("basic")){
 			JSONObject basic = j.getJSONObject("basic");
@@ -87,7 +87,7 @@ public class Translate {
 			transed = transed + translation.getString(i)+"\n";
 		}
 		System.out.println(transed);
-		return transed;
+		return " "+transed.trim();
 	}
 	
 	private static String calSign(String text,int ran)throws Exception{

@@ -68,13 +68,6 @@ public class ApiHandler {
 			resp.setContentType("text/plain");
 			ret = Search.seekByName(data);
 		}
-		if(path.equals("login")){
-			resp.setCharacterEncoding("utf-8");
-			resp.setContentType("text/plain");
-			String userid = data.get("userid")[0];
-			String pwd = data.get("pwd")[0];
-			ret = Login.login(userid, pwd);
-		}
 		return ret;
 	}
 }

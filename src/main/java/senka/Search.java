@@ -12,6 +12,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 
+import lib.TimerTask;
+
 public class Search {
 
 	public static void main(String[] args) {
@@ -23,9 +25,9 @@ public class Search {
 	}
 	
 	public static String seekByName(Map<String, String[]> data)throws Exception{
-		String token = data.get("token")[0];
 		String name = URLDecoder.decode(data.get("name")[0],"utf-8");
 		int server = Integer.valueOf(data.get("server")[0]);
+		String token = TimerTask.getToken(server);
 		String ret = searchByName(name, token, server);
 		return name+"\n当前战果值："+ret+"\n"+"";
 	}
