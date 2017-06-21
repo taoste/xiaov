@@ -571,7 +571,7 @@ public class QQService {
                 	sendMessageToGroup(groupId, msg);
                 }
         }else{
-        	sendMessageToGroup(groupId, msg);
+        	sendMessageToGroup(groupId, " "+msg);
         }
 
 

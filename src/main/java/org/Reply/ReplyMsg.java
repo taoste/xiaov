@@ -61,15 +61,15 @@ public class ReplyMsg {
 				}else{
 					ret = Translate.translate(str.trim(), "zh-CHS");
 				}
-			}
-			if(ret.equals("")){
-				ret = defaultErrorReply[rd.nextInt(defaultErrorReply.length)];
+				if(ret.equals("")){
+					ret = "纳尼～喵！";
+				}
 			}
 		} catch (Exception e) {
 			ret = defaultErrorReply[rd.nextInt(defaultErrorReply.length)];
 			e.printStackTrace();
 		}
-		return " "+ret;
+		return ret;
 	}
 	
 	public static void main(String[] args){
