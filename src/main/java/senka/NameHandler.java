@@ -107,7 +107,7 @@ public class NameHandler {
 			}else if(userlist.size()==1){
 				totalcount++;
 				int id = Integer.valueOf(userlist.get(0).get("_id").toString());
-				cl_n_senka.update(new BasicDBObject("_id",name),new BasicDBObject("$set",new BasicDBObject("id",""+id)));
+				cl_n_senka.update(new BasicDBObject("_id",name),new BasicDBObject("$set",new BasicDBObject("id",""+id).append("c", 1)));
 				Collector.collectById(id, token, server);
 			}else{
 				ArrayList<Integer> fetchidlist = new ArrayList<>();
@@ -148,7 +148,7 @@ public class NameHandler {
 				if(fetchidlist.size()>=count){
 					totalcount+=fetchidlist.size();
 					if(fetchidlist.size()==1){
-						cl_n_senka.update(new BasicDBObject("_id",name),new BasicDBObject("$set",new BasicDBObject("id",""+fetchidlist.get(0))));
+						cl_n_senka.update(new BasicDBObject("_id",name),new BasicDBObject("$set",new BasicDBObject("id",""+fetchidlist.get(0)).append("c", count)));
 						Collector.collectById(fetchidlist.get(0), token, server);
 					}else{
 						String saveidlist = "";
@@ -164,7 +164,7 @@ public class NameHandler {
 								}
 							}
 						}
-						cl_n_senka.update(new BasicDBObject("_id",name),new BasicDBObject("$set",new BasicDBObject("id",saveidlist)));
+						cl_n_senka.update(new BasicDBObject("_id",name),new BasicDBObject("$set",new BasicDBObject("id",saveidlist).append("c", count)));
 					}
 				}else{
 					System.out.println("(((((((((((((((((((((((((((((");

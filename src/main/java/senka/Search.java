@@ -117,6 +117,8 @@ public class Search {
 					}
 					System.out.println(addsenka);
 					return addsenka;
+				}else if(ida.length<5){
+					
 				}
 			}
 		}else{
