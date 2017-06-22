@@ -568,16 +568,7 @@ public class QQService {
         }
 	String msg = ReplyMsg.reply(content, userName);
         if(msg.length()<2){
-                if (content.contains("百百")) {
-                	String chat = content.replaceAll("百百", "");
-                	msg = answer(chat, userName,"百百");
-                	sendMessageToGroup(groupId, " "+msg);
-                }
-                if (content.contains("baka机器人")) {
-                	String chat = content.replaceAll("baka机器人", "");
-                	msg = answer(chat, userName,"baka机器人");
-                	sendMessageToGroup(groupId, " "+msg);
-                }
+
         }else{
         	sendMessageToGroup(groupId, msg);
         }
