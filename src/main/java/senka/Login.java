@@ -29,25 +29,13 @@ import org.json.JSONObject;
 
 import freemarker.core.ReturnInstruction.Return;
 import lib.HttpMethod;
+import lib.TimerTask;
 
 public class Login {
 	public static void main(String[] args){
 		System.out.println("start");
 		try {
-			String userid="1127805853@qq.com";
-			String pwd="9876543210";
-		        String url = "http://ooi.moe/";
-		        String param = "login_id="+userid+"&password="+pwd+"&mode=1";
-		        String cookie = getOoiCookie(url,param);
-			System.out.println(cookie);
-			String url2= "http://ooi.moe/kancolle";
-		        String s = HttpGet2(url2,param,cookie);
-			String str = "api_token=";
-			int n = s.indexOf(str);
-			String s1 = s.substring(n+str.length());
-			int n2 = s1.indexOf("&");
-			String token = s1.substring(0,n2);
-			System.out.println(token);
+			login("1127805853@qq.com","9876543210");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -58,16 +46,19 @@ public class Login {
 		        String url = "http://ooi.moe/";
 		        String param = "login_id="+userid+"&password="+pwd+"&mode=1";
 		        String cookie = getOoiCookie(url,param);
-			System.out.println(cookie);
 			String url2= "http://ooi.moe/kancolle";
 		        String s = HttpGet2(url2,param,cookie);
 			String str = "api_token=";
 			int n = s.indexOf(str);
-			String s1 = s.substring(n+str.length());
-			int n2 = s1.indexOf("&");
-			String token = s1.substring(0,n2);
-			System.out.println(token);
-			return token;
+			if(n>0){
+				String s1 = s.substring(n+str.length());
+				int n2 = s1.indexOf("&");
+				String token = s1.substring(0,n2);
+				System.out.println(token);
+				return token;
+			}else{
+				return "";
+			}
 		} catch (Exception e) {
 			return "";
 		}
@@ -101,7 +92,6 @@ public class Login {
 	            }
 	            return result;
 	        }else{
-	        	System.out.println(conn);
 	            System.out.println("failed"+conn.getResponseCode()+conn.getResponseMessage());
 	        }
 		} catch (Exception e) {

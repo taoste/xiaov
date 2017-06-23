@@ -20,10 +20,12 @@ public class TimerTask {
 	private static String user19 = "bot1@rewards.msharebox.com";
 	private static String user20 = "bot2@rewards.msharebox.com";
 	private static String user18 = "bot3@rewards.msharebox.com";
+	private static String user16 = "bot4@rewards.msharebox.com";
 	private static String pass8 = "9876543210";
 	private static String pass19 = "9876543210";
 	private static String pass20 = "9876543210";
 	private static String pass18 = "9876543210";
+	private static String pass16 = "9876543210";
 
 	static{
 		Date  now = new Date(new Date().getTime()+(new Date().getTimezoneOffset()+480)*60000);
@@ -117,7 +119,7 @@ public class TimerTask {
 			cl_token.save(new BasicDBObject("_id",server).append("token", token).append("ts", now));
 		}else{
 			Date then = (Date)tokenData.get("ts");
-			if(now.getTime()-then.getTime()>43200000){
+			if(now.getTime()-then.getTime()>40000000){
 				token = login(server);
 				cl_token.save(new BasicDBObject("_id",server).append("token", token).append("ts", now));
 			}else{
@@ -137,6 +139,8 @@ public class TimerTask {
 			token=Login.login(user18,pass18);
 		}else if(server==20){
 			token=Login.login(user20,pass20);
+		}else if(server==16){
+			token=Login.login(user16,pass16);
 		}
 		return token;
 	}
