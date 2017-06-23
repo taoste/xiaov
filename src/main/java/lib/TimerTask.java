@@ -81,7 +81,7 @@ public class TimerTask {
 				System.out.println("-----------------will do hourly task now------------");
 				new Thread(new Runnable() {
 					public void run() {
-						System.out.println(now);
+						System.out.println(new Date());
 					}
 				}).start();
 			}
