@@ -68,6 +68,12 @@ public class ApiHandler {
 			resp.setContentType("text/plain");
 			ret = Search.seekByName(data);
 		}
+		if(path.equals("ranktask")){
+			TimerTask.rankTask();
+			ret = "will run rank task";
+		}
+		
+		
 		return ret;
 	}
 }

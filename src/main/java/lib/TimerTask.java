@@ -46,7 +46,6 @@ public class TimerTask {
 						}
 					}
 				}).start();
-				
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -67,46 +66,101 @@ public class TimerTask {
 			public void run() {
 				System.out.println(new Date());
 				System.out.println("-----------------will get senka now------------");
-				
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							String token8 = getToken(8);
-							if(token8.length()>2){
-								Rank.runRankTask(token8, 8, id8);
-							}
-							
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}).start();
-				
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							String token19 = getToken(19);
-							if(token19.length()>2){
-								Rank.runRankTask(token19, 19, id19);
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}).start();
-				
-
+				rankTask();
 			}
 		}, left2, 43200, TimeUnit.SECONDS);
+		
+		
+		int left3 = (int)(3600000-(now.getTime()+60000*3)%3600000)/1000;
 		System.out.println("--------------------------------");
+		System.out.println("will do hourly task after "+left3/60+"minutes");
+		ScheduledThreadPoolExecutor stpe3 = new ScheduledThreadPoolExecutor(5);
+		stpe1.scheduleAtFixedRate(new Runnable() {
+			public void run() {
+				System.out.println(new Date());
+				System.out.println("-----------------will do hourly task now------------");
+				new Thread(new Runnable() {
+					public void run() {
+						System.out.println(now);
+					}
+				}).start();
+			}
+		}, left1, 43200, TimeUnit.SECONDS);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		System.out.println("--------------------------------");
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 	
 	public static void init(){
 
 	}
 
+	public static void rankTask(){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					String token8 = getToken(8);
+					if(token8.length()>2){
+						Rank.runRankTask(token8, 8, id8);
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					String token19 = getToken(19);
+					if(token19.length()>2){
+						Rank.runRankTask(token19, 19, id19);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+	
+	
+	
 	
 	public static String getToken(int server){
 		DBCollection cl_token = Util.db.getCollection("cl_token");
@@ -116,12 +170,16 @@ public class TimerTask {
 		Date now = new Date();
 		if(tokenData==null){
 			token = login(server);
-			cl_token.save(new BasicDBObject("_id",server).append("token", token).append("ts", now));
+			if(token.length()>2&&token.length()<100){
+				cl_token.save(new BasicDBObject("_id",server).append("token", token).append("ts", now));
+			}
 		}else{
 			Date then = (Date)tokenData.get("ts");
 			if(now.getTime()-then.getTime()>40000000){
 				token = login(server);
-				cl_token.save(new BasicDBObject("_id",server).append("token", token).append("ts", now));
+				if(token.length()>2&&token.length()<100){
+					cl_token.save(new BasicDBObject("_id",server).append("token", token).append("ts", now));
+				}
 			}else{
 				token = tokenData.get("token").toString();
 			}
@@ -148,6 +206,6 @@ public class TimerTask {
 	
 	public static void main(String[] args){
 		System.out.println(123);
-		System.out.println(getToken(8));
+//		System.out.println(getToken(8));
 	}
 }
