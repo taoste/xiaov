@@ -19,6 +19,8 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
+import lib.TimerTask;
+
 public class Collector {
 
 	public static void main(String[] args) {
@@ -46,8 +48,8 @@ public class Collector {
 	
 	public static void runCollector(Map<String, String[]> data)throws Exception{
 		final String type = data.get("type")[0];
-		final String token = data.get("token")[0];
 		final String server = data.get("server")[0];
+		final String token = TimerTask.getToken(Integer.valueOf(server));
 		if(type.equals("init")){
 			final int from = Integer.valueOf(data.get("from")[0]); 
 			final int to = Integer.valueOf(data.get("to")[0]); 

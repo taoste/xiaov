@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 import lib.TimerTask;
@@ -19,7 +20,7 @@ public class Search {
 
 	public static void main(String[] args) {
 		try {
-			searchByName("羽瀬川桂", "67e0481b49675f7587818c98bf58dd4e4acade8e", 8);
+			System.out.println(searchByName("シン", "", 8));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -54,13 +55,16 @@ public class Search {
 					String ret = "";
 					if(c==1){
 						for(int i=0;i<ida.length;i++){
-							ret = ret + getUserInfoById(ida[i], token, server, senkalist)+"\n";
+							ret = ret + getUserInfoById(ida[i], token, server, senkalist)+"\n\n";
 						}
 					}else{
-						for(int i=0;i<ida.length;i++){
-							ret = ret + getUserInfoById(ida[i], token, server, senkalist)+"\n";
+						if(c==ida.length){
+							ret = ret + getUserInfoByIdMulti(ids, token, server, senkalist,c)+"\n\n";
+						}else{
+							ret = "此ID情况复杂，无法查询";
 						}
 					}
+					return ret;
 				}else{
 					
 				}
@@ -141,9 +145,58 @@ public class Search {
 			int expsub = tail.getInt("exp")-front.getInt("exp");
 			addsenka = addsenka + "EX:"+(int)(senkasub-expsub/10000.0*7.0)+"    ("+sdf.format(frontts)+"-----"+sdf.format(tailts)+")";
 		}
-		System.out.println(addsenka);
 		return addsenka;
 	}
+	
+	
+	public static String getUserInfoByIdMulti(String ids,String token,int server,BasicDBList senkalist,int c)throws Exception{
+		Date now = new Date();
+		DBCollection cl_senka = Util.db.getCollection("cl_senka_"+server);
+		String[] ida = ids.split(",");
+		BasicDBList dbl = new BasicDBList();
+		for(int i=0;i<ida.length;i++){
+			dbl.add(Integer.valueOf(ida[i]));
+		}
+		BasicDBObject query = new BasicDBObject("_id",new BasicDBObject("$in",dbl));
+		DBCursor dbc = null;
+		try {
+			dbc = cl_senka.find(query);
+			while (dbc.hasNext()) {
+				DBObject dbObject = (DBObject) dbc.next();
+				BasicDBList explist = (BasicDBList)dbObject.get("exp");
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			if(dbc!=null){
+				dbc.close();
+			}
+		}
+		
+		return "";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	public static int getNowExp(int id,String token,int server)throws Exception{
