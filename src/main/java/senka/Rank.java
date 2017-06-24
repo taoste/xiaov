@@ -61,7 +61,7 @@ public class Rank {
 	
 	public static void runRank(Map<String, String[]> data)throws Exception{
 		int server = Integer.valueOf(data.get("server")[0]);
-		String token = TimerTask.getToken(server)
+		String token = TimerTask.getToken(server);
 		int userid = Integer.valueOf(data.get("uid")[0]);
 		runRankTask(token, server, userid);
 	}
