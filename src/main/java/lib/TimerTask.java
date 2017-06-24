@@ -56,7 +56,15 @@ public class TimerTask {
 						}
 					}
 				}).start();
-				
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						String token16 = getToken(16);
+						if(token16.length()>2){
+							Collector.collectByLastSenka(token16, 16);
+						}
+					}
+				}).start();				
 			}
 		}, left1, 43200, TimeUnit.SECONDS);
 		
@@ -165,7 +173,7 @@ public class TimerTask {
 				try {
 					String token16 = getToken(16);
 					if(token16.length()>2){
-						//Rank.runRankTask(token16, 16, id16);
+						Rank.runRankTask(token16, 16, id16);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
