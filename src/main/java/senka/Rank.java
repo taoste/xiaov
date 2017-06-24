@@ -60,8 +60,8 @@ public class Rank {
 	private static int calMagicNum = 28;
 	
 	public static void runRank(Map<String, String[]> data)throws Exception{
-		String token = data.get("token")[0];
 		int server = Integer.valueOf(data.get("server")[0]);
+		String token = TimerTask.getToken(server)
 		int userid = Integer.valueOf(data.get("uid")[0]);
 		runRankTask(token, server, userid);
 	}
