@@ -60,8 +60,8 @@ public class Rank {
 	private static int calMagicNum = 28;
 	
 	public static void runRank(Map<String, String[]> data)throws Exception{
-		String token = data.get("token")[0];
 		int server = Integer.valueOf(data.get("server")[0]);
+		String token = TimerTask.getToken(server);
 		int userid = Integer.valueOf(data.get("uid")[0]);
 		runRankTask(token, server, userid);
 	}
@@ -247,7 +247,8 @@ public class Rank {
 		return ret;
 	}
 	
-	private static long[] Il = new long[]{9137, 9740, 4458, 2139, 2130, 4132653, 1033183, 3749, 3601, 4294, 13, 6523, 3791, 10, 5424, 7481, 1000, 1875979};
+	//private static long[] Il = new long[]{9137, 9740, 4458, 2139, 2130, 4132653, 1033183, 3749, 3601, 4294, 13, 6523, 3791, 10, 5424, 7481, 1000, 1875979};
+	private static long[] Il = new long[]{8188, 8093, 5187, 2139, 5638, 4132653, 1033183, 6469, 6090, 9676, 13, 8706, 3791, 10, 5097, 9023, 1000, 1875979};
 	private static int[] I1 = new int[]{3, 7, 8, 0, 11, 4, 2, 9, 15, 14};
 	private static String generateRankKey(int userid){
 		String ret = "";

@@ -16,7 +16,7 @@ import senka.Util;
 public class TimerTask {
 	public static int id8 = 8156938;
 	public static int id19 = 19154349;
-	public static int id16 = 16154349;
+	public static int id16 = 16118483;
 	private static String user8 = "1127805853@qq.com";
 	private static String user19 = "bot1@rewards.msharebox.com";
 	private static String user20 = "bot2@rewards.msharebox.com";
@@ -56,7 +56,15 @@ public class TimerTask {
 						}
 					}
 				}).start();
-				
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						String token16 = getToken(16);
+						if(token16.length()>2){
+							Collector.collectByLastSenka(token16, 16);
+						}
+					}
+				}).start();				
 			}
 		}, left1, 43200, TimeUnit.SECONDS);
 		
@@ -165,7 +173,7 @@ public class TimerTask {
 				try {
 					String token16 = getToken(16);
 					if(token16.length()>2){
-						//Rank.runRankTask(token16, 16, id16);
+						Rank.runRankTask(token16, 16, id16);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
