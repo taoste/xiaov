@@ -20,7 +20,7 @@ public class Search {
 
 	public static void main(String[] args) {
 		try {
-			System.out.println(searchByName("シン", "", 8));
+			System.out.println(searchByName("紫はバカ233", "7e0aef6228150e3140617d1246b5df0f9ea10ee2", 16));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -182,24 +182,28 @@ public class Search {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public static int getNowExp(int id,String token,int server)throws Exception{
+		DBCollection cl_tmp_exp = Util.db.getCollection("cl_tmp_exp");
+		Date now = new Date();
+		BasicDBObject query = new BasicDBObject("_id",server+"_"+now.getTime()/60000+"_"+id);
+		DBObject expData = cl_tmp_exp.findOne(query);
+		if(expData==null){
+			int exp = getNowExpForce(id, token, server);
+			query.append("exp", exp);
+			query.append("ts", now);
+			cl_tmp_exp.save(query);
+			return exp;
+		}else{
+			return Integer.valueOf(expData.get("exp").toString());
+		}
+		
+	}
+	
+	
+	
+	
+	
+	public static int getNowExpForce(int id,String token,int server)throws Exception{
 		String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
 		String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
 		try {
