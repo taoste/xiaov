@@ -31,7 +31,6 @@ public class Calculator {
 	
 	public static String easyRank(Map<String, String[]> data)throws Exception{
 		int server = Integer.valueOf(data.get("server")[0]);
-		JSONObject j = new JSONObject();
 		ArrayList<JSONObject> ret = calculateRank(server);
 		String result = "";
 		result = result + "-------------战果简报-------------";
@@ -40,7 +39,7 @@ public class Calculator {
 		result = result + "100位："+ret.get(99).getInt("senka")+"\n";
 		result = result + "500位："+ret.get(499).getInt("senka")+"\n";
 		result = result + "统计时间：???";
-		return j.toString();
+		return result;
 	}
 	
 	
