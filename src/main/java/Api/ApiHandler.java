@@ -79,6 +79,12 @@ public class ApiHandler {
 			ret = Calculator.calculator(data);
 		}
 		
+		if(path.equals("easyrank")){
+			resp.setCharacterEncoding("utf-8");
+			resp.setContentType("text/plain");
+			ret = Calculator.easyRank(data);
+		}
+		
 		return ret;
 	}
 }

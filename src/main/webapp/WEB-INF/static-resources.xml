@@ -27,5 +27,6 @@
     <include path="/favicon.ico" />
     <include path="/favicon.png" />
     <include path="/robots.txt" />
+    <include path="/rank.html" />
 
 </static-files>

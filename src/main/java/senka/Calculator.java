@@ -29,6 +29,21 @@ public class Calculator {
 		calculateRank(8);
 	}
 	
+	public static String easyRank(Map<String, String[]> data)throws Exception{
+		int server = Integer.valueOf(data.get("server")[0]);
+		JSONObject j = new JSONObject();
+		ArrayList<JSONObject> ret = calculateRank(server);
+		String result = "";
+		result = result + "-------------战果简报-------------";
+		result = result + "5位："+ret.get(4).getInt("senka")+"\n";
+		result = result + "20位："+ret.get(19).getInt("senka")+"\n";
+		result = result + "100位："+ret.get(99).getInt("senka")+"\n";
+		result = result + "500位："+ret.get(499).getInt("senka")+"\n";
+		result = result + "统计时间：???";
+		return j.toString();
+	}
+	
+	
 	public static String calculator(Map<String, String[]> data)throws Exception{
 		int server = Integer.valueOf(data.get("server")[0]);
 		JSONObject j = new JSONObject();
