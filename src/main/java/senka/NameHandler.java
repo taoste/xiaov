@@ -88,8 +88,6 @@ public class NameHandler {
 	public static void handleName(String name,DBObject senkaUser,int tid,int count,int server,String token){
 		DBCollection cl_senka = Util.db.getCollection("cl_senka_"+server);
 		DBCollection cl_n_senka = Util.db.getCollection("cl_n_senka_"+server);
-		String cmt = senkaUser.get("cmt").toString();
-		int no = Integer.valueOf(senkaUser.get("no").toString());
 		Date now = new Date();
 		int month = now.getMonth();
 		int date = now.getDate();
@@ -139,7 +137,7 @@ public class NameHandler {
 					JSONObject infoj = new JSONObject(info);
 					int rank = infoj.getInt("api_rank");
 					String tcmt = infoj.getString("api_cmt");
-					if(now.getTime()-last.getTime()>86400000L*3*(rank-1)){
+					if(now.getTime()-last.getTime()>86400000L*4*(rank-1)){
 						fetchidlist.add(id);
 					}else{
 						mayfetchidlist.add(id);
@@ -180,6 +178,8 @@ public class NameHandler {
 			}
 		}
 	}
+	
+
 	
 	
 	public static void main(String[] args){

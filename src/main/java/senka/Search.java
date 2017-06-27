@@ -223,7 +223,7 @@ public class Search {
 	
 	
 	
-	private static boolean isExpKeyTs(Date dat){
+	public static boolean isExpKeyTs(Date dat){
 		Date  n1 = new Date(dat.getTime()+(dat.getTimezoneOffset()+480)*60000);
 		int left = (int)(43200000-(n1.getTime()-18000000)%43200000)/1000;
 		if(left<1200||left>43200-600){

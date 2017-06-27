@@ -178,9 +178,6 @@ public class Rank {
 		}
 	}
 	
-
-	
-	
 	
 	private static void needUpdateUserDate(DBObject user,DBCollection cl_senka){
 		Object us = user.get("senka");

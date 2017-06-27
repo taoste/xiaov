@@ -28,8 +28,8 @@ public class Collector {
 		System.out.println(123123);
 		long t1 = new Date().getTime();
 		try {
-//			Collector.collectByLastSenka("70d709bb2a3cfa7027939452aae19d084509c846", 19);
-			System.out.println(collectById(8045678, "723676cc8851b609d2c5739c26d5bc4f4cc56b0b", 8));
+			Collector.collectByLastSenka("ff1c47b2358a185d2d64d2b91703ca8d5458fd32", 8);
+//			System.out.println(collectById(8045678, "723676cc8851b609d2c5739c26d5bc4f4cc56b0b", 8));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,19 +120,30 @@ public class Collector {
 		}
 	}
 	
+	
 	public static void collectByLastSenka(String token,int server){
 		DBCollection cl_n_senka = Util.db.getCollection("cl_n_senka_"+server);
 		DBCursor dbc = null;
 		Date now = new Date();
+		long searchBefore = 60000000L;
+		boolean monthinit = false;
+		if(now.getDate()==1&&now.getHours()<3){
+			searchBefore = 86400000L*9;
+			monthinit=true;
+		}
 		int rankNo = Util.getRankDateNo(now);
 		try {
-			dbc = cl_n_senka.find(new BasicDBObject("ts",new BasicDBObject("$gt",new Date(now.getTime()-60000000L)))); //1000 min
+			dbc = cl_n_senka.find(new BasicDBObject("ts",new BasicDBObject("$gt",new Date(now.getTime()-searchBefore)))); //1000 min
 			int all=0;
 			while (dbc.hasNext()) {
 				all++;
 				DBObject dbObject = (DBObject) dbc.next();
 				String name = dbObject.get("_id").toString();
 				String key = "d"+now.getMonth();
+				if(monthinit){
+					NameHandler.handleName(name,null,-1,1,server,token);
+					continue;
+				}
 				BasicDBList dbl = (BasicDBList)dbObject.get(key);
 				ArrayList<DBObject> matched = new ArrayList<>();
 				for(int i=dbl.size();i>0;i--){
@@ -158,7 +169,6 @@ public class Collector {
 					System.out.println(matched);
 					System.out.println(name);
 					NameHandler.handleName(name,matched.get(0),-1,matched.size(),server,token);
-
 				}
 			}
 			System.out.println("all:"+all);

@@ -27,6 +27,8 @@ public class TimerTask {
 	private static String pass20 = "9876543210";
 	private static String pass18 = "9876543210";
 	private static String pass16 = "9876543210";
+	
+	private static int[] monthOfDay = new int[]{31,28,31,30,31,30,31,31,30,31,30,31};
 
 	static{
 		Date  now = new Date(new Date().getTime()+(new Date().getTimezoneOffset()+480)*60000);
@@ -38,33 +40,7 @@ public class TimerTask {
 			public void run() {
 				System.out.println(new Date());
 				System.out.println("-----------------will get exp now------------");
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						String token8 = getToken(8);
-						if(token8.length()>2){
-							Collector.collectByLastSenka(token8, 8);
-						}
-					}
-				}).start();
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						String token19 = getToken(19);
-						if(token19.length()>2){
-							Collector.collectByLastSenka(token19, 19);
-						}
-					}
-				}).start();
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						String token16 = getToken(16);
-						if(token16.length()>2){
-							Collector.collectByLastSenka(token16, 16);
-						}
-					}
-				}).start();				
+				collectorTask();
 			}
 		}, left1, 43200, TimeUnit.SECONDS);
 		
@@ -84,17 +60,22 @@ public class TimerTask {
 		System.out.println("--------------------------------");
 		System.out.println("will do hourly task after "+left3/60+"minutes");
 		ScheduledThreadPoolExecutor stpe3 = new ScheduledThreadPoolExecutor(5);
-		stpe1.scheduleAtFixedRate(new Runnable() {
+		stpe3.scheduleAtFixedRate(new Runnable() {
 			public void run() {
-				System.out.println(new Date());
-				System.out.println("-----------------will do hourly task now------------");
-				new Thread(new Runnable() {
-					public void run() {
+				Date now = new Date(new Date().getTime()+(new Date().getTimezoneOffset()+480)*60000);
+				if(now.getDate()==monthOfDay[now.getMonth()]){
+					int hour = now.getHours();
+					if(hour>=15&&hour<=21){
 						System.out.println(new Date());
+						System.out.println("-----------------will do hourly collect exp now------------");
+						collectorTask();
+					}else{
+						System.out.println(new Date());
+						System.out.println("-----------------hourly task------------");
 					}
-				}).start();
+				}
 			}
-		}, left1, 43200, TimeUnit.SECONDS);
+		}, left1, 3600, TimeUnit.SECONDS);
 		
 		
 		
@@ -136,6 +117,37 @@ public class TimerTask {
 	public static void init(){
 
 	}
+	
+	public static void collectorTask(){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String token8 = getToken(8);
+				if(token8.length()>2){
+					Collector.collectByLastSenka(token8, 8);
+				}
+			}
+		}).start();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String token19 = getToken(19);
+				if(token19.length()>2){
+					Collector.collectByLastSenka(token19, 19);
+				}
+			}
+		}).start();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String token16 = getToken(16);
+				if(token16.length()>2){
+					Collector.collectByLastSenka(token16, 16);
+				}
+			}
+		}).start();		
+	}
+	
 
 	public static void rankTask(){
 		new Thread(new Runnable() {
