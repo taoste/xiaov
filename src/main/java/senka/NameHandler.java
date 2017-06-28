@@ -110,6 +110,7 @@ public class NameHandler {
 			}else{
 				ArrayList<Integer> fetchidlist = new ArrayList<>();
 				ArrayList<Integer> mayfetchidlist = new ArrayList<>();
+				ArrayList<Integer> mayfetchranklist = new ArrayList<>();
 				for(int i=0;i<userlist.size();i++){
 					DBObject user = userlist.get(i);
 					int id = Integer.valueOf(user.get("_id").toString());
@@ -140,7 +141,10 @@ public class NameHandler {
 					if(now.getTime()-last.getTime()>86400000L*4*(rank-1)){
 						fetchidlist.add(id);
 					}else{
-						mayfetchidlist.add(id);
+						if(now.getTime()-last.getTime()>86400000L*2*(rank-1)||rank==2){
+							mayfetchidlist.add(id);
+							mayfetchranklist.add(rank);
+						}
 					}
 				}
 				if(fetchidlist.size()>=count){
@@ -167,9 +171,35 @@ public class NameHandler {
 				}else{
 					System.out.println("(((((((((((((((((((((((((((((");
 					System.out.println("no user matched,will fetch from mayidlist");
+					System.out.println(name);
+					String saveidlist = "";
+					for(int k=0;k<fetchidlist.size();k++){
+						int id = fetchidlist.get(k);
+						JSONObject userj = Collector.collectById(id, token, server);
+						int rank = userj.getInt("api_rank");
+						if(rank==1){
+							if(saveidlist.equals("")){
+								saveidlist = id+"";
+							}else{
+								saveidlist = saveidlist + "," + id;
+							}
+						}
+					}
+					for(int k=0;k<mayfetchidlist.size();k++){
+						int id = mayfetchidlist.get(k);
+						JSONObject userj = Collector.collectById(id, token, server);
+						int rank = userj.getInt("api_rank");
+						if(rank==1){
+							if(saveidlist.equals("")){
+								saveidlist = id+"";
+							}else{
+								saveidlist = saveidlist + "," + id;
+							}
+						}
+					}
+					cl_n_senka.update(new BasicDBObject("_id",name),new BasicDBObject("$set",new BasicDBObject("id",saveidlist).append("c", count)));
 				}
 			}
-//			System.out.println(totalcount);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally{

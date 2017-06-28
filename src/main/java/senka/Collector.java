@@ -28,7 +28,7 @@ public class Collector {
 		System.out.println(123123);
 		long t1 = new Date().getTime();
 		try {
-			Collector.collectByLastSenka("ff1c47b2358a185d2d64d2b91703ca8d5458fd32", 8);
+			Collector.collectByLastSenka("4abd4a52da787af1d9ac521c562fba396613587e", 16);
 //			System.out.println(collectById(8045678, "723676cc8851b609d2c5739c26d5bc4f4cc56b0b", 8));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,6 +137,9 @@ public class Collector {
 			int all=0;
 			while (dbc.hasNext()) {
 				all++;
+				if(all%100==0){
+					System.out.println(all);
+				}
 				DBObject dbObject = (DBObject) dbc.next();
 				String name = dbObject.get("_id").toString();
 				String key = "d"+now.getMonth();

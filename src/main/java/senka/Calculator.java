@@ -27,7 +27,7 @@ public class Calculator {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		System.out.println("start calculator");
-		calculateRank(8);
+		calculateRank(16);
 	}
 	
 	public static String easyRank(Map<String, String[]> data)throws Exception{
@@ -74,11 +74,12 @@ public class Calculator {
 				DBObject senkaData = dbc.next();
 				Object ido = senkaData.get("id");
 				if(ido==null){
-					// first time in rank,ignore
+					System.out.println(senkaData);
 					continue;
 				}
 				String idstr = senkaData.get("id").toString();
 				if(idstr.equals("")){
+					System.out.println(senkaData);
 					continue;
 				}
 				String[] ida = idstr.split(",");
@@ -101,7 +102,8 @@ public class Calculator {
 				}
 			}
 			dbc2 = cl_senka.find(new BasicDBObject("_id",new BasicDBObject("$in",dbl)));
-			
+			System.out.println(dbl.size());
+			System.out.println(resultlist.size());
 			
 			while (dbc2.hasNext()) {
 				DBObject userData = (DBObject) dbc2.next();
@@ -150,6 +152,7 @@ public class Calculator {
 								if(Math.abs(addexpsenka-addsenka)>10&&Math.abs(addexpsenka-addsenka)<60){
 									if(c==1&&ida.length>1){
 										drop=1;
+										System.out.println("drop:"+name+","+id);
 									}
 								}
 								j.put("subexp", addsenka);
@@ -173,10 +176,26 @@ public class Calculator {
 					JSONObject retj = getResultByPairlist(latestexp,latestts, pairlist, name);
 					if(retj!=null){
 						resultlist.add(retj);
+					}else{
+						JSONObject ret = new JSONObject();
+						DBObject senkaD = (DBObject)senkalist.get(senkalist.size()-1);
+						int senka = Integer.valueOf(senkaD.get("senka").toString());
+						int senkats = Integer.valueOf(senkaD.get("ts").toString()); 
+						DBObject firstExpData  = getFirstExpData(explist);
+						int firstexp = Integer.valueOf(firstExpData.get("d").toString());
+						Date firstts = (Date)firstExpData.get("ts");
+						ret.put("type", 3);
+						ret.put("senka", senka);
+						ret.put("senkats", senkats);
+						ret.put("expfrom", firstts);
+						ret.put("expto", latestts);
+						int subsenka = (latestexp-firstexp)*7/10000;
+						ret.put("subsenka", subsenka);
+						resultlist.add(ret);
 					}
 				}
 			}
-			
+			System.out.println(resultlist.size());
 			Collections.sort(resultlist, new Comparator<JSONObject>() {
 				public int compare(JSONObject a,JSONObject b){
 					try {
@@ -187,6 +206,9 @@ public class Calculator {
 					}
 				}
 			});
+//			for(int i=0;i<resultlist.size();i++){
+//				System.out.println(resultlist.get(i));
+//			}
 			JSONObject j = new JSONObject();
 			j.put("ts", new Date(updatets));
 			j.put("d", resultlist);
@@ -202,6 +224,19 @@ public class Calculator {
 				dbc.close();
 			}
 		}
+	}
+	
+	public static DBObject getFirstExpData(BasicDBList explist){
+		Date now = new Date();
+		for(int i=0;i<explist.size();i++){
+			DBObject expdata = (DBObject)explist.get(i);
+			Date ts = (Date)expdata.get("ts");
+			if(ts.getMonth()==now.getMonth()){
+				return expdata;
+			}
+		}
+		return null;
+		
 	}
 	
 	public static JSONObject getResultByPairlist(int latestexp,Date latestts,ArrayList<JSONObject> pairlist,String name)throws Exception{
