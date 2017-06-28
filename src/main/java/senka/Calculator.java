@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.enterprise.inject.New;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,35 +32,39 @@ public class Calculator {
 	
 	public static String easyRank(Map<String, String[]> data)throws Exception{
 		int server = Integer.valueOf(data.get("server")[0]);
-		ArrayList<JSONObject> ret = calculateRank(server);
+		JSONObject jret = calculateRank(server);
+		JSONArray ret = jret.getJSONArray("d");
 		String result = "";
-		result = result + "-------------战果简报-------------\n";
-		result = result + "5位："+ret.get(4).getInt("senka")+"\n";
-		result = result + "20位："+ret.get(19).getInt("senka")+"\n";
-		result = result + "100位："+ret.get(99).getInt("senka")+"\n";
-		result = result + "500位："+ret.get(499).getInt("senka")+"\n";
-		result = result + "统计时间：???";
+		result = result + "-------------战果简报(未计算EX)-------------\n";
+		result = result + "5位："+ret.getJSONObject(4).getInt("senka")+"\n";
+		result = result + "20位："+ret.getJSONObject(19).getInt("senka")+"\n";
+		result = result + "100位："+ret.getJSONObject(99).getInt("senka")+"\n";
+		result = result + "500位："+ret.getJSONObject(499).getInt("senka")+"\n";
+		Date calts = (Date)jret.get("ts");
+		result = result + "统计时间："+calts.toLocaleString();
 		return result;
 	}
 	
 	
 	public static String calculator(Map<String, String[]> data)throws Exception{
 		int server = Integer.valueOf(data.get("server")[0]);
-		JSONObject j = new JSONObject();
+		JSONObject j = calculateRank(server);
 		j.put("r", 0);
-		j.put("d", calculateRank(server));
 		return j.toString();
 	}
 
+	public static JSONObject calculateRank(int server){
+		return calculateRank_D(server);
+	}
 	
-	
-	public static ArrayList<JSONObject> calculateRank(int server){
+	public static JSONObject calculateRank_D(int server){
 		DBCollection cl_n_senka = Util.db.getCollection("cl_n_senka_"+server);
 		DBCollection cl_senka = Util.db.getCollection("cl_senka_"+server);
 		DBCursor dbc = null;
 		DBCursor dbc2 = null;
 		Date now = new Date();
 		int rankNo = Util.getRankDateNo(now);
+		long updatets = 0;
 		try {
 			ArrayList<JSONObject> resultlist = new ArrayList<>();
 			BasicDBList dbl = new BasicDBList(); 
@@ -162,6 +167,9 @@ public class Calculator {
 					DBObject latestexpdata = (DBObject)explist.get(explist.size()-1);
 					int latestexp = Integer.valueOf(latestexpdata.get("d").toString());
 					Date latestts = (Date)latestexpdata.get("ts");
+					if(latestts.getTime()>updatets){
+						updatets = latestts.getTime();
+					}
 					JSONObject retj = getResultByPairlist(latestexp,latestts, pairlist, name);
 					if(retj!=null){
 						resultlist.add(retj);
@@ -179,10 +187,13 @@ public class Calculator {
 					}
 				}
 			});
-			return resultlist;
+			JSONObject j = new JSONObject();
+			j.put("ts", new Date(updatets));
+			j.put("d", resultlist);
+			return j;
 		}catch (Exception e) {
 			e.printStackTrace();
-			return new ArrayList<>();
+			return new JSONObject();
 		} finally{
 			if(dbc!=null){
 				dbc.close();
