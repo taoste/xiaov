@@ -588,7 +588,7 @@ public class QQService {
         if(msg.length()<2){
 
         }else{
-        	sendMessageToGroup(discussId, msg);
+        	sendMessageToDiscuss(discussId, msg);
         }
     }
     
