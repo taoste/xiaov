@@ -583,38 +583,13 @@ public class QQService {
         final String userName = Long.toHexString(message.getUserId());
         // Push to forum
         String qqMsg = content.replaceAll("\\[\"face\",[0-9]+\\]", "");
-        if (StringUtils.isNotBlank(qqMsg)) {
-            qqMsg = "<p>" + qqMsg + "</p>";
-            sendToForum(qqMsg, userName);
+
+	String msg = ReplyMsg.reply(content, userName);
+        if(msg.length()<2){
+
+        }else{
+        	sendMessageToGroup(discussId, msg);
         }
-
-        String msg = "";
-        if (StringUtils.contains(content, XiaoVs.QQ_BOT_NAME)
-                || (StringUtils.length(content) > 6
-                && (StringUtils.contains(content, "?") || StringUtils.contains(content, "？") || StringUtils.contains(content, "问")))) {
-            msg = answer(content, userName,"百百");
-        }
-
-        if (StringUtils.isBlank(msg)) {
-            return;
-        }
-
-        if (RandomUtils.nextFloat() >= 0.9) {
-            Long latestAdTime = DISCUSS_AD_TIME.get(discussId);
-            if (null == latestAdTime) {
-                latestAdTime = 0L;
-            }
-
-            final long now = System.currentTimeMillis();
-
-            if (now - latestAdTime > 1000 * 60 * 30) {
-                msg = msg + "\n\n（" + ADS.get(RandomUtils.nextInt(ADS.size())) + "）";
-
-                DISCUSS_AD_TIME.put(discussId, now);
-            }
-        }
-
-        sendMessageToDiscuss(discussId, msg);
     }
     
     private String answer(final String content, final String userName,final String botname) {
