@@ -1,9 +1,71 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet">
+	<link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="index.css" rel="stylesheet">
+	<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+	<script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdn.bootcss.com/clipboard.js/1.7.1/clipboard.js"></script>
 </head>
 <body>
-<div id="main">
-	123123123
+<script type="text/javascript">
+
+
+</script>
+
+
+
+
+<div id="h">
+  <select id="server" class="form-control" style="width: 300px">
+    <option value="0">请选择服务器</option>
+    <option value="8">8</option>
+    <option value="16">16</option>
+    <option value="19">19</option>
+  </select>
+  <button type="button" class="btn btn-primary" onclick="search();">查询</button>
 </div>
+<div id="main">
+
+</div>
+<script type="text/javascript">
+  function search(){
+    var server = $('#server').val();
+    if(server==0){
+      return;
+    }else{
+      var url = '/api/calrank?server='+server;
+      $.get(url,function(response,status){
+        var data = eval("("+response+")");
+        var result = data.r;
+        if(result==0){
+          var h='<table class="table table-bordered table-striped table-hover">';
+          h=h+'<thead></thead>';
+          for(var i=0;i<data.d.length;i++){
+            var senka=data.d[i];
+            if(i==5||i==20||i==100||i==500){
+              h=h+'<td> </td></tr><tr>';
+            }
+            h=h+'<tr>';
+            h=h+'<td>'+(i+1)+'位</td>';
+            h=h+'<td>'+senka.name+'</td>';
+            h=h+'<td>'+senka.senka+'</td>';
+            h=h+'<td>'+senka.ex+'</td>';
+            h=h+'<td>'+(senka.senka+1380-senka.ex)+'</td>';
+            h=h+'</tr>';
+          }
+          h=h+'</table>'
+          $('#main').html(h);
+          console.log(data);
+        }
+      })
+    }
+  }
+
+
+</script>
+
 </body>
 </html>
