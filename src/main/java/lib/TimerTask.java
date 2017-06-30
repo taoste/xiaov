@@ -75,7 +75,7 @@ public class TimerTask {
 					}
 				}
 			}
-		}, left1, 3600, TimeUnit.SECONDS);
+		}, left3, 3600, TimeUnit.SECONDS);
 		
 		
 		
