@@ -35,7 +35,7 @@ public class TimerTask {
 		int left1 = (int)(43200000-(now.getTime()-18002000)%43200000)/1000;
 		System.out.println("--------------------------------");
 		System.out.println("will get exp after "+left1/60+"minutes");
-		ScheduledThreadPoolExecutor stpe1 = new ScheduledThreadPoolExecutor(5);
+		ScheduledThreadPoolExecutor stpe1 = new ScheduledThreadPoolExecutor(15);
 		stpe1.scheduleAtFixedRate(new Runnable() {
 			public void run() {
 				System.out.println(new Date());
@@ -46,7 +46,7 @@ public class TimerTask {
 		
 		int left2 = (int)(43200000-(now.getTime()-21700000)%43200000)/1000;
 		System.out.println("will get senka after "+left2/60+"minutes");
-		ScheduledThreadPoolExecutor stpe2 = new ScheduledThreadPoolExecutor(5);
+		ScheduledThreadPoolExecutor stpe2 = new ScheduledThreadPoolExecutor(15);
 		stpe2.scheduleAtFixedRate(new Runnable() {
 			public void run() {
 				System.out.println(new Date());
@@ -59,7 +59,7 @@ public class TimerTask {
 		int left3 = (int)(3600000-(now.getTime()+60000*3)%3600000)/1000;
 		System.out.println("--------------------------------");
 		System.out.println("will do hourly task after "+left3/60+"minutes");
-		ScheduledThreadPoolExecutor stpe3 = new ScheduledThreadPoolExecutor(5);
+		ScheduledThreadPoolExecutor stpe3 = new ScheduledThreadPoolExecutor(15);
 		stpe3.scheduleAtFixedRate(new Runnable() {
 			public void run() {
 				Date now = new Date(new Date().getTime()+(new Date().getTimezoneOffset()+480)*60000);
