@@ -41,7 +41,8 @@
         var data = eval("("+response+")");
         var result = data.r;
         if(result==0){
-          var h='<table class="table table-bordered table-striped table-hover">';
+          var h = '统计时间：'+new Date(data.ts).toLocaleString();
+          h=h+'<table class="table table-bordered table-striped table-hover">';
           h=h+'<thead></thead>';
           for(var i=0;i<data.d.length;i++){
             var senka=data.d[i];
