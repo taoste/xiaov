@@ -73,7 +73,10 @@ public class ApiHandler {
 			TimerTask.rankTask();
 			ret = "will run rank task";
 		}
-		
+		if(path.equals("forcecollect")){
+			TimerTask.collectorTask();
+			ret = "will run rank task";
+		}
 		if(path.equals("calrank")){
 			resp.setCharacterEncoding("utf-8");
 			ret = Calculator.calculator(data);
