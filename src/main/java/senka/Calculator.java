@@ -135,7 +135,9 @@ public class Calculator {
 					}else{
 						int expno = Util.getRankDateNo(new Date(expts.getTime()+3600000*2));
 						int senkano = Integer.valueOf(senka.get("ts").toString());
-						if(expno>senkano){
+						if(expts.getMonth()<now.getMonth()){
+							pointer1++;
+						}else if(expno>senkano){
 							pointer2++;
 						}else if(expno<senkano){
 							pointer1++;
@@ -152,7 +154,6 @@ public class Calculator {
 								if(Math.abs(addexpsenka-addsenka)>10&&Math.abs(addexpsenka-addsenka)<60){
 									if(c==1&&ida.length>1){
 										drop=1;
-										System.out.println("drop:"+name+","+id);
 									}
 								}
 								j.put("subexp", addsenka);
@@ -195,7 +196,6 @@ public class Calculator {
 					}
 				}
 			}
-			System.out.println(resultlist.size());
 			Collections.sort(resultlist, new Comparator<JSONObject>() {
 				public int compare(JSONObject a,JSONObject b){
 					try {
@@ -206,9 +206,6 @@ public class Calculator {
 					}
 				}
 			});
-//			for(int i=0;i<resultlist.size();i++){
-//				System.out.println(resultlist.get(i));
-//			}
 			JSONObject j = new JSONObject();
 			j.put("ts", new Date(updatets));
 			j.put("d", resultlist);
@@ -333,7 +330,6 @@ public class Calculator {
 			}
 		}
 		int a=0;
-//		System.out.println(cmt2id);
 		for(int i=0;i<explist.size();i++){
 			int id = idlist.get(i);
 			BasicDBList expL = explist.get(i);
@@ -436,7 +432,6 @@ public class Calculator {
 				}
 			}
 		}
-		System.out.println(result);
 		return result;
 	}
 	
