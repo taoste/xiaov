@@ -186,6 +186,7 @@ public class Calculator {
 						int firstexp = Integer.valueOf(firstExpData.get("d").toString());
 						Date firstts = (Date)firstExpData.get("ts");
 						ret.put("type", 3);
+						ret.put("name", name);
 						ret.put("senka", senka);
 						ret.put("senkats", senkats);
 						ret.put("expfrom", firstts);
