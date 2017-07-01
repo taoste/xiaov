@@ -357,7 +357,9 @@ public class Calculator {
 				}else{
 					int expno = Util.getRankDateNo(new Date(expts.getTime()+3600000*2));
 					int senkano = Integer.valueOf(senka.get("ts").toString());
-					if(expno>senkano){
+					if(expts.getMonth()<now.getMonth()){
+						pointer1++;
+					}else if(expno>senkano){
 						pointer2++;
 					}else if(expno<senkano){
 						pointer1++;
