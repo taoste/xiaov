@@ -114,6 +114,9 @@ public class Calculator {
 			dbc2 = cl_senka.find(new BasicDBObject("_id",new BasicDBObject("$in",dbl)));
 			long exfrom = 1999123456789L;
 			long exto = 0L;
+			long expfrom = 1999123456789L;
+			long expto = 0L;
+			int latestsenkats = 0;
 			while (dbc2.hasNext()) {
 				DBObject userData = (DBObject) dbc2.next();
 				int id = Integer.valueOf(userData.get("_id").toString());
@@ -191,24 +194,42 @@ public class Calculator {
 					int senka = Integer.valueOf(senkaD.get("senka").toString());
 					int senkats = Integer.valueOf(senkaD.get("ts").toString()); 
 					int lastno = Integer.valueOf(senkaD.get("no").toString()); 
+					DBObject firstExpData  = getFirstExpData(explist);
+					int firstexp = Integer.valueOf(firstExpData.get("d").toString());
+					Date firstts = (Date)firstExpData.get("ts");
+					int subsenka = (latestexp-firstexp)*7/10000;
+					if(latestsenkats<senkats){
+						latestsenkats=senkats;
+					}
+					if(expfrom>firstts.getTime()){
+						expfrom=firstts.getTime();
+					}
+					if(expto<latestts.getTime()){
+						expto=latestts.getTime();
+					}
 					JSONObject retj = getResultByPairlist(latestexp,latestts, pairlist, name);
+					
 					if(retj!=null){
+						Date pairexfrom = (Date)pairlist.get(0).get("ts");
+						Date pairexto = (Date)pairlist.get(pairlist.size()-1).get("ts");
+						
+						if(exfrom>pairexfrom.getTime()){
+							exfrom = pairexfrom.getTime();
+						}
+						if(exto>pairexto.getTime()){
+							exto = pairexto.getTime();
+						}
 						retj.put("lsenka", senka);
 						retj.put("lsenkats", senkats);
 						retj.put("lno", lastno);
+						retj.put("expfrom", firstts.getTime());
+						retj.put("expto", latestts.getTime());
+						retj.put("subsenka", subsenka);
 						resultlist.add(retj);
 					}else{
 						JSONObject ret = new JSONObject();
 
-						DBObject firstExpData  = getFirstExpData(explist);
-						int firstexp = Integer.valueOf(firstExpData.get("d").toString());
-						Date firstts = (Date)firstExpData.get("ts");
-						if(firstts.getTime()<exfrom){
-							exfrom = firstts.getTime();
-						}
-						if(latestts.getTime()>exto){
-							exto = latestts.getTime();
-						}
+
 						ret.put("type", 3);
 						ret.put("fsenka", fsenka);
 						ret.put("fsenkats", fsenkats);
@@ -218,9 +239,8 @@ public class Calculator {
 						ret.put("lsenka", senka);
 						ret.put("lsenkats", senkats);
 						ret.put("lno", lastno);
-						ret.put("expfrom", firstts);
-						ret.put("expto", latestts);
-						int subsenka = (latestexp-firstexp)*7/10000;
+						ret.put("expfrom", firstts.getTime());
+						ret.put("expto", latestts.getTime());
 						ret.put("subsenka", subsenka);
 						resultlist.add(ret);
 					}
@@ -240,6 +260,9 @@ public class Calculator {
 			j.put("ts", new Date(updatets).getTime());
 			j.put("exfrom", exfrom);
 			j.put("exto", exto);
+			j.put("expfrom", expfrom);
+			j.put("expto", expto);
+			j.put("rankts", latestsenkats);
 			j.put("d", resultlist);
 			return j;
 		}catch (Exception e) {
