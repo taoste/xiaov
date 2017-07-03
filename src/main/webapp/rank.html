@@ -31,6 +31,7 @@
 
 </div>
 <script type="text/javascript">
+  var u;
   function search(){
     var server = $('#server').val();
     if(server==0){
@@ -39,84 +40,108 @@
       var url = '/api/calrank?server='+server;
       $.get(url,function(response,status){
         var data = eval("("+response+")");
-        var result = data.r;
-        var zexfrom = data.exfrom;
-        var zexto = data.exto;
-        var zexpfrom = data.expfrom;
-        var zexpto = data.expto;
-        if(result==0){
-          var h = '统计时间：'+new Date(data.ts).toLocaleString();
-          h=h+'<table class="table table-bordered table-striped table-hover">';
-          h=h+'<thead><td>排名(当前/榜单)</td><td></td><td>当前</td>';
-          h=h+'<td>经验  ('+new Date(zexpfrom).toLocaleString()+'----'+new Date(zexpto).toLocaleString()+')</td>';
-          h=h+'<td>ex  ('+new Date(zexfrom).toLocaleString()+'----'+new Date(zexto).toLocaleString()+')</td>';
-          h=h+'<td>预想1(当前战果+1380-EX)</td><td>预想2(月初战果+经验+1380)</td></thead>';
-          for(var i=0;i<data.d.length;i++){
-            var type=data.d[i].type;
-            var senka=data.d[i];
-            if(i==5||i==20||i==100||i==500){
-              h=h+'<td> </td></tr><tr>';
-            }
-            h=h+'<tr>';
-            h=h+'<td>'+(i+1)+'位('+senka.lno+'位)</td>';
-            h=h+'<td>'+senka.name+'</td>';
-            h=h+'<td>'+senka.senka+'</td>';
-            var subsenkastr = senka.subsenka;
-            var expfrom = senka.expfrom;
-            var expto = senka.expto;
-            if(Math.abs(expfrom-zexpfrom)>1200000||Math.abs(expto-zexpto)>1200000){
-              subsenkastr = subsenkastr + '    ('+new Date(expfrom).toLocaleString()+'----'+new Date(expto).toLocaleString()+')';
-            }
-            h=h+'<td>'+subsenkastr+'</td>';
-            if(type==1){
-              var exfrom = senka.exfrom;
-              var exto = senka.exto;
-              var ensure=0;
-              if(Math.abs(exfrom-zexfrom)<1200000&&Math.abs(exto-zexto)<1200000){
-                h=h+'<td>'+senka.ex+'</td>';
-                ensure=1;
-              }else{
-                h=h+'<td>'+senka.ex+'    ('+new Date(exfrom).toLocaleString()+'----'+new Date(exto).toLocaleString()+')</td>';
-              }
-              if(ensure){
-                h=h+'<td colspan="2">'+(senka.senka+1380-senka.ex)+'</td>';
-              }else{
-                if(senka.fsenkats==0&&getDateNo(senka.expfrom)==0){
-                  h=h+'<td colspan="2">'+(senka.subsenka+senka.fsenka+1380)+'</td>';
-                }else{
-                  h=h+'<td>'+(senka.senka+1380-senka.ex)+'</td>';
-                  h=h+'<td>'+(senka.subsenka+senka.fsenka+1380)+'</td>';
-                }
-              }
-            }else if(type==3){
-              h=h+'<td>'+'unknown'+'</td>';
-              if(senka.fsenkats==0){
-                h=h+'<td colspan="2">'+(senka.subsenka+senka.fsenka+1380)+'</td>';
-              }else{
-                h=h+'<td>'+(senka.senka+senka.fsenka+1380)+'</td>';
-                h=h+'<td>'+(senka.subsenka+senka.fsenka+1380)+'</td>';
-              }
-
-
-            }else if(type==2){
-              var exfrom = senka.exfrom;
-              var exto = senka.exto;
-              if(Math.abs(exfrom-zexfrom)<600000&&Math.abs(exto-zexto)<600000){
-                h=h+'<td>'+senka.ex+'</td>';
-              }else{
-                h=h+'<td>'+senka.ex+'('+new Date(exfrom).toLocaleString()+'----'+new Date(exto).toLocaleString()+')</td>';
-              }
-              h=h+'<td>'+(senka.senka+1380-senka.ex)+'</td>';
-            }
-            h=h+'</tr>';
-          }
-          h=h+'</table>'
-          $('#main').html(h);
-          console.log(data);
-        }
+        u=data;
+        generateTable()
       })
     }
   }
+
+  function sortby(type){
+    u.d.sort(function(a,b){
+      if(type==0){
+        return b.senka-a.senka;
+      }else if(type==1){
+        return b.subsenka-a.subsenka;
+      }else if(type==2){
+        return a.ex-b.ex;
+      }else if(typ==3){
+        return (b.senka + 1380 - b.ex) - (a.senka+1380-a.ex);
+      }else if(type==4){
+        return (b.subsenka + b.fsenka + 1380) - (a.subsenka + a.fsenka + 1380)
+      }
+    });
+    generateTable(data);
+  }
+
+  function generateTable(){
+    var data = u;
+    var result = data.r;
+    var zexfrom = data.exfrom;
+    var zexto = data.exto;
+    var zexpfrom = data.expfrom;
+    var zexpto = data.expto;
+    if(result==0) {
+      var h = '统计时间：' + new Date(data.ts).toLocaleString();
+      h = h + '<table class="table table-bordered table-striped table-hover">';
+      h = h + '<thead><td>排名(当前/榜单)</td><td></td><td><div onclick="sortby(0);">当前</div></td>';
+      h = h + '<td><div onclick="sortby(1);"> 经验  (' + new Date(zexpfrom).toLocaleString() + '----' + new Date(zexpto).toLocaleString() + ')</div></td>';
+      h = h + '<td><div onclick="sortby(2);">ex  (' + new Date(zexfrom).toLocaleString() + '----' + new Date(zexto).toLocaleString() + ')</div></td>';
+      h = h + '<td><div onclick="sortby(3);">预想1(当前战果+1380-EX)</div></td><td><div onclick="sortby(4);">预想2(月初战果+经验+1380)</div></td></thead>';
+      for (var i = 0; i < data.d.length; i++) {
+        var type = data.d[i].type;
+        var senka = data.d[i];
+        if (i == 5 || i == 20 || i == 100 || i == 500) {
+          h = h + '<td> </td></tr><tr>';
+        }
+        h = h + '<tr>';
+        h = h + '<td>' + (i + 1) + '位(' + senka.lno + '位)</td>';
+        h = h + '<td>' + senka.name + '</td>';
+        h = h + '<td>' + senka.senka + '</td>';
+        var subsenkastr = senka.subsenka;
+        var expfrom = senka.expfrom;
+        var expto = senka.expto;
+        if (Math.abs(expfrom - zexpfrom) > 1200000 || Math.abs(expto - zexpto) > 1200000) {
+          subsenkastr = subsenkastr + '    (' + new Date(expfrom).toLocaleString() + '----' + new Date(expto).toLocaleString() + ')';
+        }
+        h = h + '<td>' + subsenkastr + '</td>';
+        if (type == 1) {
+          var exfrom = senka.exfrom;
+          var exto = senka.exto;
+          var ensure = 0;
+          if (Math.abs(exfrom - zexfrom) < 1200000 && Math.abs(exto - zexto) < 1200000) {
+            h = h + '<td>' + senka.ex + '</td>';
+            ensure = 1;
+          } else {
+            h = h + '<td>' + senka.ex + '    (' + new Date(exfrom).toLocaleString() + '----' + new Date(exto).toLocaleString() + ')</td>';
+          }
+          if (ensure) {
+            h = h + '<td colspan="2">' + (senka.senka + 1380 - senka.ex) + '</td>';
+          } else {
+            if (senka.fsenkats == 0 && getDateNo(senka.expfrom) == 0) {
+              h = h + '<td colspan="2">' + (senka.subsenka + senka.fsenka + 1380) + '</td>';
+            } else {
+              h = h + '<td>' + (senka.senka + 1380 - senka.ex) + '</td>';
+              h = h + '<td>' + (senka.subsenka + senka.fsenka + 1380) + '</td>';
+            }
+          }
+        } else if (type == 3) {
+          h = h + '<td>' + 'unknown' + '</td>';
+          if (senka.fsenkats == 0) {
+            h = h + '<td colspan="2">' + (senka.subsenka + senka.fsenka + 1380) + '</td>';
+          } else {
+            h = h + '<td>' + (senka.senka + senka.fsenka + 1380) + '</td>';
+            h = h + '<td>' + (senka.subsenka + senka.fsenka + 1380) + '</td>';
+          }
+
+
+        } else if (type == 2) {
+          var exfrom = senka.exfrom;
+          var exto = senka.exto;
+          if (Math.abs(exfrom - zexfrom) < 600000 && Math.abs(exto - zexto) < 600000) {
+            h = h + '<td>' + senka.ex + '</td>';
+          } else {
+            h = h + '<td>' + senka.ex + '(' + new Date(exfrom).toLocaleString() + '----' + new Date(exto).toLocaleString() + ')</td>';
+          }
+          h = h + '<td>' + (senka.senka + 1380 - senka.ex) + '</td>';
+        }
+        h = h + '</tr>';
+      }
+      h = h + '</table>'
+      $('#main').html(h);
+      console.log(data);
+    }
+  }
+
 
   getDateNo = function(now){
     now = new Date(new Date(now).getTime()+(new Date().getTimezoneOffset()+480)*60000)
