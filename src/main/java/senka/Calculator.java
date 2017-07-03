@@ -2,11 +2,13 @@ package senka;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.enterprise.inject.New;
 
@@ -24,10 +26,18 @@ import lib.TimerTask;
 
 public class Calculator {
 
+
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("start calculator");
-		calculateRank(16);
+		try {
+			Date d = new Date();
+			Date d2 = new Date(d.getTime()+3600000*3);
+			System.out.println(Util.getRankDateNo(d2));
+			System.out.println(d);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	public static String easyRank(Map<String, String[]> data)throws Exception{
@@ -35,7 +45,7 @@ public class Calculator {
 		JSONObject jret = calculateRank(server);
 		JSONArray ret = jret.getJSONArray("d");
 		String result = "";
-		result = result + "-------------战果简报(未计算EX)-------------\n";
+		result = result + "-------------战果简报-------------\n";
 		result = result + "5位："+ret.getJSONObject(4).getInt("senka")+"\n";
 		result = result + "20位："+ret.getJSONObject(19).getInt("senka")+"\n";
 		result = result + "100位："+ret.getJSONObject(99).getInt("senka")+"\n";
@@ -102,9 +112,8 @@ public class Calculator {
 				}
 			}
 			dbc2 = cl_senka.find(new BasicDBObject("_id",new BasicDBObject("$in",dbl)));
-			System.out.println(dbl.size());
-			System.out.println(resultlist.size());
-			
+			long exfrom = 1999123456789L;
+			long exto = 0L;
 			while (dbc2.hasNext()) {
 				DBObject userData = (DBObject) dbc2.next();
 				int id = Integer.valueOf(userData.get("_id").toString());
@@ -166,6 +175,7 @@ public class Calculator {
 						}
 					}
 				}
+
 				if(drop==0){
 					DBObject latestexpdata = (DBObject)explist.get(explist.size()-1);
 					int latestexp = Integer.valueOf(latestexpdata.get("d").toString());
@@ -173,20 +183,39 @@ public class Calculator {
 					if(latestts.getTime()>updatets){
 						updatets = latestts.getTime();
 					}
+					DBObject senkaD = (DBObject)senkalist.get(senkalist.size()-1);
+					DBObject senkaF = (DBObject)senkalist.get(0);
+					int fsenka = Integer.valueOf(senkaF.get("senka").toString());
+					int fsenkats = Integer.valueOf(senkaF.get("ts").toString()); 
+					int senka = Integer.valueOf(senkaD.get("senka").toString());
+					int senkats = Integer.valueOf(senkaD.get("ts").toString()); 
+					int lastno = Integer.valueOf(senkaD.get("no").toString()); 
 					JSONObject retj = getResultByPairlist(latestexp,latestts, pairlist, name);
 					if(retj!=null){
+						retj.put("lsenka", senka);
+						retj.put("lsenkats", senkats);
+						retj.put("lno", lastno);
 						resultlist.add(retj);
 					}else{
 						JSONObject ret = new JSONObject();
-						DBObject senkaD = (DBObject)senkalist.get(senkalist.size()-1);
-						int senka = Integer.valueOf(senkaD.get("senka").toString());
-						int senkats = Integer.valueOf(senkaD.get("ts").toString()); 
+
 						DBObject firstExpData  = getFirstExpData(explist);
 						int firstexp = Integer.valueOf(firstExpData.get("d").toString());
 						Date firstts = (Date)firstExpData.get("ts");
+						if(firstts.getTime()<exfrom){
+							exfrom = firstts.getTime();
+						}
+						if(latestts.getTime()>exto){
+							exto = latestts.getTime();
+						}
 						ret.put("type", 3);
+						ret.put("fsenka", fsenka);
+						ret.put("fsenkats", fsenkats);
 						ret.put("senka", senka);
 						ret.put("senkats", senkats);
+						ret.put("lsenka", senka);
+						ret.put("lsenkats", senkats);
+						ret.put("lno", lastno);
 						ret.put("expfrom", firstts);
 						ret.put("expto", latestts);
 						int subsenka = (latestexp-firstexp)*7/10000;
@@ -195,7 +224,6 @@ public class Calculator {
 					}
 				}
 			}
-			System.out.println(resultlist.size());
 			Collections.sort(resultlist, new Comparator<JSONObject>() {
 				public int compare(JSONObject a,JSONObject b){
 					try {
@@ -210,7 +238,9 @@ public class Calculator {
 //				System.out.println(resultlist.get(i));
 //			}
 			JSONObject j = new JSONObject();
-			j.put("ts", new Date(updatets));
+			j.put("ts", new Date(updatets).getTime());
+			j.put("exfrom", exfrom);
+			j.put("exto", exto);
 			j.put("d", resultlist);
 			return j;
 		}catch (Exception e) {
@@ -260,10 +290,11 @@ public class Calculator {
 				j.put("senka", latestpairsenka);
 				j.put("ts", latestpairts);
 			}
+			j.put("type", 1);
 			j.put("name",name);
 			j.put("ex", ex);
-			j.put("exfrom", firstpairts);
-			j.put("exto", latestpairts);
+			j.put("exfrom", firstpairts.getTime());
+			j.put("exto", latestpairts.getTime());
 			return j;
 		}else{
 			return null;
