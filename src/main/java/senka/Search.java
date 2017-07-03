@@ -90,7 +90,9 @@ public class Search {
 			int senkano = Integer.valueOf(senkadata.get("ts").toString());
 			if(isExpKeyTs(expts)){
 				int expno = Util.getRankDateNo(new Date(expts.getTime()+3600000*2));
-				if(expno==senkano){
+				if(expts.getMonth()<now.getMonth()){
+					pointer1++;
+				}else if(expno==senkano){
 					front = new JSONObject();
 					front.put("ts", expts);
 					front.put("senka", senka);
