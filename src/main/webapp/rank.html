@@ -50,7 +50,7 @@
           h=h+'<thead><td>排名(当前/榜单)</td><td></td><td>当前</td>';
           h=h+'<td>经验  ('+new Date(zexpfrom).toLocaleString()+'----'+new Date(zexpto).toLocaleString()+')</td>';
           h=h+'<td>ex  ('+new Date(zexfrom).toLocaleString()+'----'+new Date(zexto).toLocaleString()+')</td>';
-          h=h+'<td>预想1(战果+1380-EX)</td><td>预想2(经验+继承+1380)</td></thead>';
+          h=h+'<td>预想1(当前战果+1380-EX)</td><td>预想2(月初战果+经验+1380)</td></thead>';
           for(var i=0;i<data.d.length;i++){
             var type=data.d[i].type;
             var senka=data.d[i];
@@ -71,19 +71,33 @@
             if(type==1){
               var exfrom = senka.exfrom;
               var exto = senka.exto;
+              var ensure=0;
               if(Math.abs(exfrom-zexfrom)<1200000&&Math.abs(exto-zexto)<1200000){
                 h=h+'<td>'+senka.ex+'</td>';
+                ensure=1;
               }else{
                 h=h+'<td>'+senka.ex+'    ('+new Date(exfrom).toLocaleString()+'----'+new Date(exto).toLocaleString()+')</td>';
               }
-              h=h+'<td>'+(senka.senka+1380-senka.ex)+'</td>';
-              h=h+'<td>'+(senka.subsenka+senka.fsenka+1380)+'</td>';
+              if(ensure){
+                h=h+'<td colspan="2">'+(senka.senka+1380-senka.ex)+'</td>';
+              }else{
+                if(senka.fsenkats==0&&getDateNo(senka.expfrom)==0){
+                  h=h+'<td colspan="2">'+(senka.subsenka+senka.fsenka+1380)+'</td>';
+                }else{
+                  h=h+'<td>'+(senka.senka+1380-senka.ex)+'</td>';
+                  h=h+'<td>'+(senka.subsenka+senka.fsenka+1380)+'</td>';
+                }
+              }
             }else if(type==3){
-              var ret = '经验：'+senka.subsenka+'    ('+new Date(senka.expfrom).toLocaleString()+'----'+new Date(senka.expto).toLocaleString()+'<br>';
-              ret = ret + '月初:'+senka.fsenka+'('+Math.floor(senka.fsenkats/2+1)+'日)';
-              h=h+'<td>'+ret+'</td>';
-              h=h+'<td>'+(senka.subsenka+1380)+'</td>';
-              h=h+'<td>'+(senka.subsenka+senka.fsenka+1380)+'</td>';
+              h=h+'<td>'+'unknown'+'</td>';
+              if(senka.fsenkats==0){
+                h=h+'<td colspan="2">'+(senka.subsenka+senka.fsenka+1380)+'</td>';
+              }else{
+                h=h+'<td>'+(senka.senka+senka.fsenka+1380)+'</td>';
+                h=h+'<td>'+(senka.subsenka+senka.fsenka+1380)+'</td>';
+              }
+
+
             }else if(type==2){
               var exfrom = senka.exfrom;
               var exto = senka.exto;
@@ -103,6 +117,36 @@
       })
     }
   }
+
+  getDateNo = function(now){
+    now = new Date(new Date(now).getTime()+(new Date().getTimezoneOffset()+480)*60000)
+    var date = now.getDate()
+    var hour = now.getHours()
+    if(hour<1){
+      date = date -1
+      hour = hour + 24
+    }
+    const no = (date-1)*2+((hour>=13)?1:0)
+    return no
+  }
+
+  getRankDateNo = function(now){
+    now = new Date(new Date(now).getTime()+(new Date().getTimezoneOffset()+480)*60000)
+    var date = now.getDate()
+    var hour = now.getHours()
+    if(hour<2){
+      date = date -1
+      hour = hour + 24
+    }
+    const no = (date-1)*2+((hour>=14)?1:0)
+    return no
+  }
+
+
+
+
+
+
 
 
 </script>

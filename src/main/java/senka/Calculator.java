@@ -217,12 +217,14 @@ public class Calculator {
 							exto = pairexto.getTime();
 						}
 						retj.put("fsenka", fsenka);
+						retj.put("fsenkats", fsenkats);
 						retj.put("lsenka", senka);
 						retj.put("lsenkats", senkats);
 						retj.put("lno", lastno);
 						retj.put("expfrom", firstts.getTime());
 						retj.put("expto", latestts.getTime());
 						retj.put("subsenka", subsenka);
+						retj.put("pair", 1);
 						resultlist.add(retj);
 					}else{
 						JSONObject ret = new JSONObject();
