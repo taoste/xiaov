@@ -64,14 +64,14 @@
             var subsenkastr = senka.subsenka;
             var expfrom = senka.expfrom;
             var expto = senka.expto;
-            if(Math.abs(expfrom-zexpfrom)>600000||Math.abs(expto-zexpto)>600000){
+            if(Math.abs(expfrom-zexpfrom)>1200000||Math.abs(expto-zexpto)>1200000){
               subsenkastr = subsenkastr + '    ('+new Date(expfrom).toLocaleString()+'----'+new Date(expto).toLocaleString()+')';
             }
             h=h+'<td>'+subsenkastr+'</td>';
             if(type==1){
               var exfrom = senka.exfrom;
               var exto = senka.exto;
-              if(Math.abs(exfrom-zexfrom)<600000&&Math.abs(exto-zexto)<600000){
+              if(Math.abs(exfrom-zexfrom)<1200000&&Math.abs(exto-zexto)<1200000){
                 h=h+'<td>'+senka.ex+'</td>';
               }else{
                 h=h+'<td>'+senka.ex+'    ('+new Date(exfrom).toLocaleString()+'----'+new Date(exto).toLocaleString()+')</td>';

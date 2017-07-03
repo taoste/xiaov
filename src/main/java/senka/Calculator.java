@@ -31,12 +31,9 @@ public class Calculator {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
-			Date d = new Date();
-			Date d2 = new Date(d.getTime()+3600000*3);
-			System.out.println(Util.getRankDateNo(d2));
-			System.out.println(d);
+			calculateRank(8);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 	
@@ -212,11 +209,11 @@ public class Calculator {
 					if(retj!=null){
 						Date pairexfrom = (Date)pairlist.get(0).get("ts");
 						Date pairexto = (Date)pairlist.get(pairlist.size()-1).get("ts");
-						
+						System.out.println(pairexto);
 						if(exfrom>pairexfrom.getTime()){
 							exfrom = pairexfrom.getTime();
 						}
-						if(exto>pairexto.getTime()){
+						if(exto<pairexto.getTime()){
 							exto = pairexto.getTime();
 						}
 						retj.put("lsenka", senka);
