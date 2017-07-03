@@ -50,7 +50,7 @@
           h=h+'<thead><td>排名(当前/榜单)</td><td></td><td>当前</td>';
           h=h+'<td>经验  ('+new Date(zexpfrom).toLocaleString()+'----'+new Date(zexpto).toLocaleString()+')</td>';
           h=h+'<td>ex  ('+new Date(zexfrom).toLocaleString()+'----'+new Date(zexto).toLocaleString()+')</td>';
-          h=h+'<td>预想</td></thead>';
+          h=h+'<td>预想1(战果+1380-EX)</td><td>预想2(经验+继承+1380)</td></thead>';
           for(var i=0;i<data.d.length;i++){
             var type=data.d[i].type;
             var senka=data.d[i];
@@ -77,11 +77,13 @@
                 h=h+'<td>'+senka.ex+'    ('+new Date(exfrom).toLocaleString()+'----'+new Date(exto).toLocaleString()+')</td>';
               }
               h=h+'<td>'+(senka.senka+1380-senka.ex)+'</td>';
+              h=h+'<td>'+(senka.subsenka+senka.fsenka+1380)+'</td>';
             }else if(type==3){
               var ret = '经验：'+senka.subsenka+'    ('+new Date(senka.expfrom).toLocaleString()+'----'+new Date(senka.expto).toLocaleString()+'<br>';
               ret = ret + '月初:'+senka.fsenka+'('+Math.floor(senka.fsenkats/2+1)+'日)';
               h=h+'<td>'+ret+'</td>';
               h=h+'<td>'+(senka.subsenka+1380)+'</td>';
+              h=h+'<td>'+(senka.subsenka+senka.fsenka+1380)+'</td>';
             }else if(type==2){
               var exfrom = senka.exfrom;
               var exto = senka.exto;

@@ -216,6 +216,7 @@ public class Calculator {
 						if(exto<pairexto.getTime()){
 							exto = pairexto.getTime();
 						}
+						retj.put("fsenka", fsenka);
 						retj.put("lsenka", senka);
 						retj.put("lsenkats", senkats);
 						retj.put("lno", lastno);
