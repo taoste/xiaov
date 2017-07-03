@@ -64,7 +64,7 @@
             var subsenkastr = senka.subsenka;
             var expfrom = senka.expfrom;
             var expto = senka.expto;
-            if(math.abs(expfrom-zexpfrom)>600000||Math.abs(expto-zexpto)>600000){
+            if(Math.abs(expfrom-zexpfrom)>600000||Math.abs(expto-zexpto)>600000){
               subsenkastr = subsenkastr + '    ('+new Date(expfrom).toLocaleString()+'----'+new Date(expto).toLocaleString()+')';
             }
             h=h+'<td>'+subsenkastr+'</td>';
