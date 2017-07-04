@@ -247,7 +247,7 @@ public class Calculator {
 						ret.put("expfrom", firstts.getTime());
 						ret.put("expto", latestts.getTime());
 						ret.put("subsenka", subsenka);
-						retj.put("z", z);
+						ret.put("z", z);
 						resultlist.add(ret);
 					}
 				}
