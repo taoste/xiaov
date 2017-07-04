@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
@@ -31,7 +32,7 @@ public class Calculator {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
-			calculateRank(8);
+			calculateZ(8,5);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -121,6 +122,11 @@ public class Calculator {
 				DBObject senkaData = id2senka.get(id);
 				Object ido = senkaData.get("id");
 				Object co = senkaData.get("c");
+				Object zo = userData.get("z");
+				int z=-1;
+				if(zo!=null){
+					z=Integer.valueOf(zo.toString());
+				}
 				if(ido==null||co==null){
 					continue;
 				}
@@ -225,11 +231,10 @@ public class Calculator {
 						retj.put("expto", latestts.getTime());
 						retj.put("subsenka", subsenka);
 						retj.put("pair", 1);
+						retj.put("z", z);
 						resultlist.add(retj);
 					}else{
 						JSONObject ret = new JSONObject();
-
-
 						ret.put("type", 3);
 						ret.put("fsenka", fsenka);
 						ret.put("fsenkats", fsenkats);
@@ -242,6 +247,7 @@ public class Calculator {
 						ret.put("expfrom", firstts.getTime());
 						ret.put("expto", latestts.getTime());
 						ret.put("subsenka", subsenka);
+						retj.put("z", z);
 						resultlist.add(ret);
 					}
 				}
@@ -489,6 +495,98 @@ public class Calculator {
 			}
 		}
 		return result;
+	}
+	
+	public static void calculateZ(int server,int month){
+		DBCollection cl_n_senka = Util.db.getCollection("cl_n_senka_"+server);
+		DBCollection cl_senka = Util.db.getCollection("cl_senka_"+server);
+		DBCursor dbc = null;
+		Date now = new Date();
+		try {
+			dbc = cl_n_senka.find();
+			while (dbc.hasNext()) {
+				DBObject dbObject = (DBObject) dbc.next();
+				String key = "d"+month;
+				String name = dbObject.get("_id").toString();
+				Object senkaListObject = dbObject.get(key);
+				BasicDBList senkaList=null;
+				if(senkaListObject!=null){
+					senkaList = (BasicDBList)senkaListObject;
+				}
+				Object ido = dbObject.get("id");
+				String ids = null;
+				if(ido!=null){
+					ids = ido.toString();
+				}
+				if(senkaList!=null&&ids!=null&&ids.length()>1){
+					String[] ida = ids.split(",");
+					if(ida.length==1){
+						DBObject user = cl_senka.findOne(new BasicDBObject("_id",Integer.valueOf(ids)));
+						BasicDBList expList = (BasicDBList)user.get("exp");
+						int pointer1=0;
+						int pointer2=0;
+						ArrayList<JSONObject> pairlist = new ArrayList<>();
+						while(pointer1<expList.size()&&pointer2<senkaList.size()){
+							DBObject expData = (DBObject)expList.get(pointer1);
+							DBObject senkaData = (DBObject)senkaList.get(pointer2);
+							Date expts = (Date)expData.get("ts");
+							
+							if(expts.getMonth()<month){
+								pointer1++;
+							}else if(expts.getMonth()>month){
+								break;
+							}else{
+								int rankts = Integer.valueOf(senkaData.get("ts").toString());
+								int expno = Util.getRankDateNo(new Date(expts.getTime()+3600000*2));
+								if(expno<rankts){
+									pointer1++;
+								}else if(expno>rankts){
+									pointer2++;
+								}else{
+									if(!isExpKeyTs(expts)){
+										pointer1++;
+									}else{
+										int exp = Integer.valueOf(expData.get("d").toString());
+										int senka = Integer.valueOf(senkaData.get("senka").toString());
+										JSONObject j = new JSONObject();
+										j.put("exp", exp);
+										j.put("senka", senka);
+										j.put("ts", expts);
+										pairlist.add(j);
+										pointer1++;
+										pointer2++;
+									}
+								}
+							}
+						}
+						if(pairlist.size()>1){
+							JSONObject firstPair = pairlist.get(0);
+							JSONObject lastPair = pairlist.get(pairlist.size()-1);
+							int firstexp = firstPair.getInt("exp");
+							int lastexp = lastPair.getInt("exp");
+							int subexp = lastexp-firstexp;
+							int firstsenka = firstPair.getInt("senka");
+							int lastsenka = lastPair.getInt("senka");
+							int subsenka = lastsenka-firstsenka;
+							int ex = subsenka-subexp*7/10000;
+							if(ex>1050){
+								System.out.println(name+":"+ex);
+								cl_senka.update(user, new BasicDBObject("$set",new BasicDBObject("z",month)));
+							}
+						}
+						
+					}else{
+						
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			if(dbc != null){
+				dbc.close();
+			}
+		}
 	}
 	
 
