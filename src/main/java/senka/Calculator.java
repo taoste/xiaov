@@ -445,7 +445,7 @@ public class Calculator {
 						Date firstts = (Date)firstExpData.get("ts");
 						int subsenka = (latestexp-firstexp)*7/10000;
 						
-						
+						j.put("type", 1);
 						j.put("fsenka", fsenka);
 						j.put("fsenkats", fsenkats);
 						j.put("lsenka", lsenka);
