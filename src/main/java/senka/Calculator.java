@@ -32,7 +32,7 @@ public class Calculator {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
-			calculateZ(8,5);
+			calculateZ(19,5);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -427,6 +427,38 @@ public class Calculator {
 						j.put("senka", senkathen);
 						j.put("name", name);
 						j.put("senkats", senkano);
+						
+						
+						DBObject latestexpdata = (DBObject)expL.get(expL.size()-1);
+						int latestexp = Integer.valueOf(latestexpdata.get("d").toString());
+						Date latestts = (Date)latestexpdata.get("ts");
+
+						DBObject senkaD = (DBObject)senkaList.get(senkaList.size()-1);
+						DBObject senkaF = (DBObject)senkaList.get(0);
+						int fsenka = Integer.valueOf(senkaF.get("senka").toString());
+						int fsenkats = Integer.valueOf(senkaF.get("ts").toString()); 
+						int lsenka = Integer.valueOf(senkaD.get("senka").toString());
+						int lsenkats = Integer.valueOf(senkaD.get("ts").toString()); 
+						int lastno = Integer.valueOf(senkaD.get("no").toString()); 
+						DBObject firstExpData  = getFirstExpData(expL);
+						int firstexp = Integer.valueOf(firstExpData.get("d").toString());
+						Date firstts = (Date)firstExpData.get("ts");
+						int subsenka = (latestexp-firstexp)*7/10000;
+						
+						
+						j.put("fsenka", fsenka);
+						j.put("fsenkats", fsenkats);
+						j.put("lsenka", lsenka);
+						j.put("lsenkats", lsenkats);
+						j.put("lno", lastno);
+						j.put("expfrom", firstts.getTime());
+						j.put("expto", latestts.getTime());
+						j.put("subsenka", subsenka);
+						j.put("pair", 1);
+						j.put("z", -1);
+						
+						
+						
 						if(lastexp>0){
 							int addexpsenka = (expthen-lastexp)*7/10000;
 							int addsenka = senkathen-lastsenka;
@@ -567,7 +599,9 @@ public class Calculator {
 							int subsenka = lastsenka-firstsenka;
 							int ex = subsenka-subexp*7/10000;
 							if(ex>1050){
+								System.out.println();
 								System.out.println(name+":"+ex);
+								System.out.println(pairlist);
 								cl_senka.update(user, new BasicDBObject("$set",new BasicDBObject("z",month)));
 							}
 						}
