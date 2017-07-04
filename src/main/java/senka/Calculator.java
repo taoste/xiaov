@@ -82,12 +82,10 @@ public class Calculator {
 				DBObject senkaData = dbc.next();
 				Object ido = senkaData.get("id");
 				if(ido==null){
-					System.out.println(senkaData);
 					continue;
 				}
 				String idstr = senkaData.get("id").toString();
 				if(idstr.equals("")){
-					System.out.println(senkaData);
 					continue;
 				}
 				String[] ida = idstr.split(",");
@@ -215,7 +213,6 @@ public class Calculator {
 					if(retj!=null){
 						Date pairexfrom = (Date)pairlist.get(0).get("ts");
 						Date pairexto = (Date)pairlist.get(pairlist.size()-1).get("ts");
-						System.out.println(pairexto);
 						if(exfrom>pairexfrom.getTime()){
 							exfrom = pairexfrom.getTime();
 						}
