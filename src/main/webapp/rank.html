@@ -142,12 +142,16 @@
           }
         } else if (type == 3) {
           h = h + '<td>' + 'unknown' + '</td>';
-          if (senka.fsenkats == 0) {
-            h = h + '<td colspan="2">' + (senka.subsenka + senka.fsenka + 1380) + '</td>';
-          } else {
-            h = h + '<td>' + (senka.senka + senka.fsenka + 1380) + '</td>';
-            h = h + '<td>' + (senka.subsenka + senka.fsenka + 1380) + '</td>';
-          }
+          var firstExpDateNo = getDateNo(expfrom);
+          var maxsenka1 = senka.subsenka+minmap[firstExpDateNo]+1380-zcleared;
+          var minsenka = senka.subsenka+1380-zcleared;
+          var maxsenka2 = senka.senka + 1380 - senka.ex-zcleared;
+          var maxsenka3 = senka.subsenka + senka.fsenka + 1380-zcleared;
+          var maxsenka = Math.min(maxsenka1,maxsenka2,maxsenka3);
+          h = h + '<td>' + maxsenka + '</td>';
+          h = h + '<td>' + minsenka + '</td>';
+          data.d[i].max=data.d[i].maxsenka;
+          data.d[i].min=data.d[i].minsenka;
         } else if (type == 2) {
           var exfrom = senka.exfrom;
           var exto = senka.exto;
