@@ -28,5 +28,6 @@
     <include path="/favicon.png" />
     <include path="/robots.txt" />
     <include path="/rank.html" />
+    <include path="/seek5.html" />
 
 </static-files>
