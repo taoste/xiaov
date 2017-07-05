@@ -150,8 +150,8 @@
           var maxsenka = Math.min(maxsenka1,maxsenka2,maxsenka3);
           h = h + '<td>' + maxsenka + '</td>';
           h = h + '<td>' + minsenka + '</td>';
-          data.d[i].max=data.d[i].maxsenka;
-          data.d[i].min=data.d[i].minsenka;
+          data.d[i].max=maxsenka;
+          data.d[i].min=minsenka;
         } else if (type == 2) {
           var exfrom = senka.exfrom;
           var exto = senka.exto;
