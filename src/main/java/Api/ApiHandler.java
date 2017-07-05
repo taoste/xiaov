@@ -80,6 +80,7 @@ public class ApiHandler {
 		}
 		if(path.equals("calrank")){
 			resp.setCharacterEncoding("utf-8");
+			resp.setHeader("Access-Control-Allow-Origin", "*");
 			ret = Calculator.calculator(data);
 		}
 		
