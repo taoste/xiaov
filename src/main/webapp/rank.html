@@ -149,7 +149,7 @@
           var minsenka = senka.subsenka+1380-zcleared;
           var maxsenka2 = senka.senka + 1380 - senka.ex-zcleared;
           var maxsenka3 = senka.subsenka + senka.fsenka + 1380-zcleared;
-          console.log(maxsenka1,maxsenka2,maxsenka3,data.d[i].name);
+          console.log(maxsenka1,maxsenka2,maxsenka3,data.d[i].name,senka,minmap,firstExpDateNo);
           var maxsenka = Math.min(maxsenka1,maxsenka2,maxsenka3);
           h = h + '<td>' + maxsenka + '</td>';
           h = h + '<td>' + minsenka + '</td>';
