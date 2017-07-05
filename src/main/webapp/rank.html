@@ -151,8 +151,16 @@
           var minsenka = senka.subsenka+1380-zcleared;
           var maxsenka2 = senka.senka + 1380 - senka.ex-zcleared;
           var maxsenka3 = senka.subsenka + senka.fsenka + 1380-zcleared;
-          console.log(maxsenka1,maxsenka2,maxsenka3,data.d[i].name,senka,minmap,firstExpDateNo);
-          var maxsenka = Math.min(maxsenka1,maxsenka2,maxsenka3);
+          var maxsenka = 0;
+          if(maxsenka1>maxsenka){
+            maxsenka=maxsenka1;
+          }
+          if(maxsenka2>maxsenka){
+            maxsenka=maxsenka2;
+          }
+          if(maxsenka3>maxsenka){
+            maxsenka=maxsenka3;
+          }
           h = h + '<td>' + maxsenka + '</td>';
           h = h + '<td>' + minsenka + '</td>';
           data.d[i].max=maxsenka;
