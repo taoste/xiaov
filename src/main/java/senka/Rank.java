@@ -26,7 +26,7 @@ public class Rank {
 	public static void main(String[] args) {
 		System.out.println("start1");
 		try {
-			runRankTask(TimerTask.getToken(19), 19, TimerTask.id19);
+			runRankTask(TimerTask.getToken(8), 8, TimerTask.id8);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -67,49 +67,39 @@ public class Rank {
 	}
 	
 	public static void runRankTask(final String token,final int server,final int userid)throws Exception{
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					String path = "/kcsapi/api_req_ranking/mxltvkpyuklh";
-					String ranking = generateRankKey(userid);
-					DBCollection cl_u_senka = Util.db.getCollection("cl_u_senka_"+server);
-					Date now = new Date();
-					int rankNo = Util.getRankDateNo(now);
-					int year = now.getYear();
-					int month = now.getMonth();
-					String key = year + "_" + month + "_" + rankNo + "_" + server;
-					BasicDBObject query = new BasicDBObject("_id",key);
-					DBObject uData = cl_u_senka.findOne(query);
-					ArrayList<JSONObject> tdata = new ArrayList<>();
-					int ma;
-					if(uData==null){
-						for(int i=1;i<100;i++){
-							String param = "api%5Fpageno="+i+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
-							String ret = Lib.ApiPost(path, param, token, server);
-							if(ret.startsWith("svdata=")){
-								JSONObject j = new JSONObject(ret.substring(7));
-								tdata.addAll(addData(j));
-							}
-						}
-						ma = calMagic(tdata);
-						System.out.println("magic:"+ma);
-						cl_u_senka.save(new BasicDBObject("_id",key).append("d", tdata.toString()).append("magic", ma));
-					}else{
-						String t1 = uData.get("d").toString();
-						JSONArray j2 = new JSONArray(t1);
-						for(int i=0;i<j2.length();i++){
-							tdata.add(j2.getJSONObject(i));
-						}
-						ma = Integer.valueOf(uData.get("magic").toString());
-					}
-					handleSenkaList(server,ma,tdata);
-				} catch (Exception e) {
-					e.printStackTrace();
+		String path = "/kcsapi/api_req_ranking/mxltvkpyuklh";
+		String ranking = generateRankKey(userid);
+		DBCollection cl_u_senka = Util.db.getCollection("cl_u_senka_"+server);
+		Date now = new Date();
+		int rankNo = Util.getRankDateNo(now);
+		int year = now.getYear();
+		int month = now.getMonth();
+		String key = year + "_" + month + "_" + rankNo + "_" + server;
+		BasicDBObject query = new BasicDBObject("_id",key);
+		DBObject uData = cl_u_senka.findOne(query);
+		ArrayList<JSONObject> tdata = new ArrayList<>();
+		int ma;
+		if(uData==null){
+			for(int i=1;i<100;i++){
+				String param = "api%5Fpageno="+i+"&api%5Fverno=1&api%5Franking="+ranking+"&api%5Ftoken="+token;
+				String ret = Lib.ApiPost(path, param, token, server);
+				if(ret.startsWith("svdata=")){
+					JSONObject j = new JSONObject(ret.substring(7));
+					tdata.addAll(addData(j));
 				}
-				
 			}
-		}).start();
+			ma = calMagic(tdata);
+			System.out.println("magic:"+ma);
+			cl_u_senka.save(new BasicDBObject("_id",key).append("d", tdata.toString()).append("magic", ma));
+		}else{
+			String t1 = uData.get("d").toString();
+			JSONArray j2 = new JSONArray(t1);
+			for(int i=0;i<j2.length();i++){
+				tdata.add(j2.getJSONObject(i));
+			}
+			ma = Integer.valueOf(uData.get("magic").toString());
+		}
+		handleSenkaList(server,ma,tdata);
 	}
 	
 
