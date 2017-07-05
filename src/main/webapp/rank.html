@@ -70,6 +70,7 @@
     var zexto = data.exto;
     var zexpfrom = data.expfrom;
     var zexpto = data.expto;
+    var minmap = data.min;
     var now = new Date();
     var month = now.getMonth();
     if(result==0) {
@@ -78,7 +79,7 @@
       h = h + '<thead><td>排名(当前/榜单)</td><td></td><td><div onclick="sortby(0);">当前</div></td>';
       h = h + '<td><div onclick="sortby(1);"> 经验  (' + new Date(zexpfrom).toLocaleString() + '----' + new Date(zexpto).toLocaleString() + ')</div></td>';
       h = h + '<td><div onclick="sortby(2);">ex  (' + new Date(zexfrom).toLocaleString() + '----' + new Date(zexto).toLocaleString() + ')</div></td>';
-      h = h + '<td><div onclick="sortby(3);">预想1(当前战果+1380-EX)</div></td><td><div onclick="sortby(4);">预想2(月初战果+经验+1380)</div></td></thead>';
+      h = h + '<td><div onclick="sortby(3);">最大</div></td><td><div onclick="sortby(4);">最小</div></td></thead>';
       for (var i = 0; i < data.d.length; i++) {
         var type = data.d[i].type;
         var senka = data.d[i];
@@ -118,13 +119,25 @@
           if (ensure) {
             h = h + '<td colspan="2">' + (senka.senka + 1380 - zcleared - senka.ex) + '</td>';
             data.d[i].except=senka.senka + 1380 - zcleared - senka.ex;
+            data.d[i].max=data.d[i].except;
+            data.d[i].min=data.d[i].except;
           } else {
             if (senka.fsenkats == 0 && getDateNo(senka.expfrom) == 0) {
               h = h + '<td colspan="2">' + (senka.subsenka + senka.fsenka + 1380 - zcleared) + '</td>';
               data.d[i].except=senka.subsenka + senka.fsenka + 1380 - zcleared;
+              data.d[i].max=data.d[i].except;
+              data.d[i].min=data.d[i].except;
             } else {
-              h = h + '<td>' + (senka.senka + 1380 - senka.ex) + '</td>';
-              h = h + '<td>' + (senka.subsenka + senka.fsenka + 1380) + '</td>';
+              var firstExpDateNo = getDateNo(expfrom);
+              var maxsenka1 = senka.subsenka+minmap[firstExpDateNo]+1380-zcleared;
+              var minsenka = senka.subsenka+1380-zcleared;
+              var maxsenka2 = senka.senka + 1380 - senka.ex-zcleared;
+              var maxsenka3 = senka.subsenka + senka.fsenka + 1380-zcleared;
+              var maxsenka = Math.min(maxsenka1,maxsenka2,maxsenka3);
+              h = h + '<td>' + maxsenka + '</td>';
+              h = h + '<td>' + minsenka + '</td>';
+              data.d[i].max=data.d[i].maxsenka;
+              data.d[i].min=data.d[i].minsenka;
             }
           }
         } else if (type == 3) {
@@ -135,8 +148,6 @@
             h = h + '<td>' + (senka.senka + senka.fsenka + 1380) + '</td>';
             h = h + '<td>' + (senka.subsenka + senka.fsenka + 1380) + '</td>';
           }
-
-
         } else if (type == 2) {
           var exfrom = senka.exfrom;
           var exto = senka.exto;
