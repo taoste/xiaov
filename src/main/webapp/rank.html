@@ -66,14 +66,14 @@
   function generateTable(){
     var data = u;
     var result = data.r;
-    var zexfrom = data.exfrom;
-    var zexto = data.exto;
-    var zexpfrom = data.expfrom;
-    var zexpto = data.expto;
-    var minmap = data.min;
-    var now = new Date();
-    var month = now.getMonth();
     if(result==0) {
+      var zexfrom = data.exfrom;
+      var zexto = data.exto;
+      var zexpfrom = data.expfrom;
+      var zexpto = data.expto;
+      var minmap = data.min;
+      var now = new Date();
+      var month = now.getMonth();
       var h = '统计时间：' + new Date(data.ts).toLocaleString();
       h = h + '<table class="table table-bordered table-striped table-hover">';
       h = h + '<thead><td>排名(当前/榜单)</td><td></td><td><div onclick="sortby(0);">当前</div></td>';
@@ -87,7 +87,6 @@
         var zcleared=0;
         if(Math.floor(((month+1)/3)%4)==Math.floor(((z+1)/3))%4){
           if(z>=0){
-            h=h+'（'+(z+1)+'月已完成Z作战）';
             zcleared=350;
           }
         }
@@ -115,6 +114,9 @@
             ensure = 1;
           } else {
             h = h + '<td>' + senka.ex + '    (' + new Date(exfrom).toLocaleString() + '----' + new Date(exto).toLocaleString() + ')';
+          }
+          if(zcleared>0){
+            h=h+'('+(z+1)+'月已完成Z作战)';
           }
 
           h=h+'</td>';
