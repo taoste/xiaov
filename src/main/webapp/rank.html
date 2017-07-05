@@ -84,6 +84,14 @@
         var type = data.d[i].type;
         var senka = data.d[i];
         var z = data.d[i].z;
+        var zcleared=0;
+        if(Math.floor(((month+1)/3)%4)==Math.floor(((z+1)/3))%4){
+          if(z>=0){
+            h=h+'（'+(z+1)+'月已完成Z作战）';
+            zcleared=350;
+          }
+        }
+
         if (i == 5 || i == 20 || i == 100 || i == 500) {
           h = h + '<td> </td></tr><tr>';
         }
@@ -108,13 +116,7 @@
           } else {
             h = h + '<td>' + senka.ex + '    (' + new Date(exfrom).toLocaleString() + '----' + new Date(exto).toLocaleString() + ')';
           }
-          var zcleared=0;
-          if(Math.floor(((month+1)/3)%4)==Math.floor(((z+1)/3))%4){
-            if(z>=0){
-              h=h+'（'+(z+1)+'月已完成Z作战）';
-              zcleared=350;
-            }
-          }
+
           h=h+'</td>';
           if (ensure) {
             h = h + '<td colspan="2">' + (senka.senka + 1380 - zcleared - senka.ex) + '</td>';
