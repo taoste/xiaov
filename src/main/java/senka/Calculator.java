@@ -443,36 +443,6 @@ public class Calculator {
 						j.put("senkats", senkano);
 						
 						
-						DBObject latestexpdata = (DBObject)expL.get(expL.size()-1);
-						int latestexp = Integer.valueOf(latestexpdata.get("d").toString());
-						Date latestts = (Date)latestexpdata.get("ts");
-
-						DBObject senkaD = (DBObject)senkaList.get(senkaList.size()-1);
-						DBObject senkaF = (DBObject)senkaList.get(0);
-						int fsenka = Integer.valueOf(senkaF.get("senka").toString());
-						int fsenkats = Integer.valueOf(senkaF.get("ts").toString()); 
-						int lsenka = Integer.valueOf(senkaD.get("senka").toString());
-						int lsenkats = Integer.valueOf(senkaD.get("ts").toString()); 
-						int lastno = Integer.valueOf(senkaD.get("no").toString()); 
-						DBObject firstExpData  = getFirstExpData(expL);
-						int firstexp = Integer.valueOf(firstExpData.get("d").toString());
-						Date firstts = (Date)firstExpData.get("ts");
-						int subsenka = (latestexp-firstexp)*7/10000;
-						
-						j.put("type", 1);
-						j.put("fsenka", fsenka);
-						j.put("fsenkats", fsenkats);
-						j.put("lsenka", lsenka);
-						j.put("lsenkats", lsenkats);
-						j.put("lno", lastno);
-						j.put("expfrom", firstts.getTime());
-						j.put("expto", latestts.getTime());
-						j.put("subsenka", subsenka);
-						j.put("pair", 1);
-						j.put("z", -1);
-						
-						
-						
 						if(lastexp>0){
 							int addexpsenka = (expthen-lastexp)*7/10000;
 							int addsenka = senkathen-lastsenka;
@@ -488,11 +458,46 @@ public class Calculator {
 					}
 				}
 			}
+			
+			
+			DBObject latestexpdata = (DBObject)expL.get(expL.size()-1);
+			int latestexp = Integer.valueOf(latestexpdata.get("d").toString());
+			Date latestts = (Date)latestexpdata.get("ts");
+
+			DBObject senkaD = (DBObject)senkaList.get(senkaList.size()-1);
+			DBObject senkaF = (DBObject)senkaList.get(0);
+			int fsenka = Integer.valueOf(senkaF.get("senka").toString());
+			int fsenkats = Integer.valueOf(senkaF.get("ts").toString()); 
+			int lsenka = Integer.valueOf(senkaD.get("senka").toString());
+			int lsenkats = Integer.valueOf(senkaD.get("ts").toString()); 
+			int lastno = Integer.valueOf(senkaD.get("no").toString()); 
+			DBObject firstExpData  = getFirstExpData(expL);
+			int firstexp = Integer.valueOf(firstExpData.get("d").toString());
+			Date firstts = (Date)firstExpData.get("ts");
+			int subsenka = (latestexp-firstexp)*7/10000;
+			
+
+			
+			
+			
+			
 			if(pairlist.size()>0){
-				DBObject latestexpdata = (DBObject)expL.get(expL.size()-1);
-				int latestexp = Integer.valueOf(latestexpdata.get("d").toString());
-				Date latestts = (Date)latestexpdata.get("ts");
+
 				JSONObject retj = getResultByPairlist(latestexp, latestts,pairlist, name);
+				
+				retj.put("type", 1);
+				retj.put("fsenka", fsenka);
+				retj.put("fsenkats", fsenkats);
+				retj.put("lsenka", lsenka);
+				retj.put("lsenkats", lsenkats);
+				retj.put("lno", lastno);
+				retj.put("expfrom", firstts.getTime());
+				retj.put("expto", latestts.getTime());
+				retj.put("subsenka", subsenka);
+				retj.put("pair", 1);
+				retj.put("z", -1);
+				
+				
 				result.add(retj);
 				a++;
 			}
