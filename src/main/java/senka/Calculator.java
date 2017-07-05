@@ -78,9 +78,22 @@ public class Calculator {
 			BasicDBList dbl = new BasicDBList(); 
 			dbc = cl_n_senka.find(new BasicDBObject("ts",new BasicDBObject("$gt",new Date(now.getTime()-60000000L)))); //1000 min
 			Map<Integer, DBObject> id2senka = new HashMap<>();
+			Map<Integer, Integer> minmap = new HashMap<>();
 			while (dbc.hasNext()) {
 				DBObject senkaData = dbc.next();
 				Object ido = senkaData.get("id");
+				BasicDBList senkaList = (BasicDBList)senkaData.get("d"+now.getMonth());
+				DBObject frontSenka = (DBObject)senkaList.get(0);
+				int no = Integer.valueOf(frontSenka.get("no").toString());
+				int ts = Integer.valueOf(frontSenka.get("ts").toString());
+				int senka = Integer.valueOf(frontSenka.get("senka").toString());
+				if(minmap.get(ts)==null){
+					minmap.put(ts, senka);
+				}else{
+					if(senka<minmap.get(ts)){
+						minmap.put(ts, senka);
+					}
+				}
 				if(ido==null){
 					continue;
 				}
@@ -267,6 +280,7 @@ public class Calculator {
 			j.put("expto", expto);
 			j.put("rankts", latestsenkats);
 			j.put("d", resultlist);
+			j.put("min", minmap);
 			return j;
 		}catch (Exception e) {
 			e.printStackTrace();
