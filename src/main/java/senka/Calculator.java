@@ -76,7 +76,7 @@ public class Calculator {
 		try {
 			ArrayList<JSONObject> resultlist = new ArrayList<>();
 			BasicDBList dbl = new BasicDBList(); 
-			dbc = cl_n_senka.find(new BasicDBObject("ts",new BasicDBObject("$gt",new Date(now.getTime()-60000000L)))); //1000 min
+			dbc = cl_n_senka.find(); //1000 min
 			Map<Integer, DBObject> id2senka = new HashMap<>();
 			Map<Integer, Integer> minmap = new HashMap<>();
 			Map<Integer, Integer> frontmap = new HashMap<>();
@@ -104,6 +104,10 @@ public class Calculator {
 						System.out.println(no);
 						System.out.println(senka);
 					}
+				}
+				Date lastupdatets = (Date)senkaData.get("ts");
+				if(now.getTime()-lastupdatets.getTime()>60000000L){
+					continue;
 				}
 				if(ido==null){
 					continue;
