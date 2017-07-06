@@ -74,7 +74,7 @@
     var furture500 = (senka500-frontmap[500]-1380)*rate+frontmap[500]+1380;
     var h='本月战果预测';
     h=h+'<table class="table table-bordered table-striped table-hover">';
-    h=h+'<thead><td>排名</td><td>当前</td><td>月底</td></thead>';
+    h=h+'<thead><td style="max-width: 200px">排名</td><td style="max-width: 200px">当前</td><td style="max-width: 200px">月底</td></thead>';
     h=h+'<tr><td>5位</td><td>'+senka5+'</td><td>'+furture5.toFixed(0)+'</td></tr>';
     h=h+'<tr><td>20位</td><td>'+senka20+'</td><td>'+furture20.toFixed(0)+'</td></tr>';
     h=h+'<tr><td>100位</td><td>'+senka100+'</td><td>'+furture100.toFixed(0)+'</td></tr>';
@@ -114,10 +114,10 @@
       var month = now.getMonth();
       var h = '统计时间：' + new Date(data.ts).toLocaleString();
       h = h + '<table class="table table-bordered table-striped table-hover">';
-      h = h + '<thead><td>排名(当前/榜单)</td><td></td><td><div onclick="sortby(0);">当前</div></td>';
-      h = h + '<td><div onclick="sortby(1);"> 经验  (' + new Date(zexpfrom).toLocaleString() + '----' + new Date(zexpto).toLocaleString() + ')</div></td>';
-      h = h + '<td><div onclick="sortby(2);">ex  (' + new Date(zexfrom).toLocaleString() + '----' + new Date(zexto).toLocaleString() + ')</div></td>';
-      h = h + '<td><div onclick="sortby(3);">最大</div></td><td><div onclick="sortby(4);">最小</div></td></thead>';
+      h = h + '<thead><td style="max-width: 150px">排名(当前/榜单)</td><td style="max-width: 400px"></td><td style="max-width: 100px"><div onclick="sortby(0);">当前</div></td>';
+      h = h + '<td style="max-width: 300px"><div onclick="sortby(1);"> 经验  (' + new Date(zexpfrom).toLocaleString() + '----' + new Date(zexpto).toLocaleString() + ')</div></td>';
+      h = h + '<td style="max-width: 300px"><div onclick="sortby(2);">ex  (' + new Date(zexfrom).toLocaleString() + '----' + new Date(zexto).toLocaleString() + ')</div></td>';
+      h = h + '<td style="max-width: 100px"><div onclick="sortby(3);">最大</div></td><td style="max-width: 100px"><div onclick="sortby(4);">最小</div></td></thead>';
       for (var i = 0; i < data.d.length; i++) {
         var type = data.d[i].type;
         var senka = data.d[i];
