@@ -27,10 +27,15 @@
   </select>
   <button type="button" class="btn btn-primary" onclick="search();">查询</button>
 </div>
+<div id="forecast">
+
+
+</div>
 <div id="main">
 
 </div>
 <script type="text/javascript">
+  var monthOfDay=[31,28,31,30,31,30,31,31,30,31,30,31];
   var u;
   function search(){
     var server = $('#server').val();
@@ -41,9 +46,39 @@
       $.get(url,function(response,status){
         var data = eval("("+response+")");
         u=data;
+        sortby(3);
         generateTable()
+        forecast();
       })
     }
+  }
+
+  function forecast(){
+    var senka5 = u.d[4].max;
+    var senka20 = u.d[19].max;
+    var senka100 = u.d[99].max;
+    var senka500 = u.d[499].max;
+    var fromts = u.expfrom;
+    var tots = u.expto;
+    var frontmap = u.front;
+    var now = new Date();
+    var month = now.getMonth();
+    var days = monthOfDay[month];
+    var totalts = days*31*86400000-3600000*4;
+    var dur = tots-fromts;
+    var rate = totalts/dur;
+    var furture5 = (senka5-frontmap[5]-1380)*rate+frontmap[5]+1380;
+    var furture20 = (senka20-frontmap[20]-1380)*rate+frontmap[20]+1380;
+    var furture100 = (senka100-frontmap[100]-1380)*rate+frontmap[100]+1380;
+    var furture500 = (senka500-frontmap[500]-1380)*rate+frontmap[500]+1380;
+    var h='<table class="table table-bordered table-striped table-hover">';
+    h=h+'<thead><td>排名</td><td>当前</td><td>月底</td></thead>';
+    h=h+'<tr><td>'+senka5+'</td><td>'+furture5.toFixed(0)+'</td>';
+    h=h+'<tr><td>'+senka20+'</td><td>'+furture20.toFixed(0)+'</td>';
+    h=h+'<tr><td>'+senka100+'</td><td>'+furture100.toFixed(0)+'</td>';
+    h=h+'<tr><td>'+senka500+'</td><td>'+furture500.toFixed(0)+'</td>';
+    h=h+'</table>';
+    $('#forcast').html(h);
   }
 
   function sortby(type){
@@ -72,6 +107,7 @@
       var zexpfrom = data.expfrom;
       var zexpto = data.expto;
       var minmap = data.min;
+      var frontmap = data.front;
       var now = new Date();
       var month = now.getMonth();
       var h = '统计时间：' + new Date(data.ts).toLocaleString();
@@ -153,7 +189,6 @@
               }
               if(new Date(basets).getMonth()<month){
                 var maxsenka4 = senka.subsenka+senka.subbase+1380-zcleared;
-                console.log(new Date(basets),maxsenka4,maxsenka);
                 if(maxsenka4<maxsenka){
                   maxsenka=maxsenka4;
                 }
@@ -183,7 +218,6 @@
           }
           if(new Date(basets).getMonth()<month){
             var maxsenka4 = senka.subsenka+senka.subbase+1380-zcleared;
-            console.log(new Date(basets),maxsenka4,maxsenka);
             if(maxsenka4<maxsenka){
               maxsenka=maxsenka4;
             }
