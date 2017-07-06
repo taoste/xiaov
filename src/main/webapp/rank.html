@@ -46,6 +46,7 @@
       $.get(url,function(response,status){
         var data = eval("("+response+")");
         u=data;
+        generateTable()
         sortby(3);
         generateTable()
         forecast();
@@ -73,10 +74,10 @@
     var furture500 = (senka500-frontmap[500]-1380)*rate+frontmap[500]+1380;
     var h='<table class="table table-bordered table-striped table-hover">';
     h=h+'<thead><td>排名</td><td>当前</td><td>月底</td></thead>';
-    h=h+'<tr><td>'+senka5+'</td><td>'+furture5.toFixed(0)+'</td>';
-    h=h+'<tr><td>'+senka20+'</td><td>'+furture20.toFixed(0)+'</td>';
-    h=h+'<tr><td>'+senka100+'</td><td>'+furture100.toFixed(0)+'</td>';
-    h=h+'<tr><td>'+senka500+'</td><td>'+furture500.toFixed(0)+'</td>';
+    h=h+'<tr><td>'+senka5+'</td><td>'+furture5.toFixed(0)+'</td></tr>';
+    h=h+'<tr><td>'+senka20+'</td><td>'+furture20.toFixed(0)+'</td></tr>';
+    h=h+'<tr><td>'+senka100+'</td><td>'+furture100.toFixed(0)+'</td></tr>';
+    h=h+'<tr><td>'+senka500+'</td><td>'+furture500.toFixed(0)+'</td></tr>';
     h=h+'</table>';
     $('#forecast').html(h);
   }
