@@ -83,7 +83,11 @@ public class Calculator {
 			while (dbc.hasNext()) {
 				DBObject senkaData = dbc.next();
 				Object ido = senkaData.get("id");
-				BasicDBList senkaList = (BasicDBList)senkaData.get("d"+now.getMonth());
+				Object senkaListObj = senkaData.get("d"+now.getMonth());
+				if(senkaListObj==null){
+					continue;
+				}
+				BasicDBList senkaList = (BasicDBList)senkaListObj;
 				DBObject frontSenka = (DBObject)senkaList.get(0);
 				int no = Integer.valueOf(frontSenka.get("no").toString());
 				int ts = Integer.valueOf(frontSenka.get("ts").toString());
