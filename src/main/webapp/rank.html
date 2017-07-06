@@ -101,6 +101,10 @@
         var subsenkastr = senka.subsenka;
         var expfrom = senka.expfrom;
         var expto = senka.expto;
+
+        var subbase = senka.subbase;
+        var basets = senka.basets;
+
         if (Math.abs(expfrom - zexpfrom) > 1200000 || Math.abs(expto - zexpto) > 1200000) {
           subsenkastr = subsenkastr + '    (' + new Date(expfrom).toLocaleString() + '----' + new Date(expto).toLocaleString() + ')';
         }
@@ -137,7 +141,23 @@
               var minsenka = senka.subsenka+1380-zcleared;
               var maxsenka2 = senka.senka + 1380 - senka.ex-zcleared;
               var maxsenka3 = senka.subsenka + senka.fsenka + 1380-zcleared;
-              var maxsenka = Math.min(maxsenka1,maxsenka2,maxsenka3);
+              var maxsenka = 99999;
+              if(maxsenka1<maxsenka){
+                maxsenka=maxsenka1;
+              }
+              if(maxsenka2<maxsenka){
+                maxsenka=maxsenka2;
+              }
+              if(maxsenka3<maxsenka){
+                maxsenka=maxsenka3;
+              }
+              if(new Date(basets).getMonth()<month){
+                var maxsenka4 = senka.subsenka+senka.subbase+1380-zcleared;
+                console.log(new Date(basets),maxsenka4,maxsenka);
+                if(maxsenka4<maxsenka){
+                  maxsenka=maxsenka4;
+                }
+              }
               h = h + '<td>' + maxsenka + '</td>';
               h = h + '<td>' + minsenka + '</td>';
               data.d[i].max=maxsenka;
@@ -160,6 +180,13 @@
           }
           if(maxsenka3<maxsenka){
             maxsenka=maxsenka3;
+          }
+          if(new Date(basets).getMonth()<month){
+            var maxsenka4 = senka.subsenka+senka.subbase+1380-zcleared;
+            console.log(new Date(basets),maxsenka4,maxsenka);
+            if(maxsenka4<maxsenka){
+              maxsenka=maxsenka4;
+            }
           }
           h = h + '<td>' + maxsenka + '</td>';
           h = h + '<td>' + minsenka + '</td>';

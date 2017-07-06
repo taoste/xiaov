@@ -209,8 +209,12 @@ public class Calculator {
 					int senkats = Integer.valueOf(senkaD.get("ts").toString()); 
 					int lastno = Integer.valueOf(senkaD.get("no").toString()); 
 					DBObject firstExpData  = getFirstExpData(explist);
+					DBObject baseExpData = getBaseExpData(explist);
 					int firstexp = Integer.valueOf(firstExpData.get("d").toString());
 					Date firstts = (Date)firstExpData.get("ts");
+					int baseexp = Integer.valueOf(baseExpData.get("d").toString());
+					Date basets = (Date)baseExpData.get("ts");
+					int subbase = (firstexp-baseexp)*7/10000;
 					int subsenka = (latestexp-firstexp)*7/10000;
 					if(latestsenkats<senkats){
 						latestsenkats=senkats;
@@ -239,6 +243,10 @@ public class Calculator {
 						retj.put("lno", lastno);
 						retj.put("expfrom", firstts.getTime());
 						retj.put("expto", latestts.getTime());
+						
+						retj.put("basets", basets.getTime());
+						retj.put("subbase", subbase);
+						
 						retj.put("subsenka", subsenka);
 						retj.put("pair", 1);
 						retj.put("z", z);
@@ -256,6 +264,8 @@ public class Calculator {
 						ret.put("lno", lastno);
 						ret.put("expfrom", firstts.getTime());
 						ret.put("expto", latestts.getTime());
+						ret.put("basets", basets.getTime());
+						ret.put("subbase", subbase);
 						ret.put("subsenka", subsenka);
 						ret.put("z", z);
 						resultlist.add(ret);
@@ -295,6 +305,20 @@ public class Calculator {
 		}
 	}
 	
+	public static DBObject getBaseExpData(BasicDBList explist){
+		Date now = new Date();
+		int month = now.getMonth();
+		for(int i=0;i<explist.size();i++){
+			DBObject expdata = (DBObject)explist.get(explist.size()-i-1);
+			Date ts = (Date)expdata.get("ts");
+			if(ts.getMonth()<month){
+				return expdata;
+			}
+		}
+		return null;
+	}
+	
+	
 	public static DBObject getFirstExpData(BasicDBList explist){
 		Date now = new Date();
 		for(int i=0;i<explist.size();i++){
@@ -305,7 +329,6 @@ public class Calculator {
 			}
 		}
 		return null;
-		
 	}
 	
 	public static JSONObject getResultByPairlist(int latestexp,Date latestts,ArrayList<JSONObject> pairlist,String name)throws Exception{
