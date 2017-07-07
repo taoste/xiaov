@@ -230,7 +230,7 @@
           if (Math.abs(exfrom - zexfrom) < 600000 && Math.abs(exto - zexto) < 600000) {
             exstr = exstr + senka.ex;
           } else {
-            exstr = exstr + senka.ex + '(' + new Date(exfrom).toLocaleString() + '----' + new Date(exto).toLocaleString() + ')</td>';
+            exstr = exstr + senka.ex + '(' + new Date(exfrom).toLocaleString() + '----' + new Date(exto).toLocaleString();
           }
         }
 
@@ -248,7 +248,6 @@
 
         h = h + '</tr>';
       }
-      console.log(h);
       h = h + '</table>';
       $('#main').html(h);
       console.log(data);
