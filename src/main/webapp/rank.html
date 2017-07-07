@@ -129,11 +129,11 @@
             zcleared=350;
           }
         }
-
+        h = h + '<tr>';
         if (i == 5 || i == 20 || i == 100 || i == 500) {
           h = h + '<td colspan="8"> </td></tr><tr>';
         }
-        h = h + '<tr>';
+
         h = h + '<td>' + (i + 1) + '位(' + senka.lno + '位)</td>';
         h = h + '<td>' + senka.name + '</td>';
         h = h + '<td>' + senka.senka + '</td>';
@@ -141,13 +141,11 @@
         var subsenkastr = senka.subsenka;
         var expfrom = senka.expfrom;
         var expto = senka.expto;
-
         var basets = senka.basets;
 
         if (Math.abs(expfrom - zexpfrom) > 1200000 || Math.abs(expto - zexpto) > 1200000) {
           subsenkastr = subsenkastr + '    (' + new Date(expfrom).toLocaleString() + '----' + new Date(expto).toLocaleString() + ')';
         }
-        h = h + '<td>' + subsenkastr + '</td>';
 
         var nowsenkastr = senka.senka;
         var exstr = '';
@@ -234,6 +232,7 @@
             exstr = exstr + senka.ex + '(' + new Date(exfrom).toLocaleString() + '----' + new Date(exto).toLocaleString() + ')</td>';
           }
         }
+
         var max = data.d[i].max;
         var min = data.d[i].min;
         if(max==min){
@@ -245,9 +244,10 @@
         h=h+'<td>'+subsenkastr+'</td>';
         h=h+'<td>'+exstr+'</td>';
 
+
         h = h + '</tr>';
       }
-      h = h + '</table>'
+      h = h + '</table>';
       $('#main').html(h);
       console.log(data);
     }
