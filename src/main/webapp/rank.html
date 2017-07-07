@@ -115,10 +115,11 @@
       var h = '统计时间：' + new Date(data.ts).toLocaleString();
       h = h + '<table class="table table-bordered table-striped table-hover">';
       h = h + '<thead><td>排名(当前/榜单)</td><td></td>';
-      h = h + '<td><div onclick="sortby(3);">最大</div></td><td style="max-width: 100px"><div onclick="sortby(4);">最小</div></td></thead>';
+      h = h + '<td><div onclick="sortby(3);">最大</div></td><td style="max-width: 100px"><div onclick="sortby(4);">最小</div></td>';
       h = h + '<td><div onclick="sortby(1);"> 经验  (' + new Date(zexpfrom).toLocaleString() + '----' + new Date(zexpto).toLocaleString() + ')</div></td>';
       h = h + '<td><div onclick="sortby(0);">当前'+sorttype==0?'':''+'</div></td>';
       h = h + '<td><div onclick="sortby(2);">ex  (' + new Date(zexfrom).toLocaleString() + '----' + new Date(zexto).toLocaleString() + ')</div></td>';
+      h = h + '</thead>';
       for (var i = 0; i < data.d.length; i++) {
         var type = data.d[i].type;
         var senka = data.d[i];
