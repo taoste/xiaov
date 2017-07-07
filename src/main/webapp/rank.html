@@ -8,6 +8,11 @@
 	<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
 	<script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://cdn.bootcss.com/clipboard.js/1.7.1/clipboard.js"></script>
+
+  <style>
+    .sort-main{background-color: aqua}
+    .sort-sub{background-color: fuchsia}
+  </style>
 </head>
 <body>
 <script type="text/javascript">
@@ -115,10 +120,10 @@
       var h = '统计时间：' + new Date(data.ts).toLocaleString();
       h = h + '<table class="table table-bordered table-striped table-hover">';
       h = h + '<thead><td>排名(当前/榜单)</td><td></td>';
-      h = h + '<td><button type="button" class="btn btn-primary"  onclick="sortby(0);">当前</button></td>';
-      h = h + '<td><button type="button" class="btn btn-primary"  onclick="sortby(3);">最大</button></td><td style="max-width: 100px"><button type="button" class="btn btn-primary"  onclick="sortby(4);">最小</button></td>';
-      h = h + '<td><button type="button" class="btn btn-primary"  onclick="sortby(1);"> 经验  (' + new Date(zexpfrom).toLocaleString() + '----' + new Date(zexpto).toLocaleString() + ')</button></td>';
-      h = h + '<td><button type="button" class="btn btn-primary"  onclick="sortby(2);">ex  (' + new Date(zexfrom).toLocaleString() + '----' + new Date(zexto).toLocaleString() + ')</button></td>';
+      h = h + '<td><div class="sort-sub" onclick="sortby(0);">当前</div></td>';
+      h = h + '<td><div class="sort-sub" onclick="sortby(3);">最大</div></td><td style="max-width: 100px"><div class="sort-sub" onclick="sortby(4);">最小</div></td>';
+      h = h + '<td><div class="sort-sub" onclick="sortby(1);"> 经验  (' + new Date(zexpfrom).toLocaleString() + '----' + new Date(zexpto).toLocaleString() + ')</div></td>';
+      h = h + '<td><div>ex  (' + new Date(zexfrom).toLocaleString() + '----' + new Date(zexto).toLocaleString() + ')</div></td>';
       h = h + '</thead>';
       for (var i = 0; i < data.d.length; i++) {
         var type = data.d[i].type;
