@@ -680,6 +680,7 @@ public class SmartQQClient implements Closeable {
     //检验Json返回结果
     private static JSONObject getResponseJson(Response<String> response) {
         if (response.getStatusCode() != 200) {
+        	System.out.println(response.getBody());
             throw new RequestException(String.format("请求失败，Http返回码[%d]", response.getStatusCode()));
         }
         JSONObject json = JSON.parseObject(response.getBody());

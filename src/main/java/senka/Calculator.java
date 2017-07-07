@@ -99,9 +99,6 @@ public class Calculator {
 						minmap.put(ts, senka);
 					}
 				}
-				if(senkaData.get("_id").toString().equals("猫")){
-					System.out.println(senkaData);
-				}
 				if(ts==0){
 					if(no==5||no==20||no==100||no==500){
 						frontmap.put(no, senka);
