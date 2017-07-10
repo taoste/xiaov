@@ -335,7 +335,7 @@ public class Calculator {
 	}
 	
 	public static DBObject getFrontExpData(BasicDBList explist){
-		Date now = new Date();
+		Date now =	new Date();
 		int month = now.getMonth();
 		Date then = new Date();
 		then.setMonth(month);
@@ -550,6 +550,14 @@ public class Calculator {
 			int subsenka = (latestexp-firstexp)*7/10000;
 			
 
+			int senka = Integer.valueOf(senkaD.get("senka").toString());
+			int senkats = Integer.valueOf(senkaD.get("ts").toString()); 
+			
+			
+			DBObject baseExpData = getBaseExpData(expL);
+			int baseexp = Integer.valueOf(baseExpData.get("d").toString());
+			Date basets = (Date)baseExpData.get("ts");
+			int subbase = (firstexp-baseexp)*7/10000;
 			
 			
 			
@@ -561,6 +569,7 @@ public class Calculator {
 				retj.put("type", 1);
 				retj.put("fsenka", fsenka);
 				retj.put("fsenkats", fsenkats);
+				retj.put("senkats", senkats);
 				retj.put("lsenka", lsenka);
 				retj.put("lsenkats", lsenkats);
 				retj.put("lno", lastno);
@@ -568,11 +577,38 @@ public class Calculator {
 				retj.put("expto", latestts.getTime());
 				retj.put("subsenka", subsenka);
 				retj.put("pair", 1);
+				retj.put("basets", basets.getTime());
+				retj.put("subbase", subbase);
+				
 				retj.put("z", -1);
+				
+
 				
 				
 				result.add(retj);
 				a++;
+			}else{
+				JSONObject ret = new JSONObject();
+				ret.put("type", 3);
+				ret.put("fsenka", fsenka);
+				ret.put("fsenkats", fsenkats);
+				ret.put("name", name);
+				ret.put("senka", senka);
+				ret.put("senkats", senkats);
+				ret.put("lsenka", senka);
+				ret.put("lsenkats", senkats);
+				ret.put("lno", lastno);
+				ret.put("expfrom", firstts.getTime());
+				ret.put("expto", latestts.getTime());
+				ret.put("basets", basets.getTime());
+				ret.put("subbase", subbase);
+				
+				
+				ret.put("subsenka", subsenka);
+				ret.put("z",-1);
+				result.add(ret);
+				a++;
+				
 			}
 		}
 		if(c>a){
@@ -582,7 +618,7 @@ public class Calculator {
 				int id = idlist.get(i);
 				BasicDBList expL = explist.get(i);
 				DBObject latestexpdata = (DBObject)expL.get(expL.size()-1);
-				DBObject firstexpdata = (DBObject)expL.get(0);
+				DBObject firstexpdata = getFirstExpData(expL);
 				Date firstts = (Date)firstexpdata.get("ts");
 				Date lastts = (Date)latestexpdata.get("ts");
 				int subexp = Integer.valueOf(latestexpdata.get("d").toString())-Integer.valueOf(firstexpdata.get("d").toString());
@@ -602,9 +638,11 @@ public class Calculator {
 				int ts = jd.getInt("ts");
 				if(ts>=lastts){
 					int senka = jd.getInt("senka");
+					int no = jd.getInt("no");
 					JSONObject ret = new JSONObject();
 					ret.put("lsenka", senka);
 					ret.put("senka", senka);
+					ret.put("no", no);
 					ret.put("may", mayexplist);
 					ret.put("type", 2);
 					ret.put("name", name);
