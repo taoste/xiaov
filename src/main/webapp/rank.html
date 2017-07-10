@@ -164,60 +164,51 @@
           var ensure = 0;
           if (Math.abs(exfrom - zexfrom) < 1200000 && Math.abs(exto - zexto) < 1200000) {
             exstr = exstr + senka.ex;
-            ensure = 0;
+            ensure = 1;
           } else {
             exstr = exstr + senka.ex + '    (' + new Date(exfrom).toLocaleString() + '----' + new Date(exto).toLocaleString() + ')';
           }
           if(zcleared>0){
             exstr = exstr + '('+(z+1)+'月已完成Z作战)';
           }
-          if (ensure) {
+
+          if (senka.fsenkats == 0 && getDateNo(senka.expfrom) == 0) {
+            data.d[i].except=senka.subsenka + senka.fsenka + 1380 - zcleared;
+            data.d[i].max=data.d[i].except;
+            data.d[i].min=data.d[i].except;
+          }  else if (ensure) {
             data.d[i].except=senka.senka + 1380 - zcleared - senka.ex;
             data.d[i].max=data.d[i].except;
             data.d[i].min=data.d[i].except;
           } else {
-            if (senka.fsenkats == 0 && getDateNo(senka.expfrom) == 0) {
-              data.d[i].except=senka.subsenka + senka.fsenka + 1380 - zcleared;
-              data.d[i].max=data.d[i].except;
-              data.d[i].min=data.d[i].except;
-            } else {
-              var firstExpDateNo = getDateNo(expfrom);
-              var maxsenka1 = senka.subsenka+minmap[firstExpDateNo]+1380-zcleared;
-              var minsenka = senka.subsenka+1380-zcleared;
-              var maxsenka2 = senka.senka + 1380 - senka.ex-zcleared;
-              var maxsenka3 = senka.subsenka + senka.fsenka + 1380-zcleared;
-              var maxsenka = 99999;
-              if(maxsenka1<maxsenka){
-                maxsenka=maxsenka1;
-              }
-              if(maxsenka2<maxsenka){
-                maxsenka=maxsenka2;
-              }
-              if(maxsenka3<maxsenka){
-                maxsenka=maxsenka3;
-              }
-              var maxsenka4 = -1;
-              var maxsenka5 = -1;
-              if(senka.subfront>0){
-                maxsenka5 = senka.subfront+ 1380 - zcleared;
-                if(maxsenka5<maxsenka){
-                  maxsenka=maxsenka5;
-                }
-              }
-              if(new Date(basets).getMonth()<month){
-                maxsenka4 = senka.subsenka+senka.subbase+1380-zcleared;
-                if(maxsenka4<maxsenka){
-                  maxsenka=maxsenka4;
-                }
-              }
-              if(i<100){
-                console.log(maxsenka1,maxsenka2,maxsenka3,maxsenka4,maxsenka5,maxsenka,senka.name);
-              }
-
-              data.d[i].max=maxsenka;
-              data.d[i].min=minsenka;
+            var firstExpDateNo = getDateNo(expfrom);
+            var maxsenka1 = senka.subsenka+minmap[firstExpDateNo]+1380-zcleared;
+            var minsenka = senka.subsenka+1380-zcleared;
+            var maxsenka2 = senka.senka + 1380 - senka.ex-zcleared;
+            var maxsenka3 = senka.subsenka + senka.fsenka + 1380-zcleared;
+            var maxsenka = 99999;
+            if(maxsenka1<maxsenka){
+              maxsenka=maxsenka1;
             }
+            if(maxsenka2<maxsenka){
+              maxsenka=maxsenka2;
+            }
+            if(maxsenka3<maxsenka){
+              maxsenka=maxsenka3;
+            }
+            var maxsenka4 = -1;
+            var maxsenka5 = -1;
+            if(new Date(basets).getMonth()<month){
+              maxsenka4 = senka.subsenka+senka.subbase+1380-zcleared;
+              if(maxsenka4<maxsenka){
+                maxsenka=maxsenka4;
+              }
+            }
+
+            data.d[i].max=maxsenka;
+            data.d[i].min=minsenka;
           }
+
         } else if (type == 3) {
           exstr = 'unknown';
           var firstExpDateNo = getDateNo(expfrom);
