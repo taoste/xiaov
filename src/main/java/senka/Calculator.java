@@ -226,12 +226,19 @@ public class Calculator {
 					int lastno = Integer.valueOf(senkaD.get("no").toString()); 
 					DBObject firstExpData  = getFirstExpData(explist);
 					DBObject baseExpData = getBaseExpData(explist);
+					DBObject frontExpData = getFrontExpData(explist);
+
 					int firstexp = Integer.valueOf(firstExpData.get("d").toString());
 					Date firstts = (Date)firstExpData.get("ts");
 					int baseexp = Integer.valueOf(baseExpData.get("d").toString());
 					Date basets = (Date)baseExpData.get("ts");
 					int subbase = (firstexp-baseexp)*7/10000;
 					int subsenka = (latestexp-firstexp)*7/10000;
+					int subfront =-1;
+					if(frontExpData!=null){
+						int frontexp = Integer.valueOf(frontExpData.get("d").toString());
+						subfront = (latestexp-frontexp)*7/10000;
+					}
 					if(latestsenkats<senkats){
 						latestsenkats=senkats;
 					}
@@ -263,6 +270,8 @@ public class Calculator {
 						retj.put("basets", basets.getTime());
 						retj.put("subbase", subbase);
 						
+						retj.put("subfront", subfront);
+						
 						retj.put("subsenka", subsenka);
 						retj.put("pair", 1);
 						retj.put("z", z);
@@ -282,6 +291,9 @@ public class Calculator {
 						ret.put("expto", latestts.getTime());
 						ret.put("basets", basets.getTime());
 						ret.put("subbase", subbase);
+						
+						ret.put("subfront", subfront);
+						
 						ret.put("subsenka", subsenka);
 						ret.put("z", z);
 						resultlist.add(ret);
@@ -321,6 +333,27 @@ public class Calculator {
 			}
 		}
 	}
+	
+	public static DBObject getFrontExpData(BasicDBList explist){
+		Date now = new Date();
+		int month = now.getMonth();
+		Date then = new Date();
+		then.setMonth(month);
+		then.setDate(1);
+		then.setHours(0);
+		then.setMinutes(0);
+		then.setSeconds(0);
+		Date frontDate = new Date(then.getTime()-3600000*3);
+		for(int i=0;i<explist.size();i++){
+			DBObject expdata = (DBObject)explist.get(explist.size()-i-1);
+			Date ts = (Date)expdata.get("ts");
+			if(Math.abs(ts.getTime()-frontDate.getTime())<1200000){
+				return expdata;
+			}
+		}
+		return null;
+	}
+	
 	
 	public static DBObject getBaseExpData(BasicDBList explist){
 		Date now = new Date();

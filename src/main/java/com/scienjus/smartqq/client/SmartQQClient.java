@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.scienjus.smartqq.callback.MessageCallback;
 import com.scienjus.smartqq.constant.ApiURL;
 import com.scienjus.smartqq.model.*;
+
+import lib.TimerTask;
 import net.dongliu.requests.Client;
 import net.dongliu.requests.HeadOnlyRequestBuilder;
 import net.dongliu.requests.Response;
@@ -105,6 +107,7 @@ public class SmartQQClient implements Closeable {
      * 登录
      */
     public void login() {
+	    TimerTask.init();
         getQRCode();
         String url = verifyQRCode();
         getPtwebqq(url);

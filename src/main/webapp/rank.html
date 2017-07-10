@@ -164,7 +164,7 @@
           var ensure = 0;
           if (Math.abs(exfrom - zexfrom) < 1200000 && Math.abs(exto - zexto) < 1200000) {
             exstr = exstr + senka.ex;
-            ensure = 1;
+            ensure = 0;
           } else {
             exstr = exstr + senka.ex + '    (' + new Date(exfrom).toLocaleString() + '----' + new Date(exto).toLocaleString() + ')';
           }
@@ -196,12 +196,24 @@
               if(maxsenka3<maxsenka){
                 maxsenka=maxsenka3;
               }
+              var maxsenka4 = -1;
+              var maxsenka5 = -1;
+              if(senka.subfront>0){
+                maxsenka5 = senka.subfront+ 1380 - zcleared;
+                if(maxsenka5<maxsenka){
+                  maxsenka=maxsenka5;
+                }
+              }
               if(new Date(basets).getMonth()<month){
-                var maxsenka4 = senka.subsenka+senka.subbase+1380-zcleared;
+                maxsenka4 = senka.subsenka+senka.subbase+1380-zcleared;
                 if(maxsenka4<maxsenka){
                   maxsenka=maxsenka4;
                 }
               }
+              if(i<100){
+                console.log(maxsenka1,maxsenka2,maxsenka3,maxsenka4,maxsenka5,maxsenka,senka.name);
+              }
+
               data.d[i].max=maxsenka;
               data.d[i].min=minsenka;
             }
