@@ -616,14 +616,19 @@ public class Calculator {
 			int lastts=0;
 			for(int i=jsenkaList.size();i>0;i--){
 				JSONObject jd = jsenkaList.get(i-1);
+				JSONObject fd = jsenkaList.get(0);
 				int ts = jd.getInt("ts");
 				if(ts>=lastts){
 					int senka = jd.getInt("senka");
 					int no = jd.getInt("no");
+					int fsenka = fd.getInt("senka");
+					int fts = fd.getInt("ts");
 					JSONObject ret = new JSONObject();
 					ret.put("lsenka", senka);
 					ret.put("senka", senka);
-					ret.put("no", no);
+					ret.put("fsenka", fsenka);
+					ret.put("fts", fts);
+					ret.put("lno", no);
 					ret.put("may", mayexplist);
 					ret.put("type", 2);
 					ret.put("name", name);
