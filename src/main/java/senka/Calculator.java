@@ -588,27 +588,7 @@ public class Calculator {
 				result.add(retj);
 				a++;
 			}else{
-				JSONObject ret = new JSONObject();
-				ret.put("type", 3);
-				ret.put("fsenka", fsenka);
-				ret.put("fsenkats", fsenkats);
-				ret.put("name", name);
-				ret.put("senka", senka);
-				ret.put("senkats", senkats);
-				ret.put("lsenka", senka);
-				ret.put("lsenkats", senkats);
-				ret.put("lno", lastno);
-				ret.put("expfrom", firstts.getTime());
-				ret.put("expto", latestts.getTime());
-				ret.put("basets", basets.getTime());
-				ret.put("subbase", subbase);
 				
-				
-				ret.put("subsenka", subsenka);
-				ret.put("z",-1);
-				System.out.println(ret);
-				result.add(ret);
-				a++;
 				
 			}
 		}
