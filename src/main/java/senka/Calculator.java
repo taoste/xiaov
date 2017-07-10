@@ -606,6 +606,7 @@ public class Calculator {
 				
 				ret.put("subsenka", subsenka);
 				ret.put("z",-1);
+				System.out.println(ret);
 				result.add(ret);
 				a++;
 				
@@ -648,6 +649,7 @@ public class Calculator {
 					ret.put("name", name);
 					result.add(ret);
 					lastts=ts;
+					System.out.println(ret);
 				}else{
 					break;
 				}
