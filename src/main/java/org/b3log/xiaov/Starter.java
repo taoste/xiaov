@@ -72,7 +72,6 @@ public class Starter {
 
             System.exit(-1);
         }
-        TimerTask.init();
         
         
     }
