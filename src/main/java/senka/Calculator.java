@@ -603,8 +603,8 @@ public class Calculator {
 					maxexpsenka=subsenka;
 				}
 				JSONObject ret = new JSONObject();
-				ret.put("expfrom", firstts);
-				ret.put("expto", lastts);
+				ret.put("expfrom", firstts.getTime());
+				ret.put("expto", lastts.getTime());
 				ret.put("explist", expL);
 				ret.put("subsenka", subsenka);
 				mayexplist.add(ret);
