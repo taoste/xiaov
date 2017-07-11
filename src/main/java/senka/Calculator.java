@@ -581,14 +581,9 @@ public class Calculator {
 				retj.put("subbase", subbase);
 				
 				retj.put("z", -1);
-				
-
-				
-				
 				result.add(retj);
 				a++;
 			}else{
-				
 				
 			}
 		}
@@ -610,7 +605,7 @@ public class Calculator {
 				JSONObject ret = new JSONObject();
 				ret.put("expfrom", firstts);
 				ret.put("expto", lastts);
-				ret.put("senka", subsenka);
+				ret.put("subsenka", subsenka);
 				mayexplist.add(ret);
 			}
 			int lastts=0;
@@ -632,6 +627,7 @@ public class Calculator {
 					ret.put("may", mayexplist);
 					ret.put("type", 2);
 					ret.put("name", name);
+					ret.put("senkalist", jsenkaList);
 					result.add(ret);
 					lastts=ts;
 					System.out.println(ret);

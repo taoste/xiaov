@@ -235,10 +235,11 @@
           data.d[i].max=maxsenka;
           data.d[i].min=minsenka;
         } else if (type == 2) {
+          console.log(senka);
           var maylist = senka.may;
           var maxsub=0;
           for(var k=0;k<maylist.length;k++){
-            var sub = maylist[k].senka;
+            var sub = maylist[k].subsenka;
             if(sub>maxsub){
               maxsub=sub;
             }
