@@ -325,25 +325,28 @@
                   var expect = minf.senka+minsub.subsenka+1380-zcleared;
                   senka.max = expect;
                   senka.min = expect;
-                  exstr='unknown2';
                 }else{
                   var firstExpDateNo = getDateNo(minsub.expfrom);
                   var maxsenka = minmap[firstExpDateNo]+minsub.subsenka+1380-zcleared;
                   var minsenka = minsub.subsenka+1380-zcleared;
                   senka.max=maxsenka;
                   senka.min=minsenka;
-                  exstr='unknown3'
                 }
-                var subrank = min.senka-minf.senka;
-                var ex = subrank-minsub.subsenka;
-                if (Math.abs(expfrom - zexfrom) < 1200000 && Math.abs(expto - zexto) < 1200000) {
-                  exstr = ex;
-                } else {
-                  exstr = exstr + ex + '    (' + new Date(expfrom).toLocaleString() + '----' + new Date(expto).toLocaleString() + ')';
+                if(minf){
+                  var subrank = min.senka-minf.senka;
+                  var ex = subrank-minsub.subsenka;
+                  if (Math.abs(expfrom - zexfrom) < 1200000 && Math.abs(expto - zexto) < 1200000) {
+                    exstr = ex;
+                  } else {
+                    exstr = exstr + ex + '    (' + new Date(expfrom).toLocaleString() + '----' + new Date(expto).toLocaleString() + ')';
+                  }
+                  if(zcleared>0){
+                    exstr = exstr + '('+(z+1)+'月已完成Z作战)';
+                  }
+                }else{
+                  exstr = 'unknown2';
                 }
-                if(zcleared>0){
-                  exstr = exstr + '('+(z+1)+'月已完成Z作战)';
-                }
+
               }
             }
           }
