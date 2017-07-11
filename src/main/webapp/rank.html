@@ -281,9 +281,10 @@
                 }
               }
               var max = last1;
-
+              var min = last2;
               if(last1.senka<last2.senka){
                 max = last2;
+                min = last1;
               }
               console.log(maxf,minf,max,maxsub,minsub);
               if(senkas==max.senka){
@@ -294,7 +295,6 @@
                   var maxsenka = maxf.senka+maxsub.subsenka+1380-zcleared;
                   senka.max=maxsenka;
                   senka.min=maxsenka;
-                  senka.ex='unknown0';
                 }else{
                   var maxsenka1 =maxf.senka+maxsub.subsenka+1380-zcleared;
                   var firstExpDateNo = getDateNo(maxsub.expfrom);
@@ -306,7 +306,16 @@
                   var minsenka = maxsub.subsenka+1380-zcleared;
                   senka.max = maxsenka;
                   senka.min = minsenka;
-                  senka.ex='unknown1';
+                }
+                var subrank = max.senka-maxf.senka;
+                var ex = subrank-maxsub.subsenka;
+                if (Math.abs(expfrom - zexfrom) < 1200000 && Math.abs(expto - zexto) < 1200000) {
+                  exstr = ex;
+                } else {
+                  exstr = exstr + ex + '    (' + new Date(expfrom).toLocaleString() + '----' + new Date(expto).toLocaleString() + ')';
+                }
+                if(zcleared>0){
+                  exstr = exstr + '('+(z+1)+'月已完成Z作战)';
                 }
               }else{
                 senka.expfrom = minsub.expfrom;
@@ -316,14 +325,24 @@
                   var expect = minf.senka+minsub.subsenka+1380-zcleared;
                   senka.max = expect;
                   senka.min = expect;
-                  senka.ex='unknown2';
+                  exstr='unknown2';
                 }else{
                   var firstExpDateNo = getDateNo(minsub.expfrom);
                   var maxsenka = minmap[firstExpDateNo]+minsub.subsenka+1380-zcleared;
                   var minsenka = minsub.subsenka+1380-zcleared;
                   senka.max=maxsenka;
                   senka.min=minsenka;
-                  senka.ex='unknown3'
+                  exstr='unknown3'
+                }
+                var subrank = min.senka-minf.senka;
+                var ex = subrank-minsub.subsenka;
+                if (Math.abs(expfrom - zexfrom) < 1200000 && Math.abs(expto - zexto) < 1200000) {
+                  exstr = ex;
+                } else {
+                  exstr = exstr + ex + '    (' + new Date(expfrom).toLocaleString() + '----' + new Date(expto).toLocaleString() + ')';
+                }
+                if(zcleared>0){
+                  exstr = exstr + '('+(z+1)+'月已完成Z作战)';
                 }
               }
             }
