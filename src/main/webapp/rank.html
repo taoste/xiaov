@@ -235,8 +235,108 @@
           data.d[i].max=maxsenka;
           data.d[i].min=minsenka;
         } else if (type == 2) {
-          console.log(senka);
+
+          var senkalist = senka.senkalist;
           var maylist = senka.may;
+          var length = maylist.length;
+          var senkas = senka.senka;
+          if(length==2){
+            var sub1 = maylist[0].subsenka;
+            var from1 = maylist[0].expfrom;
+
+            var sub2 = maylist[1].subsenka;
+            var from2 = maylist[1].expfrom;
+
+            var maxsub = maylist[0];
+            var minsub = maylist[1];
+            if(sub1<sub2){
+              maxsub = maylist[1];
+              minsub = maylist[0];
+            }
+
+            var ts2senka = {};
+            for(var i=senkalist.length-1;i>=0;i--){
+              var senkaD = senkalist[i];
+              var sts = senkaD.ts;
+              var senkas = senkaD.senka;
+              if(ts2senka[sts]){
+                ts2senka[sts].push(senkaD);
+              }else{
+                ts2senka[sts]=[senkaD];
+              }
+            }
+            var tskeys = Object.keys(ts2senka).sort();
+            var last = ts2senka[tskeys[tskeys.length-1]];
+            var first = ts2senka[tskeys[0]];
+            if(last.length==2){
+              var last1 = last[0];
+              var last2 = last[1];
+              var first1 = first[0];
+              var first2 = first[1];
+              var maxf = first1;
+              var minf = first2;
+              if(first2){
+                if(first.senka<first2.senka){
+                  maxf = first2;
+                  minf = first1;
+                }
+              }
+              var max = last1;
+              if(last1.senka<last2.senka){
+                max = last2;
+              }
+              if(senkas==max.senka){
+                senka.expfrom = maxsub.expfrom;
+                senka.expto = maxsub.expto;
+                senka.subsenka = maxsub.subsenka;
+                if(maxf.ts==0){
+                  var maxsenka = maxf.senka+maxsub.subsenka+1380-zcleared;
+                  senka.max=maxsenka;
+                  senka.min=maxsenka;
+                  senka.ex='unknown0';
+                }else{
+                  var maxsenka1 =maxf.senka+maxsub.subsenka+1380-zcleared;
+                  var firstExpDateNo = getDateNo(maxsub.expfrom);
+                  var maxsenka2 = minmap[firstExpDateNo]+maxsub.subsenka+1380-zcleared;
+                  var maxsenka = maxsenka1;
+                  if(maxsenka2<maxsenka){
+                    maxsenka=maxsenka2;
+                  }
+                  var minsenka = maxsub.subsenka+1380-zcleared;
+                  senka.max = maxsenka;
+                  senka.min = minsenka;
+                  senka.ex='unknown1';
+                }
+              }else{
+                senka.expfrom = minsub.expfrom;
+                senka.expto = minsub.expto;
+                senka.subsenka=minsub.subsenka;
+                if(minf&&minf.ts==0){
+                  var expect = minf.senka+minsub.subsenka+1380-zcleared;
+                  senka.max = expect;
+                  senka.min = expect;
+                  senka.ex='unknown2';
+                }else{
+                  var firstExpDateNo = getDateNo(minsub.expfrom);
+                  var maxsenka = minmap[firstExpDateNo]+minsub.subsenka+1380-zcleared;
+                  var minsenka = minsub.subsenka+1380-zcleared;
+                  senka.max=maxsenka;
+                  senka.min=minsenka;
+                  senka.ex='unknown3'
+                }
+              }
+            }
+          }
+
+
+
+
+
+
+
+
+          console.log(senka);
+
           var maxsub=0;
           for(var k=0;k<maylist.length;k++){
             var sub = maylist[k].subsenka;
