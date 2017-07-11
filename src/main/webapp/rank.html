@@ -258,7 +258,6 @@
             for(var k=senkalist.length-1;k>=0;k--){
               var senkaD = senkalist[k];
               var sts = senkaD.ts;
-              var senkas = senkaD.senka;
               if(ts2senka[sts]){
                 ts2senka[sts].push(senkaD);
               }else{
@@ -286,7 +285,7 @@
               if(last1.senka<last2.senka){
                 max = last2;
               }
-              console.log(maxf,minf,max);
+              console.log(maxf,minf,max,maxsub,minsub);
               if(senkas==max.senka){
                 senka.expfrom = maxsub.expfrom;
                 senka.expto = maxsub.expto;
