@@ -605,6 +605,7 @@ public class Calculator {
 				JSONObject ret = new JSONObject();
 				ret.put("expfrom", firstts);
 				ret.put("expto", lastts);
+				ret.put("explist", expL);
 				ret.put("subsenka", subsenka);
 				mayexplist.add(ret);
 			}
