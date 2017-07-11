@@ -235,7 +235,7 @@
           data.d[i].max=maxsenka;
           data.d[i].min=minsenka;
         } else if (type == 2) {
-
+          console.log(senka);
           var senkalist = senka.senkalist;
           var maylist = senka.may;
           var length = maylist.length;
@@ -282,9 +282,11 @@
                 }
               }
               var max = last1;
+
               if(last1.senka<last2.senka){
                 max = last2;
               }
+              console.log(maxf,minf,max);
               if(senkas==max.senka){
                 senka.expfrom = maxsub.expfrom;
                 senka.expto = maxsub.expto;
