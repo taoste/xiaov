@@ -327,31 +327,6 @@
               }
             }
           }
-
-
-
-
-
-
-
-
-          console.log(senka);
-
-          var maxsub=0;
-          for(var k=0;k<maylist.length;k++){
-            var sub = maylist[k].subsenka;
-            if(sub>maxsub){
-              maxsub=sub;
-            }
-          }
-          var fts = senka.fts;
-          var fsenka = senka.fsenka;
-          senka.subsenka = maxsub;
-          if(fts==0){
-            senka.max = maxsub+1380+fsenka;
-          }
-
-          senka.min = maxsub+1380;
         }
 
         var max = senka.max;
