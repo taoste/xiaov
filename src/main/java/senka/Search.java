@@ -135,7 +135,9 @@ public class Search {
 				pointer1++;
 			}
 		}
-		int nowexp = getNowExp(Integer.valueOf(id), token, server);
+		JSONObject jd = getNowExp(Integer.valueOf(id), token, server);
+		JSONArray deck = jd.getJSONArray("deck");
+		int nowexp = jd.getInt("exp");
 		Date tailts = (Date)tail.get("ts");
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		String addsenka = "("+tail.getInt("no")+"位)   "+tail.getString("senka")+"+"+Math.round((nowexp-tail.getInt("exp"))/1000.0*7.0)/10.0
@@ -147,7 +149,13 @@ public class Search {
 			int expsub = tail.getInt("exp")-front.getInt("exp");
 			addsenka = addsenka + "EX:"+(int)(senkasub-expsub/10000.0*7.0)+"    ("+sdf.format(frontts)+"-----"+sdf.format(tailts)+")";
 		}
-		return addsenka;
+		String deckinfo = "";
+		for(int i=0;i<deck.length;i++){
+			int lv = deck.getJSONObject(i).getInt("api_level");
+			int shipid = deck.getJSONObject(i).getInt("api_ship_id");
+			deckinfo = deckinfo + "lv."+shipid+";";
+		}
+		return addsenka+"\n"+deckinfo;
 	}
 	
 	
@@ -184,11 +192,13 @@ public class Search {
 	
 	
 	
-	public static int getNowExp(int id,String token,int server)throws Exception{
+	public static JSONObject getNowExp(int id,String token,int server)throws Exception{
 		DBCollection cl_tmp_exp = Util.db.getCollection("cl_tmp_exp");
 		Date now = new Date();
 		BasicDBObject query = new BasicDBObject("_id",server+"_"+now.getTime()/60000+"_"+id);
 		DBObject expData = cl_tmp_exp.findOne(query);
+		int exp=0;
+		JSONObject jd;
 		if(expData==null){
 			JSONObject data = getNowExpForce(id, token, server);
 			JSONArray expa = data.getJSONArray("api_experience");
@@ -197,11 +207,16 @@ public class Search {
 			query.append("ts", now);
 			query.append("info", data.toString());
 			cl_tmp_exp.save(query);
-			return exp;
+			jd=data;
 		}else{
-			return Integer.valueOf(expData.get("exp").toString());
+			exp = Integer.valueOf(expData.get("exp").toString());
+			jd = new JSONObject(expData.get("info").toString());
 		}
-		
+		JSONArray deck = jd.getJSONObject("api_deck").getJSONArray("api_ships");
+		JSONObject jr = new JSONObject();
+		jr.put("exp",exp);
+		jr.put("deck",deck);
+		return jr;
 	}
 	
 	
