@@ -202,7 +202,7 @@ public class Search {
 		if(expData==null){
 			JSONObject data = getNowExpForce(id, token, server);
 			JSONArray expa = data.getJSONArray("api_experience");
-			int exp = expa.getInt(0);
+			exp = expa.getInt(0);
 			query.append("exp", exp);
 			query.append("ts", now);
 			query.append("info", data.toString());
