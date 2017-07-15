@@ -150,7 +150,7 @@ public class Search {
 			addsenka = addsenka + "EX:"+(int)(senkasub-expsub/10000.0*7.0)+"    ("+sdf.format(frontts)+"-----"+sdf.format(tailts)+")";
 		}
 		String deckinfo = "";
-		for(int i=0;i<deck.length;i++){
+		for(int i=0;i<deck.length();i++){
 			int lv = deck.getJSONObject(i).getInt("api_level");
 			int shipid = deck.getJSONObject(i).getInt("api_ship_id");
 			deckinfo = deckinfo + "lv."+shipid+";";
