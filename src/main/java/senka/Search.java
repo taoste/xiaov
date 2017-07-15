@@ -190,9 +190,12 @@ public class Search {
 		BasicDBObject query = new BasicDBObject("_id",server+"_"+now.getTime()/60000+"_"+id);
 		DBObject expData = cl_tmp_exp.findOne(query);
 		if(expData==null){
-			int exp = getNowExpForce(id, token, server);
+			JSONObject data = getNowExpForce(id, token, server);
+			JSONArray expa = data.getJSONArray("api_experience");
+			int exp = expa.getInt(0);
 			query.append("exp", exp);
 			query.append("ts", now);
+			query.append("info", data.toString());
 			cl_tmp_exp.save(query);
 			return exp;
 		}else{
@@ -205,7 +208,7 @@ public class Search {
 	
 	
 	
-	public static int getNowExpForce(int id,String token,int server)throws Exception{
+	public static JSONObject getNowExpForce(int id,String token,int server)throws Exception{
 		String path = "/kcsapi/api_req_member/get_practice_enemyinfo";
 		String param = "api%5Ftoken="+token+"&api%5Fmember%5Fid="+id+"&api%5Fverno=1";
 		try {
@@ -216,7 +219,7 @@ public class Search {
 			JSONObject data = jd.getJSONObject("api_data");
 			JSONArray expa = data.getJSONArray("api_experience");
 			int exp = expa.getInt(0);
-			return exp;
+			return data;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
