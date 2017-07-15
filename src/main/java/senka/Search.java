@@ -151,9 +151,13 @@ public class Search {
 		}
 		String deckinfo = "";
 		for(int i=0;i<deck.length();i++){
-			int lv = deck.getJSONObject(i).getInt("api_level");
-			int shipid = deck.getJSONObject(i).getInt("api_ship_id");
-			deckinfo = deckinfo + "lv."+shipid+";";
+			JSONObject shipd = deck.getJSONObject(i);
+			int id = shipd.getInt("api_id");
+			if(id>0){
+				int shipid = deck.getJSONObject(i).getInt("api_ship_id");
+				int lv = deck.getJSONObject(i).getInt("api_level");
+				deckinfo = deckinfo + "lv."+lv+" "+shipid+";";
+			}
 		}
 		return addsenka+"\n"+deckinfo;
 	}
