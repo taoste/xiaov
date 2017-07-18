@@ -58,14 +58,13 @@
   }
 
   function forecast(){
-    generateTable(0);
-    console.log(u);
+    sortby(0);
     var qsenka5 = u.d[4].senka;
     var qsenka20 = u.d[19].senka;
     var qsenka100 = u.d[99].senka;
     var qsenka500 = u.d[499].senka;
+    sortby(3);
     generateTable(3);
-    console.log(u);
     var senka5 = u.d[4].max;
     var senka20 = u.d[19].max;
     var senka100 = u.d[99].max;
