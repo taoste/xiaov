@@ -33,7 +33,7 @@
   </select>
   <button type="button" class="btn btn-primary" onclick="search();">查询</button>
 </div>
-<div id="forecast">
+<div id="forecast" style="max-width: 800px">
 
 
 </div>
@@ -88,8 +88,8 @@
     var furture500 = (senka500-frontmap[500]-1380)*rate+frontmap[500]+1380;
     var h='本月战果预测';
     h=h+'<table class="table table-bordered table-striped table-hover">';
-    h=h+'<thead><td style="max-width: 200px">排名</td><td style="max-width: 200px">榜单</td><td style="max-width: 200px">当前</td>';
-    h=h+'<td style="max-width: 200px">当前(ex)</td><td style="max-width: 200px">月底</td></thead>';
+    h=h+'<thead><td>排名</td><td>榜单</td><td>当前</td>';
+    h=h+'<td ">当前(ex)</td><td ">月底</td></thead>';
     h=h+'<tr><td>5位</td><td>'+bsenka5+'</td><td>'+qsenka5+'</td><td>'+senka5+'</td><td>'+furture5.toFixed(0)+'</td></tr>';
     h=h+'<tr><td>20位</td><td>'+bsenka20+'</td><td>'+qsenka20+'</td><td>'+senka20+'</td><td>'+furture20.toFixed(0)+'</td></tr>';
     h=h+'<tr><td>100位</td><td>'+bsenka100+'</td><td>'+qsenka100+'</td><td>'+senka100+'</td><td>'+furture100.toFixed(0)+'</td></tr>';
