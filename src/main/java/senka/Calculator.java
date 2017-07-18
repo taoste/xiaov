@@ -80,6 +80,7 @@ public class Calculator {
 			Map<Integer, DBObject> id2senka = new HashMap<>();
 			Map<Integer, Integer> minmap = new HashMap<>();
 			Map<Integer, Integer> frontmap = new HashMap<>();
+			Map<Integer, Integer> tailmap = new HashMap<>();
 			while (dbc.hasNext()) {
 				DBObject senkaData = dbc.next();
 				Object ido = senkaData.get("id");
@@ -106,6 +107,17 @@ public class Calculator {
 						System.out.println(senka);
 					}
 				}
+				
+				DBObject backSenka = (DBObject)senkaList.get(senkaList.size()-1);
+				int backno = Integer.valueOf(backSenka.get("no").toString());
+				int backts = Integer.valueOf(backSenka.get("ts").toString());
+				int backsenka = Integer.valueOf(backSenka.get("senka").toString());
+				if(backts==rankNo){
+					if(backno==5||backno==20||backno==100||backno==500){
+						tailmap.put(backno,backsenka);
+					}
+				}
+				
 				Date lastupdatets = (Date)senkaData.get("ts");
 				if(now.getTime()-lastupdatets.getTime()>60000000L){
 					continue;
@@ -320,6 +332,7 @@ public class Calculator {
 			j.put("d", resultlist);
 			j.put("min", minmap);
 			j.put("front", frontmap);
+			j.put("tail", tailmap);
 			return j;
 		}catch (Exception e) {
 			e.printStackTrace();

@@ -52,15 +52,19 @@
       $.get(url,function(response,status){
         var data = eval("("+response+")");
         u=data;
-        generateTable(3)
-        sortby(3);
-        generateTable(3)
         forecast();
       })
     }
   }
 
   function forecast(){
+    generateTable(0);
+    var qsenka5 = u.d[4].max;
+    var qsenka20 = u.d[19].max;
+    var qsenka100 = u.d[99].max;
+    var qsenka500 = u.d[499].max;
+    generateTable(3);
+    console.log(u);
     var senka5 = u.d[4].max;
     var senka20 = u.d[19].max;
     var senka100 = u.d[99].max;
@@ -80,11 +84,12 @@
     var furture500 = (senka500-frontmap[500]-1380)*rate+frontmap[500]+1380;
     var h='本月战果预测';
     h=h+'<table class="table table-bordered table-striped table-hover">';
-    h=h+'<thead><td style="max-width: 200px">排名</td><td style="max-width: 200px">当前</td><td style="max-width: 200px">月底</td></thead>';
-    h=h+'<tr><td>5位</td><td>'+senka5+'</td><td>'+furture5.toFixed(0)+'</td></tr>';
-    h=h+'<tr><td>20位</td><td>'+senka20+'</td><td>'+furture20.toFixed(0)+'</td></tr>';
-    h=h+'<tr><td>100位</td><td>'+senka100+'</td><td>'+furture100.toFixed(0)+'</td></tr>';
-    h=h+'<tr><td>500位</td><td>'+senka500+'</td><td>'+furture500.toFixed(0)+'</td></tr>';
+    h=h+'<thead><td style="max-width: 200px">排名</td><td style="max-width: 200px">当前</td>';
+    h=h+'<td style="max-width: 200px">当前(ex)</td><td style="max-width: 200px">月底</td></thead>';
+    h=h+'<tr><td>5位</td><td>'+qsenka5+'</td><td>'+senka5+'</td><td>'+furture5.toFixed(0)+'</td></tr>';
+    h=h+'<tr><td>20位</td><td>'+qsenka20+'</td><td>'+senka20+'</td><td>'+furture20.toFixed(0)+'</td></tr>';
+    h=h+'<tr><td>100位</td><td>'+qsenka100+'</td><td>'+senka100+'</td><td>'+furture100.toFixed(0)+'</td></tr>';
+    h=h+'<tr><td>500位</td><td>'+qsenka500+'</td><td>'+senka500+'</td><td>'+furture500.toFixed(0)+'</td></tr>';
     h=h+'</table>';
     $('#forecast').html(h);
   }
@@ -369,7 +374,6 @@
       }
       h = h + '</table>';
       $('#main').html(h);
-      console.log(data);
     }
   }
 
