@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Description: XiaoV POM.
-    Version: 1.1.0.11, Nov 3, 2016
-    Author: Liang Ding
--->
 <project
     xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.b3log</groupId>
-    <artifactId>xiaov</artifactId>
+    <groupId>senka</groupId>
+    <artifactId>rankCollect</artifactId>
     <packaging>war</packaging>
     <version>2.2.0</version>
-    <name>XiaoV</name>
-    <url>https://github.com/b3log/xiaov</url>
-    <description>Yet another QQ Bot. 又一个 QQ 聊天机器人，她的名字叫做小薇~</description>
+    <name>rankCollect</name>
+    <url>https://github.com/a26214311</url>
+    <description>rank</description>
     <inceptionYear>2016</inceptionYear>
     
     <!-- Properties -->

@@ -19,7 +19,6 @@ import org.json.JSONObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 
-import senka.Util;
 
 
 
@@ -162,10 +161,6 @@ public class Translate {
 	 
 	 
 	 private static String googleKey = "";
-	 static{
-		 DBCollection cl_key = Util.db.getCollection("cl_key");
-		 googleKey = cl_key.findOne(new BasicDBObject("_id","gkey")).get("key").toString();
-	 }
 	 public static String googletranslate(String text,String lan){
 	    	try {
 	        	String url="https://www.googleapis.com/language/translate/v2?"

@@ -22,7 +22,6 @@ import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Slf4jLog;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-import lib.TimerTask;
 
 /**
  * XiaoV with embedded Jetty.

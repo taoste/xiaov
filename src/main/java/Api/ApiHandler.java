@@ -10,14 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
-import lib.TimerTask;
-import senka.Calculator;
-import senka.Login;
-import senka.Search;
 
 public class ApiHandler {
 	static{
-		TimerTask.init();
+		
 	}
 	
 	public static void handleReq(final HttpServletRequest req, final HttpServletResponse resp){
@@ -57,39 +53,7 @@ public class ApiHandler {
 		if(path.equals("test")){
 			ret = "{\"r\":110}";
 		}
-		if(path.equals("collect")){
-			senka.Collector.runCollector(data);
-			ret = "will run collector";
-		}
-		if(path.equals("rank")){
-			senka.Rank.runRank(data);
-			ret = "will run rank";
-		}
-		if(path.equals("seek")){
-			resp.setCharacterEncoding("utf-8");
-			resp.setContentType("text/plain");
-			ret = Search.seekByName(data);
-		}
-		if(path.equals("ranktask")){
-			TimerTask.rankTask();
-			ret = "will run rank task";
-		}
-		if(path.equals("forcecollect")){
-			TimerTask.collectorTask();
-			ret = "will run rank task";
-		}
-		if(path.equals("calrank")){
-			resp.setCharacterEncoding("utf-8");
-			resp.setHeader("Access-Control-Allow-Origin", "*");
-			ret = Calculator.calculator(data);
-		}
-		
-		if(path.equals("easyrank")){
-			resp.setCharacterEncoding("utf-8");
-			resp.setContentType("text/plain");
-			ret = Calculator.easyRank(data);
-		}
-		
+	
 		return ret;
 	}
 }
